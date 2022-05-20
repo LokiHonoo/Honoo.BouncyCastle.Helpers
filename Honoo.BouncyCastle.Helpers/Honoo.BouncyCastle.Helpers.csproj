@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <PackageId>Honoo.BouncyCastle.Helpers</PackageId>
+	<Authors>Loki Honoo</Authors>
+    <Company>Loki Honoo</Company>
+    <Copyright>Copyright (C) Loki Honoo 2020. All rights reserved.</Copyright>	  
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Honoo.BouncyCastle.Helpers.snk</AssemblyOriginatorKeyFile>
+    <Description>BouncyCastle's helpers.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</RepositoryUrl>
+    <PackageTags>Honoo BouncyCastle</PackageTags>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
+    <Version>1.0.5</Version>
+    <AssemblyVersion></AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\bin\Debug</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\bin\Release</OutputPath>
+    <DocumentationFile>..\bin\Release\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+  </ItemGroup>
+
+</Project>

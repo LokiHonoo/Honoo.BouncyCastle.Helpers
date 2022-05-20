@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net40;netcoreapp3.1</TargetFrameworks>
+    <Company>Loki Honoo</Company>
+    <Authors>Loki Honoo</Authors>
+    <Product>Honoo.BouncyCastle.Helpers</Product>
+	<Copyright>Copyright (C) Loki Honoo 2020. All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\bin\Release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Honoo.BouncyCastle.Helpers\Honoo.BouncyCastle.Helpers.csproj" />
+  </ItemGroup>
+
+</Project>
