@@ -17,9 +17,9 @@
         #region Constructor
 
         /// <summary>
-        ///
+        /// Symmetric algorithm.
         /// </summary>
-        /// <param name="mechanism"></param>
+        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
         protected SymmetricAlgorithm(string mechanism)
         {
             this.Mechanism = mechanism;

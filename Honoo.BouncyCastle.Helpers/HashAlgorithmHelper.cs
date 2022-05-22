@@ -224,10 +224,10 @@ namespace Honoo.BouncyCastle.Helpers
         #endregion Hash algorithms
 
         /// <summary>
-        /// Try get algorithm from mechanism.
+        /// Try get hash algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Algorithm mechanism.</param>
-        /// <param name="algorithm">Algorithm.</param>
+        /// <param name="mechanism">Hash algorithm mechanism.</param>
+        /// <param name="algorithm">Hash algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IHashAlgorithm algorithm)
         {
@@ -236,7 +236,7 @@ namespace Honoo.BouncyCastle.Helpers
                 algorithm = null;
                 return false;
             }
-            mechanism = mechanism.Replace('_', '-').Replace('/', '-').ToUpperInvariant();
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
                 case "BLAKE2B-256": algorithm = BLAKE2b_256; return true;
@@ -269,8 +269,8 @@ namespace Honoo.BouncyCastle.Helpers
                 case "SHA256": case "SHA-256": algorithm = SHA256; return true;
                 case "SHA384": case "SHA-384": algorithm = SHA384; return true;
                 case "SHA512": case "SHA-512": algorithm = SHA512; return true;
-                case "SHA512-224": case "SHA-512-224": algorithm = SHA512_224; return true;
-                case "SHA512-256": case "SHA-512-256": algorithm = SHA512_256; return true;
+                case "SHA512-224": case "SHA-512-224": case "SHA512/224": case "SHA-512/224": algorithm = SHA512_224; return true;
+                case "SHA512-256": case "SHA-512-256": case "SHA512/256": case "SHA-512/256": algorithm = SHA512_256; return true;
                 case "SHA3-224": case "SHA-3-224": algorithm = SHA3_224; return true;
                 case "SHA3-256": case "SHA-3-256": algorithm = SHA3_256; return true;
                 case "SHA3-384": case "SHA-3-384": algorithm = SHA3_384; return true;
@@ -286,90 +286,96 @@ namespace Honoo.BouncyCastle.Helpers
 
                 default: break;
             }
-            return TryGetNanoAlgorithm(mechanism, out algorithm);
+            return TryGetAlgorithmNano(mechanism, out algorithm);
         }
 
-        internal static bool TryGetNanoAlgorithm(string mechanism, out IHashAlgorithm algorithm)
+        internal static bool TryGetAlgorithmNano(string mechanism, out IHashAlgorithm algorithm)
         {
-            string[] splits = mechanism.Split('-');
-            if (splits.Length >= 2 && splits.Length <= 3)
+            int hashSize = 0;
+            int stateSize = 0;
+            if (mechanism.StartsWith("BLAKE2B") || mechanism.StartsWith("BLAKE2S"))
+            {
+                string[] splits = mechanism.Split('-');
+                if (splits.Length == 2)
+                {
+                    if (int.TryParse(splits[1], out hashSize))
+                    {
+                        mechanism = splits[0];
+                    }
+                }
+            }
+            else if (mechanism.StartsWith("SHA512"))
+            {
+                mechanism = mechanism.Replace('/', '-');
+                string[] splits = mechanism.Split('-');
+                if (splits.Length == 2)
+                {
+                    if (int.TryParse(splits[1], out hashSize))
+                    {
+                        mechanism = "SHA512T";
+                    }
+                }
+            }
+            else if (mechanism.StartsWith("SHA-512"))
+            {
+                mechanism = mechanism.Replace('/', '-');
+                string[] splits = mechanism.Split('-');
+                if (splits.Length == 3)
+                {
+                    if (int.TryParse(splits[2], out hashSize))
+                    {
+                        mechanism = "SHA512T";
+                    }
+                }
+            }
+            else if (mechanism.StartsWith("SKEIN"))
+            {
+                string[] splits = mechanism.Split('-');
+                if (splits.Length == 3)
+                {
+                    if (int.TryParse(splits[1], out stateSize) && int.TryParse(splits[2], out hashSize))
+                    {
+                        mechanism = splits[0];
+                    }
+                }
+            }
+            else
             {
                 mechanism = string.Empty;
-                int hashSize = 0;
-                int stateSize = 0;
-                switch (splits[0])
+            }
+            if (mechanism.Length > 0)
+            {
+                bool legal;
+                switch (mechanism)
                 {
                     case "BLAKE2B":
+                        {
+                            legal = DetectionUtilities.ValidSize(BLAKE2b.HashSizes, hashSize);
+                            algorithm = legal ? new BLAKE2b(hashSize) : null;
+                            return legal;
+                        }
+
                     case "BLAKE2S":
-                        if (int.TryParse(splits[1], out hashSize))
                         {
-                            mechanism = splits[0];
+                            legal = DetectionUtilities.ValidSize(BLAKE2s.HashSizes, hashSize);
+                            algorithm = legal ? new BLAKE2s(hashSize) : null;
+                            return legal;
                         }
-                        break;
 
-                    case "SHA":
-                        if (splits.Length == 3)
+                    case "SHA512T":
                         {
-                            if (splits[1] == "512" && int.TryParse(splits[2], out hashSize))
-                            {
-                                mechanism = "SHA512T";
-                            }
+                            legal = DetectionUtilities.ValidSize(SHA512T.HashSizes, hashSize);
+                            algorithm = legal ? new SHA512T(hashSize) : null;
+                            return legal;
                         }
-                        break;
-
-                    case "SHA512":
-                        if (int.TryParse(splits[1], out hashSize))
-                        {
-                            mechanism = "SHA512T";
-                        }
-                        break;
-
                     case "SKEIN":
-                        if (splits.Length == 3)
                         {
-                            if (int.TryParse(splits[1], out stateSize) && int.TryParse(splits[2], out hashSize))
-                            {
-                                mechanism = splits[0];
-                            }
+                            legal = DetectionUtilities.ValidSize(Skein.HashSizes, hashSize);
+                            legal &= DetectionUtilities.ValidSize(Skein.StateSizes, stateSize);
+                            algorithm = legal ? new Skein(hashSize, stateSize) : null;
+                            return legal;
                         }
-                        break;
-
-                    default: break;
-                }
-                if (mechanism.Length > 0)
-                {
-                    bool legal;
-                    switch (mechanism)
-                    {
-                        case "BLAKE2B":
-                            {
-                                legal = DetectionUtilities.ValidSize(BLAKE2b.HashSizes, hashSize);
-                                algorithm = legal ? new BLAKE2b(hashSize) : null;
-                                return legal;
-                            }
-
-                        case "BLAKE2S":
-                            {
-                                legal = DetectionUtilities.ValidSize(BLAKE2s.HashSizes, hashSize);
-                                algorithm = legal ? new BLAKE2s(hashSize) : null;
-                                return legal;
-                            }
-
-                        case "SHA512T":
-                            {
-                                legal = DetectionUtilities.ValidSize(SHA512T.HashSizes, hashSize);
-                                algorithm = legal ? new SHA512T(hashSize) : null;
-                                return legal;
-                            }
-                        case "SKEIN":
-                            {
-                                legal = DetectionUtilities.ValidSize(Skein.HashSizes, hashSize);
-                                legal &= DetectionUtilities.ValidSize(Skein.StateSizes, stateSize);
-                                algorithm = legal ? new Skein(hashSize, stateSize) : null;
-                                return legal;
-                            }
-                        default: algorithm = null; return false;
-                    }
+                    default: algorithm = null; return false;
                 }
             }
             algorithm = null;

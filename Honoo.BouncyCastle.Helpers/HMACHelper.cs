@@ -3,7 +3,7 @@
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// HMAC helper.
+    /// HMAC algorithm helper.
     /// </summary>
     public static class HMACHelper
     {
@@ -223,10 +223,10 @@ namespace Honoo.BouncyCastle.Helpers
         #endregion HMAC
 
         /// <summary>
-        /// Try get algorithm from mechanism.
+        /// Try get HMAC algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Algorithm mechanism.</param>
-        /// <param name="algorithm">Algorithm.</param>
+        /// <param name="mechanism">HMAC algorithm mechanism.</param>
+        /// <param name="algorithm">HMAC algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IHMAC algorithm)
         {
@@ -253,7 +253,6 @@ namespace Honoo.BouncyCastle.Helpers
                     mechanism = mechanism.Substring(4);
                 }
             }
-            mechanism = mechanism.Replace('/', '-');
             switch (mechanism)
             {
                 case "BLAKE2B-256": algorithm = BLAKE2b_256_HMAC; return true;
@@ -284,8 +283,8 @@ namespace Honoo.BouncyCastle.Helpers
                 case "SHA256": case "SHA-256": algorithm = SHA256_HMAC; return true;
                 case "SHA384": case "SHA-384": algorithm = SHA384_HMAC; return true;
                 case "SHA512": case "SHA-512": algorithm = SHA512_HMAC; return true;
-                case "SHA512-224": case "SHA-512-224": algorithm = SHA512_224_HMAC; return true;
-                case "SHA512-256": case "SHA-512-256": algorithm = SHA512_256_HMAC; return true;
+                case "SHA512-224": case "SHA-512-224": case "SHA512/224": case "SHA-512/224": algorithm = SHA512_224_HMAC; return true;
+                case "SHA512-256": case "SHA-512-256": case "SHA512/256": case "SHA-512/256": algorithm = SHA512_256_HMAC; return true;
                 case "SHA3-224": case "SHA-3-224": algorithm = SHA3_224_HMAC; return true;
                 case "SHA3-256": case "SHA-3-256": algorithm = SHA3_256_HMAC; return true;
                 case "SHA3-384": case "SHA-3-384": algorithm = SHA3_384_HMAC; return true;
@@ -301,7 +300,7 @@ namespace Honoo.BouncyCastle.Helpers
 
                 default: break;
             }
-            if (HashAlgorithmHelper.TryGetNanoAlgorithm(mechanism, out IHashAlgorithm hashAlgorithm))
+            if (HashAlgorithmHelper.TryGetAlgorithmNano(mechanism, out IHashAlgorithm hashAlgorithm))
             {
                 algorithm = new HMAC(hashAlgorithm);
                 return true;

@@ -237,14 +237,14 @@ namespace Honoo.BouncyCastle.Helpers
         #endregion Stream algorithms
 
         /// <summary>
-        /// Try get algorithm from mechanism.
+        /// Try get symmetric algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Algorithm mechanism.</param>
-        /// <param name="algorithm">Algorithm.</param>
+        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
+        /// <param name="algorithm">Symmetric algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IBlockAlgorithm algorithm)
         {
-            mechanism = mechanism.Replace('_', '-').Replace('/', '-').ToUpperInvariant();
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
                 case "AES": algorithm = AES; return true;
@@ -285,14 +285,14 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Try get algorithm from mechanism.
+        /// Try get symmetric algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Algorithm mechanism.</param>
-        /// <param name="algorithm">Algorithm.</param>
+        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
+        /// <param name="algorithm">Symmetric algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IStreamAlgorithm algorithm)
         {
-            mechanism = mechanism.Replace('_', '-').Replace('/', '-').ToUpperInvariant();
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
                 case "CHACHA": algorithm = ChaCha; return true;

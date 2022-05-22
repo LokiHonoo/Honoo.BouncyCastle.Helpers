@@ -25,6 +25,11 @@ namespace Honoo.BouncyCastle.Helpers
         KeySizes[] KeySizes { get; }
 
         /// <summary>
+        /// Gets mac size bits.
+        /// </summary>
+        int MacSize { get; }
+
+        /// <summary>
         /// Gets mechanism.
         /// </summary>
         string Mechanism { get; }

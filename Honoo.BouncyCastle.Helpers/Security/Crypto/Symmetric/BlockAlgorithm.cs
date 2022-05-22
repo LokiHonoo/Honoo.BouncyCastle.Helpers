@@ -35,7 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Symmetric block algorithm.
         /// </summary>
-        /// <param name="mechanism">Mechanism.</param>
+        /// <param name="mechanism">Symmetric block algorithm mechanism.</param>
         /// <param name="blockSizes">Block sizes.</param>
         /// <param name="blockSize">Block size.</param>
         /// <param name="keySizes">Key sizes.</param>

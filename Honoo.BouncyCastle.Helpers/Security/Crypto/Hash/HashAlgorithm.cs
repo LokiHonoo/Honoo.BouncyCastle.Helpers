@@ -28,7 +28,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Hash algorithm.
         /// </summary>
-        /// <param name="mechanism">Mechanism.</param>
+        /// <param name="mechanism">Hash algorithm mechanism.</param>
         /// <param name="hashSizes">Hash sizes.</param>
         /// <param name="hashSize">Hash size.</param>
         /// <exception cref="CryptographicException"></exception>

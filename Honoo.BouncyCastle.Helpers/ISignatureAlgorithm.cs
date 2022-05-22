@@ -15,14 +15,14 @@ namespace Honoo.BouncyCastle.Helpers
         IAsymmetricAlgorithm AsymmetricAlgorithm { get; }
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets signature algorithm mechanism.
         /// </summary>
         string Mechanism { get; }
 
         /// <summary>
-        /// Gets x509 signature algorithm oid. Return null if not exists.
+        /// Gets signature algorithm oid. It's maybe 'null' if not supported.
         /// </summary>
-        DerObjectIdentifier X509 { get; }
+        DerObjectIdentifier Oid { get; }
 
         /// <summary>
         /// Generate signer. The signer can be reused.

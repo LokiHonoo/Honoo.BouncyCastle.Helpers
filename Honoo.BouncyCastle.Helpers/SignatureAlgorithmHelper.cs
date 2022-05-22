@@ -1,4 +1,15 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Signature;
+using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Asn1.Bsi;
+using Org.BouncyCastle.Asn1.CryptoPro;
+using Org.BouncyCastle.Asn1.Eac;
+using Org.BouncyCastle.Asn1.GM;
+using Org.BouncyCastle.Asn1.Nist;
+using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Asn1.TeleTrust;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Asn1.X9;
+using Org.BouncyCastle.Cms;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -285,11 +296,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion SM2
 
-        /// <summary>
-        /// Uses substitution box "D-A" by default.
-        /// <para/>Uses EllipticCurve.GostR3410x2001CryptoProA by default.
-        /// </summary>
-        public static ISignatureAlgorithm GOST3411withECGOST3410 { get; } = new ECGOST3410(HashAlgorithmHelper.GOST3411);
+        #region GOST3410
 
         /// <summary>
         /// Uses substitution box "D-A" by default.
@@ -298,31 +305,43 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         public static ISignatureAlgorithm GOST3411withGOST3410 { get; } = new GOST3410(HashAlgorithmHelper.GOST3411);
 
+        #endregion GOST3410
+
+        #region ECGOST3410
+
         /// <summary>
-        /// Try get algorithm from mechanism.
+        /// Uses substitution box "D-A" by default.
+        /// <para/>Uses EllipticCurve.GostR3410x2001CryptoProA by default.
         /// </summary>
-        /// <param name="mechanism">Algorithm mechanism.</param>
-        /// <param name="algorithm">Algorithm.</param>
+        public static ISignatureAlgorithm GOST3411withECGOST3410 { get; } = new ECGOST3410(HashAlgorithmHelper.GOST3411);
+
+        #endregion ECGOST3410
+
+        /// <summary>
+        /// Try get signature algorithm from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="algorithm">Signature algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out ISignatureAlgorithm algorithm)
         {
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
-                case "SHA1WITHCVC-ECDSA": case "SHA-1WITHCVC-ECDSA": algorithm = SHA1withCVC_ECDSA; return true;
-                case "SHA224WITHCVC-ECDSA": case "SHA-224WITHCVC-ECDSA": algorithm = SHA224withCVC_ECDSA; return true;
-                case "SHA256WITHCVC-ECDSA": case "SHA-256WITHCVC-ECDSA": algorithm = SHA256withCVC_ECDSA; return true;
-                case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": algorithm = SHA384withCVC_ECDSA; return true;
-                case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": algorithm = SHA512withCVC_ECDSA; return true;
-
                 case "ED25519": algorithm = new Ed25519(); return true;
                 case "ED25519CTX": algorithm = new Ed25519ctx(); return true;
                 case "ED25519PH": algorithm = new Ed25519ph(); return true;
                 case "ED448": algorithm = new Ed448(); return true;
                 case "ED448PH": algorithm = new Ed448ph(); return true;
 
-                case "GOST3411WITHECGOST3410": case "ECGOST3410": case "ECGOST3410-2001": case "ECGOST-3410": case "ECGOST-3410-2001": algorithm = GOST3411withECGOST3410; return true;
-                case "GOST3411WITHGOST3410": case "GOST3410": case "GOST3410-94": case "GOST-3410": case "GOST-3410-94": algorithm = GOST3411withGOST3410; return true;
+                case "SHA1WITHCVC-ECDSA": case "SHA-1WITHCVC-ECDSA": algorithm = SHA1withCVC_ECDSA; return true;
+                case "SHA224WITHCVC-ECDSA": case "SHA-224WITHCVC-ECDSA": algorithm = SHA224withCVC_ECDSA; return true;
+                case "SHA256WITHCVC-ECDSA": case "SHA-256WITHCVC-ECDSA": algorithm = SHA256withCVC_ECDSA; return true;
+                case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": algorithm = SHA384withCVC_ECDSA; return true;
+                case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": algorithm = SHA512withCVC_ECDSA; return true;
+
+                case "GOST3411WITHECGOST3410": case "ECGOST3410": case "ECGOST3410-2001": algorithm = GOST3411withECGOST3410; return true;
+                case "GOST3411WITHGOST3410": case "GOST3410": case "GOST3410-94": algorithm = GOST3411withGOST3410; return true;
 
                 case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": algorithm = RIPEMD160withPLAIN_ECDSA; return true;
                 case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": algorithm = SHA1withPLAIN_ECDSA; return true;
@@ -400,9 +419,9 @@ namespace Honoo.BouncyCastle.Helpers
                     case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm); return true;
                     case "DSA": algorithm = new DSA(hashAlgorithm); return true;
                     case "ECDSA": algorithm = new ECDSA(hashAlgorithm); return true;
-                    case "ECGOST3410": case "ECGOST3410-2001": case "ECGOST-3410": case "ECGOST-3410-2001": algorithm = new ECGOST3410(hashAlgorithm); return true;
+                    case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm); return true;
                     case "ECNR": algorithm = new ECNR(hashAlgorithm); return true;
-                    case "GOST3410": case "GOST3410-94": case "GOST-3410": case "GOST-3410-94": algorithm = new GOST3410(hashAlgorithm); return true;
+                    case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm); return true;
                     case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm); return true;
                     case "RSA": algorithm = new RSA(hashAlgorithm); return true;
                     case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm); return true;
@@ -414,6 +433,91 @@ namespace Honoo.BouncyCastle.Helpers
             }
             algorithm = null;
             return false;
+        }
+
+        /// <summary>
+        /// Try get signature algorithm oid from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="oid">Signature algorithm oid.</param>
+        /// <returns></returns>
+        public static bool TryGetOid(string mechanism, out DerObjectIdentifier oid)
+        {
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "SHA1WITHCVC-ECDSA": case "SHA-1WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_1; return true;
+                case "SHA224WITHCVC-ECDSA": case "SHA-224WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_224; return true;
+                case "SHA256WITHCVC-ECDSA": case "SHA-256WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_256; return true;
+                case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_384; return true;
+                case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_512; return true;
+
+                case "GOST3411WITHECGOST3410": case "ECGOST3410": case "ECGOST3410-2001": oid = CryptoProObjectIdentifiers.GostR3411x94WithGostR3410x2001; return true;
+                case "GOST3411WITHGOST3410": case "GOST3410": case "GOST3410-94": oid = CryptoProObjectIdentifiers.GostR3411x94WithGostR3410x94; return true;
+
+                case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_RIPEMD160; return true;
+                case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA1; return true;
+                case "SHA224WITHPLAIN-ECDSA": case "SHA-224WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA224; return true;
+                case "SHA256WITHPLAIN-ECDSA": case "SHA-256WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA256; return true;
+                case "SHA384WITHPLAIN-ECDSA": case "SHA-384WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA384; return true;
+                case "SHA512WITHPLAIN-ECDSA": case "SHA-512WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA512; return true;
+
+                case "PSSWITHRSA": oid = PkcsObjectIdentifiers.IdRsassaPss; return true;
+
+                case "SHA1WITHDSA": case "SHA-1WITHDSA": oid = X9ObjectIdentifiers.IdDsaWithSha1; return true;
+                case "SHA224WITHDSA": case "SHA-224WITHDSA": oid = NistObjectIdentifiers.DsaWithSha224; return true;
+                case "SHA256WITHDSA": case "SHA-256WITHDSA": oid = NistObjectIdentifiers.DsaWithSha256; return true;
+                case "SHA384WITHDSA": case "SHA-384WITHDSA": oid = NistObjectIdentifiers.DsaWithSha384; return true;
+                case "SHA512WITHDSA": case "SHA-512WITHDSA": oid = NistObjectIdentifiers.DsaWithSha512; return true;
+                case "SHA3-224WITHDSA": case "SHA-3-224WITHDSA": oid = NistObjectIdentifiers.IdDsaWithSha3_224; return true;
+                case "SHA3-256WITHDSA": case "SHA-3-256WITHDSA": oid = NistObjectIdentifiers.IdDsaWithSha3_256; return true;
+                case "SHA3-384WITHDSA": case "SHA-3-384WITHDSA": oid = NistObjectIdentifiers.IdDsaWithSha3_384; return true;
+                case "SHA3-512WITHDSA": case "SHA-3-512WITHDSA": oid = NistObjectIdentifiers.IdDsaWithSha3_512; return true;
+
+                case "SHA1WITHECDSA": case "SHA-1WITHECDSA": oid = X9ObjectIdentifiers.ECDsaWithSha1; return true;
+                case "SHA224WITHECDSA": case "SHA-224WITHECDSA": oid = X9ObjectIdentifiers.ECDsaWithSha224; return true;
+                case "SHA256WITHECDSA": case "SHA-256WITHECDSA": oid = X9ObjectIdentifiers.ECDsaWithSha256; return true;
+                case "SHA384WITHECDSA": case "SHA-384WITHECDSA": oid = X9ObjectIdentifiers.ECDsaWithSha384; return true;
+                case "SHA512WITHECDSA": case "SHA-512WITHECDSA": oid = X9ObjectIdentifiers.ECDsaWithSha512; return true;
+                case "SHA3-224WITHECDSA": case "SHA-3-224WITHECDSA": oid = NistObjectIdentifiers.IdEcdsaWithSha3_224; return true;
+                case "SHA3-256WITHECDSA": case "SHA-3-256WITHECDSA": oid = NistObjectIdentifiers.IdEcdsaWithSha3_256; return true;
+                case "SHA3-384WITHECDSA": case "SHA-3-384WITHECDSA": oid = NistObjectIdentifiers.IdEcdsaWithSha3_384; return true;
+                case "SHA3-512WITHECDSA": case "SHA-3-512WITHECDSA": oid = NistObjectIdentifiers.IdEcdsaWithSha3_512; return true;
+
+                case "MD2WITHRSA": oid = PkcsObjectIdentifiers.MD2WithRsaEncryption; return true;
+                case "MD5WITHRSA": oid = PkcsObjectIdentifiers.MD5WithRsaEncryption; return true;
+                case "RIPEMD128WITHRSA": case "RIPEMD-128WITHRSA": oid = TeleTrusTObjectIdentifiers.RsaSignatureWithRipeMD128; return true;
+                case "RIPEMD160WITHRSA": case "RIPEMD-160WITHRSA": oid = TeleTrusTObjectIdentifiers.RsaSignatureWithRipeMD160; return true;
+                case "RIPEMD256WITHRSA": case "RIPEMD-256WITHRSA": oid = TeleTrusTObjectIdentifiers.RsaSignatureWithRipeMD256; return true;
+                case "SHA1WITHRSA": case "SHA-1WITHRSA": oid = PkcsObjectIdentifiers.Sha1WithRsaEncryption; return true;
+                case "SHA224WITHRSA": case "SHA-224WITHRSA": oid = PkcsObjectIdentifiers.Sha224WithRsaEncryption; return true;
+                case "SHA256WITHRSA": case "SHA-256WITHRSA": oid = PkcsObjectIdentifiers.Sha256WithRsaEncryption; return true;
+                case "SHA384WITHRSA": case "SHA-384WITHRSA": oid = PkcsObjectIdentifiers.Sha384WithRsaEncryption; return true;
+                case "SHA512WITHRSA": case "SHA-512WITHRSA": oid = PkcsObjectIdentifiers.Sha512WithRsaEncryption; return true;
+                case "SHA3-224WITHRSA": case "SHA-3-224WITHRSA": oid = NistObjectIdentifiers.IdRsassaPkcs1V15WithSha3_224; return true;
+                case "SHA3-256WITHRSA": case "SHA-3-256WITHRSA": oid = NistObjectIdentifiers.IdRsassaPkcs1V15WithSha3_256; return true;
+                case "SHA3-384WITHRSA": case "SHA-3-384WITHRSA": oid = NistObjectIdentifiers.IdRsassaPkcs1V15WithSha3_384; return true;
+                case "SHA3-512WITHRSA": case "SHA-3-512WITHRSA": oid = NistObjectIdentifiers.IdRsassaPkcs1V15WithSha3_512; return true;
+
+                case "SHA1WITHRSAANDMGF1": case "SHA-1WITHRSAANDMGF1": oid = PkcsObjectIdentifiers.IdRsassaPss; return true;
+
+                case "SHA256WITHSM2": case "SHA-256WITHSM2": oid = GMObjectIdentifiers.sm2sign_with_sha256; return true;
+                case "SM3WITHSM2": oid = GMObjectIdentifiers.sm2sign_with_sm3; return true;
+
+                default: break;
+            }
+            try
+            {
+                DefaultSignatureAlgorithmIdentifierFinder finder = new DefaultSignatureAlgorithmIdentifierFinder();
+                AlgorithmIdentifier ai = finder.Find(mechanism);
+                oid = ai.Algorithm;
+                return true;
+            }
+            catch
+            {
+                oid = null;
+                return false;
+            }
         }
     }
 }

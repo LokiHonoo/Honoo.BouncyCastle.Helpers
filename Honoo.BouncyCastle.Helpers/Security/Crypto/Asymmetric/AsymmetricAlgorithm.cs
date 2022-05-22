@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Asymmetric algorithm.
         /// </summary>
-        /// <param name="mechanism">Mechanism.</param>
+        /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
         protected AsymmetricAlgorithm(string mechanism)
         {
             this.Mechanism = mechanism;

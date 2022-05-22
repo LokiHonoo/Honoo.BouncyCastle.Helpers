@@ -34,7 +34,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Symmetric stream algorithm.
         /// </summary>
-        /// <param name="mechanism">Mechanism.</param>
+        /// <param name="mechanism">Symmetric stream algorithm mechanism.</param>
         /// <param name="keySizes">Key sizes.</param>
         /// <param name="ivSizes">IV sizes.</param>
         protected StreamAlgorithm(string mechanism, KeySizes[] keySizes, KeySizes[] ivSizes) : base(mechanism)

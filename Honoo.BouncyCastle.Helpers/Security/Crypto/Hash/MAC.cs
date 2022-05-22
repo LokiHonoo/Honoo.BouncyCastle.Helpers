@@ -36,6 +36,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         { get { return (KeySizes[])this.BlockAlgorithm.KeySizes.Clone(); } }
 
         /// <summary>
+        /// Gets mac size bits.
+        /// </summary>
+        public int MacSize { get; }
+
+        /// <summary>
         /// Gets mechanism.
         /// </summary>
         public string Mechanism { get; }
@@ -73,6 +78,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             }
             this.Mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/MAC", blockAlgorithm.Mechanism);
             this.BlockAlgorithm = (BlockAlgorithm)blockAlgorithm;
+            this.MacSize = macSize;
             this.HashSize = macSize;
         }
 

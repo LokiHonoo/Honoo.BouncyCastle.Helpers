@@ -27,6 +27,8 @@ namespace Test
             Demo1();
             ////
             Test1();
+            Console.WriteLine();
+            Console.WriteLine();
             Test2();
             //
             Console.WriteLine("\r\n\r\n");
@@ -147,7 +149,7 @@ namespace Test
             verifier.BlockUpdate(test, 0, test.Length);
             bool diff = !verifier.VerifySignature(signature);
             //
-            string id = algorithm.X509 is null ? string.Empty : algorithm.X509.Id;
+            string id = algorithm.Oid is null ? string.Empty : algorithm.Oid.Id;
             Console.Write("{0}{1}{2} ", algorithm.Mechanism.PadRight(32), signer.AlgorithmName.PadRight(32), id.PadRight(32));
             if (diff)
             {
