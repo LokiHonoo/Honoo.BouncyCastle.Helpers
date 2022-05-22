@@ -28,7 +28,7 @@ namespace Test
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Honoo.Net.Sockets TEST Root CA")
+                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST Root CA")
             };
             X509Name dn = X509Helper.GenerateX509Name(names);
             Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -42,7 +42,7 @@ namespace Test
                                                    dn,
                                                    extensions,
                                                    DateTime.UtcNow.AddDays(-1),
-                                                   365);
+                                                   120);
 
             _ = PemHelper.KeyToPem(keyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
             _ = PemHelper.KeyToPem(keyPair.Public);
@@ -56,7 +56,7 @@ namespace Test
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Honoo.Net.Sockets TEST TCP Client")
+                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Client")
             };
             X509Name dn = X509Helper.GenerateX509Name(names);
             Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -74,7 +74,7 @@ namespace Test
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Honoo.Net.Sockets TEST TCP Server")
+                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Server")
             };
             X509Name dn = X509Helper.GenerateX509Name(names);
             Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -109,8 +109,8 @@ namespace Test
                                                                         serverExtensions,
                                                                         DateTime.UtcNow.AddDays(-1),
                                                                         90);
-            X509Helper.ExtractCsr(clientCsr, out AsymmetricKeyParameter clientPublicKey, out X509Name clientDN, out X509Extensions clientExtensions);
             //
+            X509Helper.ExtractCsr(clientCsr, out AsymmetricKeyParameter clientPublicKey, out X509Name clientDN, out X509Extensions clientExtensions);
             SignatureAlgorithmHelper.TryGetAlgorithm("SHA256WithECDSA", out ISignatureAlgorithm signatureAlgorithm);
             X509Certificate clientCert = X509Helper.GenerateSubjectCert(signatureAlgorithm,
                                                                         caPrivateKey,
