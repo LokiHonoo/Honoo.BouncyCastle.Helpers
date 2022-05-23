@@ -291,62 +291,47 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static bool TryGetAlgorithmNano(string mechanism, out IHashAlgorithm algorithm)
         {
+            string name = string.Empty;
             int hashSize = 0;
             int stateSize = 0;
             if (mechanism.StartsWith("BLAKE2B") || mechanism.StartsWith("BLAKE2S"))
             {
                 string[] splits = mechanism.Split('-');
-                if (splits.Length == 2)
+                if (splits.Length == 2 && int.TryParse(splits[1], out hashSize))
                 {
-                    if (int.TryParse(splits[1], out hashSize))
-                    {
-                        mechanism = splits[0];
-                    }
+                    name = splits[0];
                 }
             }
             else if (mechanism.StartsWith("SHA512"))
             {
                 mechanism = mechanism.Replace('/', '-');
                 string[] splits = mechanism.Split('-');
-                if (splits.Length == 2)
+                if (splits.Length == 2 && int.TryParse(splits[1], out hashSize))
                 {
-                    if (int.TryParse(splits[1], out hashSize))
-                    {
-                        mechanism = "SHA512T";
-                    }
+                    name = "SHA512T";
                 }
             }
             else if (mechanism.StartsWith("SHA-512"))
             {
                 mechanism = mechanism.Replace('/', '-');
                 string[] splits = mechanism.Split('-');
-                if (splits.Length == 3)
+                if (splits.Length == 3 && int.TryParse(splits[2], out hashSize))
                 {
-                    if (int.TryParse(splits[2], out hashSize))
-                    {
-                        mechanism = "SHA512T";
-                    }
+                    name = "SHA512T";
                 }
             }
             else if (mechanism.StartsWith("SKEIN"))
             {
                 string[] splits = mechanism.Split('-');
-                if (splits.Length == 3)
+                if (splits.Length == 3 && int.TryParse(splits[1], out stateSize) && int.TryParse(splits[2], out hashSize))
                 {
-                    if (int.TryParse(splits[1], out stateSize) && int.TryParse(splits[2], out hashSize))
-                    {
-                        mechanism = splits[0];
-                    }
+                    name = splits[0];
                 }
             }
-            else
-            {
-                mechanism = string.Empty;
-            }
-            if (mechanism.Length > 0)
+            if (name.Length > 0)
             {
                 bool legal;
-                switch (mechanism)
+                switch (name)
                 {
                     case "BLAKE2B":
                         {
