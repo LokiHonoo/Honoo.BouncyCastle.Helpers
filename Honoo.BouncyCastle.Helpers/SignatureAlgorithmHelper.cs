@@ -7,9 +7,7 @@ using Org.BouncyCastle.Asn1.GM;
 using Org.BouncyCastle.Asn1.Nist;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.TeleTrust;
-using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.Cms;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -344,12 +342,12 @@ namespace Honoo.BouncyCastle.Helpers
                 case "0.4.0.127.0.7.2.2.2.2.4": case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": algorithm = SHA384withCVC_ECDSA; return true;
                 case "0.4.0.127.0.7.2.2.2.2.5": case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": algorithm = SHA512withCVC_ECDSA; return true;
 
+                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": algorithm = RIPEMD160withPLAIN_ECDSA; return true;
                 case "0.4.0.127.0.7.1.1.4.1.1": case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": algorithm = SHA1withPLAIN_ECDSA; return true;
                 case "0.4.0.127.0.7.1.1.4.1.2": case "SHA224WITHPLAIN-ECDSA": case "SHA-224WITHPLAIN-ECDSA": algorithm = SHA224withPLAIN_ECDSA; return true;
                 case "0.4.0.127.0.7.1.1.4.1.3": case "SHA256WITHPLAIN-ECDSA": case "SHA-256WITHPLAIN-ECDSA": algorithm = SHA256withPLAIN_ECDSA; return true;
                 case "0.4.0.127.0.7.1.1.4.1.4": case "SHA384WITHPLAIN-ECDSA": case "SHA-384WITHPLAIN-ECDSA": algorithm = SHA384withPLAIN_ECDSA; return true;
                 case "0.4.0.127.0.7.1.1.4.1.5": case "SHA512WITHPLAIN-ECDSA": case "SHA-512WITHPLAIN-ECDSA": algorithm = SHA512withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": algorithm = RIPEMD160withPLAIN_ECDSA; return true;
 
                 case "1.2.840.113549.1.1.10": case "PSSWITHRSA": case "SHA1WITHRSAANDMGF1": case "SHA-1WITHRSAANDMGF1": algorithm = PSSwithRSA; return true;
 
@@ -442,6 +440,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetOid(string mechanism, out DerObjectIdentifier oid)
         {
+            switch (mechanism)
+            {
+                default: break;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
@@ -461,12 +463,12 @@ namespace Honoo.BouncyCastle.Helpers
                 case "0.4.0.127.0.7.2.2.2.2.4": case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_384; return true;
                 case "0.4.0.127.0.7.2.2.2.2.5": case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": oid = EacObjectIdentifiers.id_TA_ECDSA_SHA_512; return true;
 
+                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_RIPEMD160; return true;
                 case "0.4.0.127.0.7.1.1.4.1.1": case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA1; return true;
                 case "0.4.0.127.0.7.1.1.4.1.2": case "SHA224WITHPLAIN-ECDSA": case "SHA-224WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA224; return true;
                 case "0.4.0.127.0.7.1.1.4.1.3": case "SHA256WITHPLAIN-ECDSA": case "SHA-256WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA256; return true;
                 case "0.4.0.127.0.7.1.1.4.1.4": case "SHA384WITHPLAIN-ECDSA": case "SHA-384WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA384; return true;
                 case "0.4.0.127.0.7.1.1.4.1.5": case "SHA512WITHPLAIN-ECDSA": case "SHA-512WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_SHA512; return true;
-                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": oid = BsiObjectIdentifiers.ecdsa_plain_RIPEMD160; return true;
 
                 case "1.2.840.113549.1.1.10": case "PSSWITHRSA": case "SHA1WITHRSAANDMGF1": case "SHA-1WITHRSAANDMGF1": oid = PkcsObjectIdentifiers.IdRsassaPss; return true;
 
@@ -504,18 +506,8 @@ namespace Honoo.BouncyCastle.Helpers
 
                 default: break;
             }
-            try
-            {
-                DefaultSignatureAlgorithmIdentifierFinder finder = new DefaultSignatureAlgorithmIdentifierFinder();
-                AlgorithmIdentifier ai = finder.Find(mechanism);
-                oid = ai.Algorithm;
-                return true;
-            }
-            catch
-            {
-                oid = null;
-                return false;
-            }
+            oid = null;
+            return false;
         }
     }
 }

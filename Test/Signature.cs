@@ -1,8 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers;
-using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Operators;
-using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -25,11 +22,8 @@ namespace Test
             Console.WriteLine();
             //
             Demo1();
-            ////
+            //
             Test1();
-            Console.WriteLine();
-            Console.WriteLine();
-            Test2();
             //
             Console.WriteLine("\r\n\r\n");
             Console.WriteLine("Total={0}  Ignore={1}  Diff={2}", _total, _total - _execute, _diff);
@@ -84,84 +78,35 @@ namespace Test
             }
         }
 
-        private static void Test2()
-        {
-            List<string> hashs = new List<string>();
-            Type type = typeof(HashAlgorithmHelper);
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.GetValue(type, null) is IHashAlgorithm algorithm)
-                {
-                    hashs.Add(algorithm.Mechanism);
-                }
-            }
-            List<string> algorithms = new List<string>();
-            string[] suffixs = new string[] { "CVC-ECDSA", "PLAIN-ECDSA", "DSA", "RSA", "ECDSA", "ECGOST3410", "ECNR", "GOST3410", "RSA/X9.31", "ISO9796-2", "RSAANDMGF1", "SM2" };
-            foreach (string suffix in suffixs)
-            {
-                foreach (string prefix in hashs)
-                {
-                    algorithms.Add(prefix + "with" + suffix);
-                }
-            }
-            SecureRandom random = SecureRandom.GetInstance("MD5PRNG");
-            var rsa = new Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric.RSA(768, 8);
-            var key = rsa.GenerateKeyPair().Private;
-            DefaultSignatureAlgorithmIdentifierFinder finder = new DefaultSignatureAlgorithmIdentifierFinder();
-            foreach (string algorithm in algorithms)
-            {
-                _total++;
-                _execute++;
-                string tag1 = "------------------------------- ";
-                string tag2 = "x";
-                string tag3 = "x";
-                bool oidy = false;
-                try
-                {
-                    var identifier = finder.Find(algorithm);
-                    tag1 = identifier.Algorithm.Id;
-                    oidy = true;
-                }
-                catch { }
-                try
-                {
-                    _ = new Asn1SignatureFactory(algorithm, key, random);
-                    tag2 = "X509 name availabled.";
-                }
-                catch { }
-                if (oidy)
-                {
-                    try
-                    {
-                        _ = new Asn1SignatureFactory(tag1, key, random);
-                        tag3 = "X509 oid availabled.";
-                    }
-                    catch { }
-                }
-                Console.WriteLine("{0}{1}{2}{3}", algorithm.PadRight(38), tag1.PadRight(32), tag2.PadRight(24), tag3);
-            }
-        }
-
         private static void XTest(ISignatureAlgorithm algorithm, ISigner signer, ISigner verifier, byte[] test)
         {
-            signer.BlockUpdate(test, 0, test.Length);
-            byte[] signature = signer.GenerateSignature();
-            verifier.BlockUpdate(test, 0, test.Length);
-            bool diff = !verifier.VerifySignature(signature);
-            //
             string id = algorithm.Oid is null ? string.Empty : algorithm.Oid.Id;
             Console.Write("{0}{1}{2} ", algorithm.Mechanism.PadRight(32), signer.AlgorithmName.PadRight(32), id.PadRight(32));
-            if (diff)
+            try
+            {
+                signer.BlockUpdate(test, 0, test.Length);
+                byte[] signature = signer.GenerateSignature();
+                verifier.BlockUpdate(test, 0, test.Length);
+                bool diff = !verifier.VerifySignature(signature);
+                //
+                if (diff)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("diff");
+                    _diff++;
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine("same");
+                }
+            }
+            catch (Exception)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("diff");
+                Console.WriteLine("error");
                 _diff++;
                 Console.ResetColor();
-            }
-            else
-            {
-                Console.WriteLine("same");
             }
         }
     }

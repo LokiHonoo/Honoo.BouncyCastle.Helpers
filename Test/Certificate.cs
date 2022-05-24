@@ -16,19 +16,20 @@ namespace Test
             Console.WriteLine("====  Certificate Test  ================================================================================================");
             Console.WriteLine();
             //
-            Demo();
+            Demo("SM2", "SHA256withSM2", "SM3withSM2");
             //
             Console.WriteLine("\r\n\r\n\r\n");
         }
 
-        private static void BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
+        private static void BuildCAUnit(string asymmetricAlgorithm, string signatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
         {
-            AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair();
+            AsymmetricAlgorithmHelper.TryGetAlgorithm(asymmetricAlgorithm, out IAsymmetricAlgorithm algorithm);
+            AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
             caPrivateKey = keyPair.Private;
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST Root CA")
+                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST Root CA")
             };
             X509Name dn = X509Helper.GenerateX509Name(names);
             Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -37,7 +38,7 @@ namespace Test
                 new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
             };
             X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            caCert = X509Helper.GenerateIssuerCert("SHA224withECDSA",
+            caCert = X509Helper.GenerateIssuerCert(signatureAlgorithm,
                                                    keyPair,
                                                    dn,
                                                    extensions,
@@ -49,14 +50,15 @@ namespace Test
             _ = PemHelper.CertToPem(caCert);
         }
 
-        private static void BuildClientUnit(out Pkcs10CertificationRequest clientCsr)
+        private static void BuildUserUnit(out AsymmetricKeyParameter userPrivateKey, out Pkcs10CertificationRequest userCsr)
         {
             ISignatureAlgorithm algorithm = SignatureAlgorithmHelper.GOST3411withECGOST3410;
             AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
+            userPrivateKey = keyPair.Private;
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Client")
+                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST User")
             };
             X509Name dn = X509Helper.GenerateX509Name(names);
             Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -65,96 +67,54 @@ namespace Test
                 new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
             };
             X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            clientCsr = X509Helper.GenerateCsr(algorithm, keyPair, dn, extensions);
+            userCsr = X509Helper.GenerateCsr(algorithm, keyPair, dn, extensions);
         }
 
-        private static void BuildServerUnit(out Pkcs10CertificationRequest serverCsr)
-        {
-            AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECGOST3410.GenerateKeyPair();
-            Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
-            {
-                new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-                new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Server")
-            };
-            X509Name dn = X509Helper.GenerateX509Name(names);
-            Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
-            {
-                new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
-                new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
-            };
-            X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            serverCsr = X509Helper.GenerateCsr("GOST3411withECGOST3410", keyPair, dn, extensions);
-        }
-
-        private static void Demo()
+        private static void Demo(string caAsymmetricAlgorithm, string caSignatureAlgorithm, string subjectSignatureAlgorithm)
         {
             //
-            // CA work
+            // CA build self.
             //
-            BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
+            BuildCAUnit(caAsymmetricAlgorithm, caSignatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
             //
-            // Subject work
+            // User create csr and sand to CA.
             //
-            BuildServerUnit(out Pkcs10CertificationRequest serverCsr);
-            BuildClientUnit(out Pkcs10CertificationRequest clientCsr);
+            BuildUserUnit(out AsymmetricKeyParameter _, out Pkcs10CertificationRequest userCsr);
             //
-            // CA work
+            // CA extract csr and create user cert.
             //
-            X509Helper.ExtractCsr(serverCsr, out AsymmetricKeyParameter serverPublicKey, out X509Name serverDN, out X509Extensions serverExtensions);
-            X509Certificate serverCert = X509Helper.GenerateSubjectCert("SHA256WithECDSA",
-                                                                        caPrivateKey,
-                                                                        caCert,
-                                                                        serverPublicKey,
-                                                                        serverDN,
-                                                                        serverExtensions,
-                                                                        DateTime.UtcNow.AddDays(-1),
-                                                                        90);
-            //
-            X509Helper.ExtractCsr(clientCsr, out AsymmetricKeyParameter clientPublicKey, out X509Name clientDN, out X509Extensions clientExtensions);
-            SignatureAlgorithmHelper.TryGetAlgorithm("SHA256WithECDSA", out ISignatureAlgorithm signatureAlgorithm);
-            X509Certificate clientCert = X509Helper.GenerateSubjectCert(signatureAlgorithm,
-                                                                        caPrivateKey,
-                                                                        caCert,
-                                                                        clientPublicKey,
-                                                                        clientDN,
-                                                                        clientExtensions,
-                                                                        DateTime.UtcNow.AddDays(-1),
-                                                                        90);
+            X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDN, out X509Extensions userExtensions);
+            X509Certificate userCert = X509Helper.GenerateSubjectCert(subjectSignatureAlgorithm,
+                                                                      caPrivateKey,
+                                                                      caCert,
+                                                                      userPublicKey,
+                                                                      userDN,
+                                                                      userExtensions,
+                                                                      DateTime.UtcNow.AddDays(-1),
+                                                                      90);
             //
             //
             // Print
             //
             Console.WriteLine("====  CA Cert  =====================================================================================");
             Console.WriteLine(caCert.ToString());
-            Console.WriteLine("====  Server Cert  =================================================================================");
-            Console.WriteLine(serverCert.ToString());
-            Console.WriteLine("====  Client Cert  =================================================================================");
-            Console.WriteLine(clientCert.ToString());
+            Console.WriteLine("====  User Cert  =================================================================================");
+            Console.WriteLine(userCert.ToString());
             Console.WriteLine();
             //
-            // Verify
+            // User verify cert.
             //
             bool validated;
             try
             {
-                serverCert.Verify(caCert.GetPublicKey());
+                userCert.Verify(caCert.GetPublicKey());
                 validated = true;
             }
             catch
             {
                 validated = false;
             }
-            Console.WriteLine("Verify server cert - " + validated);
-            try
-            {
-                clientCert.Verify(caCert.GetPublicKey());
-                validated = true;
-            }
-            catch
-            {
-                validated = false;
-            }
-            Console.WriteLine("Verify client cert - " + validated);
+            Console.WriteLine("Verify user cert - " + validated);
         }
     }
 }

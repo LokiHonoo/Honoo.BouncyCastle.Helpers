@@ -74,29 +74,22 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            string id = signatureAlgorithm.Oid is null ? signatureAlgorithm.Mechanism : signatureAlgorithm.Oid.Id;
-            return GenerateCsr(id, keyPair, dn, extensions);
-        }
-
-        /// <summary>
-        /// Generate certificate signing request.
-        /// </summary>
-        /// <param name="oid">Signature algorithm oid.</param>
-        /// <param name="keyPair">Asymmetric key pair.</param>
-        /// <param name="dn">Distinct name.</param>
-        /// <param name="extensions">Extensions.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static Pkcs10CertificationRequest GenerateCsr(DerObjectIdentifier oid,
-                                                             AsymmetricCipherKeyPair keyPair,
-                                                             X509Name dn,
-                                                             X509Extensions extensions)
-        {
-            if (oid is null)
+            if (keyPair is null)
             {
-                throw new ArgumentNullException(nameof(oid));
+                throw new ArgumentNullException(nameof(keyPair));
             }
-            return GenerateCsr(oid.Id, keyPair, dn, extensions);
+            if (dn is null)
+            {
+                throw new ArgumentNullException(nameof(dn));
+            }
+            if (signatureAlgorithm.Oid is null)
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
+            }
+            else
+            {
+                return GenerateCsr(signatureAlgorithm.Oid.Id, keyPair, dn, extensions);
+            }
         }
 
         /// <summary>
@@ -113,6 +106,10 @@ namespace Honoo.BouncyCastle.Helpers
                                                              X509Name dn,
                                                              X509Extensions extensions)
         {
+            if (string.IsNullOrWhiteSpace(signatureAlgorithm))
+            {
+                throw new ArgumentNullException(nameof(signatureAlgorithm));
+            }
             if (keyPair is null)
             {
                 throw new ArgumentNullException(nameof(keyPair));
@@ -121,9 +118,16 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithm, keyPair.Private, Common.ThreadSecureRandom.Value);
-            DerSet attribute = extensions is null ? null : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(extensions)));
-            return new Pkcs10CertificationRequest(signatureFactory, dn, keyPair.Public, attribute);
+            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            {
+                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, keyPair.Private, Common.ThreadSecureRandom.Value);
+                DerSet attribute = extensions is null ? null : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(extensions)));
+                return new Pkcs10CertificationRequest(signatureFactory, dn, keyPair.Public, attribute);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", signatureAlgorithm);
+            }
         }
 
         /// <summary>
@@ -148,33 +152,22 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            string id = signatureAlgorithm.Oid is null ? signatureAlgorithm.Mechanism : signatureAlgorithm.Oid.Id;
-            return GenerateIssuerCert(id, keyPair, dn, extensions, start, days);
-        }
-
-        /// <summary>
-        /// Generate issuer self signed certificate.
-        /// </summary>
-        /// <param name="oid">Signature algorithm oid.</param>
-        /// <param name="keyPair">The asymmetric key pair of issuer.</param>
-        /// <param name="dn">The distinct name of issuer.</param>
-        /// <param name="extensions">Extensions of issuer.</param>
-        /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static X509Certificate GenerateIssuerCert(DerObjectIdentifier oid,
-                                                         AsymmetricCipherKeyPair keyPair,
-                                                         X509Name dn,
-                                                         X509Extensions extensions,
-                                                         DateTime start,
-                                                         int days)
-        {
-            if (oid is null)
+            if (keyPair is null)
             {
-                throw new ArgumentNullException(nameof(oid));
+                throw new ArgumentNullException(nameof(keyPair));
             }
-            return GenerateIssuerCert(oid.Id, keyPair, dn, extensions, start, days);
+            if (dn is null)
+            {
+                throw new ArgumentNullException(nameof(dn));
+            }
+            if (signatureAlgorithm.Oid is null)
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
+            }
+            else
+            {
+                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, days);
+            }
         }
 
         /// <summary>
@@ -195,6 +188,10 @@ namespace Honoo.BouncyCastle.Helpers
                                                          DateTime start,
                                                          int days)
         {
+            if (string.IsNullOrWhiteSpace(signatureAlgorithm))
+            {
+                throw new ArgumentNullException(nameof(signatureAlgorithm));
+            }
             if (keyPair is null)
             {
                 throw new ArgumentNullException(nameof(keyPair));
@@ -203,7 +200,14 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            return GenerateCert(signatureAlgorithm, keyPair.Private, dn, keyPair.Public, dn, extensions, start, days);
+            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            {
+                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, days);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", signatureAlgorithm);
+            }
         }
 
         /// <summary>
@@ -276,61 +280,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            string id = signatureAlgorithm.Oid is null ? signatureAlgorithm.Mechanism : signatureAlgorithm.Oid.Id;
-            return GenerateSubjectCert(id, issuerPrivateKey, issuerCert, subjectPublicKey, subjectDN, subjectExtensions, start, days);
-        }
-
-        /// <summary>
-        /// Generate subject certificate.
-        /// </summary>
-        /// <param name="oid">Signature algorithm oid.</param>
-        /// <param name="issuerPrivateKey">The asymmetric private key of issuer.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
-        /// <param name="subjectPublicKey">The asymmetric public key of subject.</param>
-        /// <param name="subjectDN">The distinct name of subject.</param>
-        /// <param name="subjectExtensions">Extensions of subject.</param>
-        /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static X509Certificate GenerateSubjectCert(DerObjectIdentifier oid,
-                                                          AsymmetricKeyParameter issuerPrivateKey,
-                                                          X509Certificate issuerCert,
-                                                          AsymmetricKeyParameter subjectPublicKey,
-                                                          X509Name subjectDN,
-                                                          X509Extensions subjectExtensions,
-                                                          DateTime start,
-                                                          int days)
-        {
-            if (oid is null)
-            {
-                throw new ArgumentNullException(nameof(oid));
-            }
-            return GenerateSubjectCert(oid.Id, issuerPrivateKey, issuerCert, subjectPublicKey, subjectDN, subjectExtensions, start, days);
-        }
-
-        /// <summary>
-        /// Generate subject certificate.
-        /// </summary>
-        /// <param name="signatureAlgorithm">Signature algorithm mechanism or oid supported by x590.</param>
-        /// <param name="issuerPrivateKey">The asymmetric private key of issuer.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
-        /// <param name="subjectPublicKey">The asymmetric public key of subject.</param>
-        /// <param name="subjectDN">The distinct name of subject.</param>
-        /// <param name="subjectExtensions">Extensions of subject.</param>
-        /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static X509Certificate GenerateSubjectCert(string signatureAlgorithm,
-                                                          AsymmetricKeyParameter issuerPrivateKey,
-                                                          X509Certificate issuerCert,
-                                                          AsymmetricKeyParameter subjectPublicKey,
-                                                          X509Name subjectDN,
-                                                          X509Extensions subjectExtensions,
-                                                          DateTime start,
-                                                          int days)
-        {
             if (issuerPrivateKey is null)
             {
                 throw new ArgumentNullException(nameof(issuerPrivateKey));
@@ -359,7 +308,78 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new CryptographicException("The end time exceeds the validity of the issuer certificate.");
             }
-            return GenerateCert(signatureAlgorithm, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, days);
+            if (signatureAlgorithm.Oid is null)
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
+            }
+            else
+            {
+                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, days);
+            }
+        }
+
+        /// <summary>
+        /// Generate subject certificate.
+        /// </summary>
+        /// <param name="signatureAlgorithm">Signature algorithm mechanism or oid supported by x590.</param>
+        /// <param name="issuerPrivateKey">The asymmetric private key of issuer.</param>
+        /// <param name="issuerCert">The certificate of issuer.</param>
+        /// <param name="subjectPublicKey">The asymmetric public key of subject.</param>
+        /// <param name="subjectDN">The distinct name of subject.</param>
+        /// <param name="subjectExtensions">Extensions of subject.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="days">The valid days from the start time.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static X509Certificate GenerateSubjectCert(string signatureAlgorithm,
+                                                          AsymmetricKeyParameter issuerPrivateKey,
+                                                          X509Certificate issuerCert,
+                                                          AsymmetricKeyParameter subjectPublicKey,
+                                                          X509Name subjectDN,
+                                                          X509Extensions subjectExtensions,
+                                                          DateTime start,
+                                                          int days)
+        {
+            if (string.IsNullOrWhiteSpace(signatureAlgorithm))
+            {
+                throw new ArgumentNullException(nameof(signatureAlgorithm));
+            }
+            if (issuerPrivateKey is null)
+            {
+                throw new ArgumentNullException(nameof(issuerPrivateKey));
+            }
+            if (issuerCert is null)
+            {
+                throw new ArgumentNullException(nameof(issuerCert));
+            }
+            if (subjectPublicKey is null)
+            {
+                throw new ArgumentNullException(nameof(subjectPublicKey));
+            }
+            try
+            {
+                issuerCert.CheckValidity();
+            }
+            catch
+            {
+                throw new CryptographicException("The issuer's certificate has expired.");
+            }
+            try
+            {
+                issuerCert.CheckValidity(start.AddDays(days));
+            }
+            catch
+            {
+                throw new CryptographicException("The end time exceeds the validity of the issuer certificate.");
+            }
+            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            {
+                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, days);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", signatureAlgorithm);
+            }
         }
 
         /// <summary>
@@ -458,7 +478,7 @@ namespace Honoo.BouncyCastle.Helpers
             return new X509Name(ordering, attributes);
         }
 
-        private static X509Certificate GenerateCert(string signatureAlgorithm,
+        private static X509Certificate GenerateCert(string signatureAlgorithmOid,
                                                     AsymmetricKeyParameter issuerPrivateKey,
                                                     X509Name issuerDN,
                                                     AsymmetricKeyParameter subjectPublicKey,
@@ -467,7 +487,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                     DateTime start,
                                                     int days)
         {
-            ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithm, issuerPrivateKey, Common.ThreadSecureRandom.Value);
+            ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.ThreadSecureRandom.Value);
             BigInteger sn = new BigInteger(128, Common.ThreadSecureRandom.Value);
             X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
             generator.SetSerialNumber(sn);
