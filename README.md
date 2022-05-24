@@ -345,7 +345,7 @@ private static void Demo()
 
 ## BUG
 
-BouncyCastle 1.8.9
+BouncyCastle 1.9.0
 
 1. The signature algorithm SHA256withECDSA points to SHA224withECDSA at Org.BouncyCastle.Cms.DefaultSignatureAlgorithmIdentifierFinder.
 2. GCM cipher mode cannot be resue. The algorithm instance needs to be recreated every time.
