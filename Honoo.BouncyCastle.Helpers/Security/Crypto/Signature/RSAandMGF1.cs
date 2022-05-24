@@ -1,7 +1,9 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -16,7 +18,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         //private readonly int _saltLength;
         //private readonly byte _trailer = 0xBC;
         //private readonly byte[] _salt;
-        private readonly IHashAlgorithm _hashAlgorithMgf;
+        private readonly IHashAlgorithm _hashAlgorithm;
 
         #endregion Properties
 
@@ -38,7 +40,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         public RSAandMGF1(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSAandMGF1", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
         {
-            _hashAlgorithMgf = hashAlgorithm;
+            _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
         #endregion Constructor
@@ -49,7 +51,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <returns></returns>
         protected override ISigner GenerateSigner()
         {
-            IDigest digest = _hashAlgorithMgf.GenerateDigest();
+            IDigest digest = _hashAlgorithm.GenerateDigest();
             return new PssSigner(new RsaBlindedEngine(), digest);
         }
 
@@ -61,7 +63,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             }
             else if (asymmetricAlgorithm.Mechanism != "RSA")
             {
-                throw new System.Security.Cryptography.CryptographicException("Requires RSA asymmetric algorithm.");
+                throw new CryptographicException("Requires RSA asymmetric algorithm.");
             }
             else
             {

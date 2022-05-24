@@ -231,7 +231,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IHashAlgorithm algorithm)
         {
-            if (string.IsNullOrEmpty(mechanism))
+            if (string.IsNullOrWhiteSpace(mechanism))
             {
                 algorithm = null;
                 return false;

@@ -7,6 +7,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using System;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -21,6 +22,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         private readonly int _certainty;
         private readonly int _keySize;
+
+        /// <summary>
+        /// Certainty.
+        /// </summary>
+        public int Certainty => _certainty;
+
+        /// <summary>
+        /// Key size.
+        /// </summary>
+        public int KeySize => _keySize;
 
         #endregion Properties
 
@@ -88,7 +99,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                 case AsymmetricPaddingMode.PKCS1: cipher = new Pkcs1Encoding(cipher); break;
                 case AsymmetricPaddingMode.OAEP: cipher = new OaepEncoding(cipher); break;
                 case AsymmetricPaddingMode.ISO9796_1: cipher = new ISO9796d1Encoding(cipher); break;
-                default: throw new System.Security.Cryptography.CryptographicException("Unsupported padding mode.");
+                default: throw new CryptographicException("Unsupported padding mode.");
             }
             cipher.Init(!asymmetricKey.IsPrivate, asymmetricKey);
             return cipher;

@@ -1,6 +1,8 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Utilities;
+using System;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -42,7 +44,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
         public Ed448(byte[] context, IAsymmetricAlgorithm asymmetricAlgorithm) : base("Ed448", EnsureAlgorithm(asymmetricAlgorithm))
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         #endregion Constructor
@@ -64,7 +66,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             }
             else if (asymmetricAlgorithm.Mechanism != "Ed448")
             {
-                throw new System.Security.Cryptography.CryptographicException("Requires Ed448 asymmetric algorithm.");
+                throw new CryptographicException("Requires Ed448 asymmetric algorithm.");
             }
             else
             {

@@ -244,6 +244,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IBlockAlgorithm algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
@@ -292,6 +297,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IStreamAlgorithm algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {

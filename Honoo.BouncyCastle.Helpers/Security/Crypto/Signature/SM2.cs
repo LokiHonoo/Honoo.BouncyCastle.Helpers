@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Globalization;
 using System.Security.Cryptography;
 
@@ -34,7 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         public SM2(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withSM2", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
         {
-            _hashAlgorithm = hashAlgorithm;
+            _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
         #endregion Constructor

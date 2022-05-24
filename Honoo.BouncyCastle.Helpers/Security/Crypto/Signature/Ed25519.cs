@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -44,7 +45,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             }
             else if (asymmetricAlgorithm.Mechanism != "Ed25519")
             {
-                throw new System.Security.Cryptography.CryptographicException("Requires Ed25519 asymmetric algorithm.");
+                throw new CryptographicException("Requires Ed25519 asymmetric algorithm.");
             }
             else
             {

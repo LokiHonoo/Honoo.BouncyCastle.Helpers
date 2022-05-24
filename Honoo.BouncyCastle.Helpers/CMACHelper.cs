@@ -143,6 +143,16 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, int macSize, out ICMAC algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
+            if (macSize <= 0)
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             if (mechanism.EndsWith("CMAC"))
             {

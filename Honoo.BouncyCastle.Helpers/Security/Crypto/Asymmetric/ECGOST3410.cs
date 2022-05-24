@@ -3,6 +3,7 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -15,6 +16,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #region Properties
 
         private readonly ECGOST3410EllipticCurve _ellipticCurve;
+
+        /// <summary>
+        /// Curve.
+        /// </summary>
+        public ECGOST3410EllipticCurve EllipticCurve => _ellipticCurve;
 
         #endregion Properties
 
@@ -63,7 +69,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                 case ECGOST3410EllipticCurve.GostR3410x2001CryptoProC: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProC);
                 case ECGOST3410EllipticCurve.GostR3410x2001CryptoProXchA: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchA);
                 case ECGOST3410EllipticCurve.GostR3410x2001CryptoProXchB: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchB);
-                default: throw new System.Security.Cryptography.CryptographicException("Unsupported elliptic curve.");
+                default: throw new CryptographicException("Unsupported elliptic curve.");
             }
         }
     }

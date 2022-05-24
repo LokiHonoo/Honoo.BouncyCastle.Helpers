@@ -230,6 +230,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IHMAC algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             if (mechanism.EndsWith("HMAC"))
             {

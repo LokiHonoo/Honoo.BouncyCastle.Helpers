@@ -1,6 +1,8 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -33,7 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         public ECNR(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withECNR", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
         {
-            _hashAlgorithm = hashAlgorithm;
+            _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
         #endregion Constructor
@@ -56,7 +58,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             }
             else if (asymmetricAlgorithm.Mechanism != "ECDSA")
             {
-                throw new System.Security.Cryptography.CryptographicException("Requires ECDSA asymmetric algorithm.");
+                throw new CryptographicException("Requires ECDSA asymmetric algorithm.");
             }
             else
             {

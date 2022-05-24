@@ -1,6 +1,8 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -33,7 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         public DSA(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withDSA", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
         {
-            _hashAlgorithm = hashAlgorithm;
+            _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
         #endregion Constructor
@@ -56,7 +58,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             }
             else if (asymmetricAlgorithm.Mechanism != "DSA")
             {
-                throw new System.Security.Cryptography.CryptographicException("Requires DSA asymmetric algorithm.");
+                throw new CryptographicException("Requires DSA asymmetric algorithm.");
             }
             else
             {

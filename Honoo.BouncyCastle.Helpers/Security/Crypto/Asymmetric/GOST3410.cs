@@ -16,6 +16,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         private readonly int _keySize;
         private readonly int _procedure;
 
+        /// <summary>
+        /// Key size.
+        /// </summary>
+        public int KeySize => _keySize;
+
+        /// <summary>
+        /// Procedure.
+        /// </summary>
+        public int Procedure => _procedure;
+
         #endregion Properties
 
         #region Constructor

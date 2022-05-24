@@ -64,6 +64,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IAsymmetricAlgorithm algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
@@ -88,6 +93,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IAsymmetricEncryptionAlgorithm algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.ToUpperInvariant();
             switch (mechanism)
             {

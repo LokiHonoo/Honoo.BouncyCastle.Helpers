@@ -321,8 +321,86 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mechanism">Signature algorithm mechanism.</param>
         /// <param name="algorithm">Signature algorithm.</param>
         /// <returns></returns>
+
+        /// <summary>
+        /// Try get signature algorithm used arguments hash algorithm, asymmetric algorithm.
+        /// </summary>
+        /// <param name="model">Signature algorithm model. e.g. ECDSA, RSA, RSAandMGF1, and so on.</param>
+        /// <param name="hashAlgorithm">Hash algorithm.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
+        /// <param name="algorithm">Signature algorithm.</param>
+        /// <returns></returns>
+        public static bool TryGetAlgorithm(string model, IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm, out ISignatureAlgorithm algorithm)
+        {
+            if (string.IsNullOrWhiteSpace(model))
+            {
+                algorithm = null;
+                return false;
+            }
+            if (asymmetricAlgorithm is null)
+            {
+                algorithm = null;
+                return false;
+            }
+            if (hashAlgorithm is null)
+            {
+                algorithm = null;
+                return false;
+            }
+            model = model.Replace('_', '-').ToUpperInvariant();
+            bool corresponding = false;
+            switch (model)
+            {
+                case "CVC-ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
+                case "DSA": corresponding = asymmetricAlgorithm.Mechanism == "DSA"; break;
+                case "ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
+                case "ECGOST3410": case "ECGOST3410-2001": corresponding = asymmetricAlgorithm.Mechanism == "ECGOST3410"; break;
+                case "ECNR": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
+                case "GOST3410": case "GOST3410-94": corresponding = asymmetricAlgorithm.Mechanism == "GOST3410"; break;
+                case "PLAIN-ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
+                case "RSA": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
+                case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
+                case "RSAANDMGF1": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
+                case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
+                case "SM2": corresponding = asymmetricAlgorithm.Mechanism == "SM2"; break;
+                default: break;
+            }
+            if (corresponding)
+            {
+                switch (model)
+                {
+                    case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "DSA": algorithm = new DSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "ECDSA": algorithm = new ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "ECNR": algorithm = new ECNR(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "RSA": algorithm = new RSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm, asymmetricAlgorithm); return true;
+                    case "SM2": algorithm = new SM2(hashAlgorithm, asymmetricAlgorithm); return true;
+                    default: break;
+                }
+            }
+            algorithm = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Try get signature algorithm from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="algorithm">Signature algorithm.</param>
+        /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out ISignatureAlgorithm algorithm)
         {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                algorithm = null;
+                return false;
+            }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
@@ -433,9 +511,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetOid(string mechanism, out DerObjectIdentifier oid)
         {
-            switch (mechanism)
+            if (string.IsNullOrWhiteSpace(mechanism))
             {
-                default: break;
+                oid = null;
+                return false;
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
