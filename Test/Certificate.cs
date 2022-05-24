@@ -16,14 +16,15 @@ namespace Test
             Console.WriteLine("====  Certificate Test  ================================================================================================");
             Console.WriteLine();
             //
-            Demo();
+            Demo("SM2", "SHA256withSM2", "SM3withSM2");
             //
             Console.WriteLine("\r\n\r\n\r\n");
         }
 
-        private static void BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
+        private static void BuildCAUnit(string asymmetricAlgorithm, string signatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
         {
-            AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair();
+            AsymmetricAlgorithmHelper.TryGetAlgorithm(asymmetricAlgorithm, out IAsymmetricAlgorithm algorithm);
+            AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
             caPrivateKey = keyPair.Private;
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {
@@ -37,7 +38,7 @@ namespace Test
                 new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
             };
             X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            caCert = X509Helper.GenerateIssuerCert("SHA224withECDSA",
+            caCert = X509Helper.GenerateIssuerCert(signatureAlgorithm,
                                                    keyPair,
                                                    dn,
                                                    extensions,
@@ -86,12 +87,12 @@ namespace Test
             serverCsr = X509Helper.GenerateCsr("GOST3411withECGOST3410", keyPair, dn, extensions);
         }
 
-        private static void Demo()
+        private static void Demo(string caAsymmetricAlgorithm, string caSignatureAlgorithm, string subjectSignatureAlgorithm)
         {
             //
             // CA work
             //
-            BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
+            BuildCAUnit(caAsymmetricAlgorithm, caSignatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
             //
             // Subject work
             //
@@ -101,7 +102,7 @@ namespace Test
             // CA work
             //
             X509Helper.ExtractCsr(serverCsr, out AsymmetricKeyParameter serverPublicKey, out X509Name serverDN, out X509Extensions serverExtensions);
-            X509Certificate serverCert = X509Helper.GenerateSubjectCert("SHA256WithECDSA",
+            X509Certificate serverCert = X509Helper.GenerateSubjectCert(subjectSignatureAlgorithm,
                                                                         caPrivateKey,
                                                                         caCert,
                                                                         serverPublicKey,
@@ -111,8 +112,7 @@ namespace Test
                                                                         90);
             //
             X509Helper.ExtractCsr(clientCsr, out AsymmetricKeyParameter clientPublicKey, out X509Name clientDN, out X509Extensions clientExtensions);
-            SignatureAlgorithmHelper.TryGetAlgorithm("SHA256WithECDSA", out ISignatureAlgorithm signatureAlgorithm);
-            X509Certificate clientCert = X509Helper.GenerateSubjectCert(signatureAlgorithm,
+            X509Certificate clientCert = X509Helper.GenerateSubjectCert(subjectSignatureAlgorithm,
                                                                         caPrivateKey,
                                                                         caCert,
                                                                         clientPublicKey,
