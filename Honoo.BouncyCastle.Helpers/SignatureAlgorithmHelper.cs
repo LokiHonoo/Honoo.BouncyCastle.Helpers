@@ -398,34 +398,27 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 prefix = mechanism.Substring(0, index);
                 suffix = mechanism.Substring(index + 4, mechanism.Length - index - 4);
-            }
-            else
-            {
-                prefix = string.Empty;
-                suffix = mechanism;
-            }
-            if (suffix == "ELGAMAL")
-            {
-                algorithm = null;
-                return false;
-            }
-            if (HashAlgorithmHelper.TryGetAlgorithm(prefix, out IHashAlgorithm hashAlgorithm))
-            {
-                switch (suffix)
+                if (suffix != "ELGAMAL")
                 {
-                    case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm); return true;
-                    case "DSA": algorithm = new DSA(hashAlgorithm); return true;
-                    case "ECDSA": algorithm = new ECDSA(hashAlgorithm); return true;
-                    case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm); return true;
-                    case "ECNR": algorithm = new ECNR(hashAlgorithm); return true;
-                    case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm); return true;
-                    case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm); return true;
-                    case "RSA": algorithm = new RSA(hashAlgorithm); return true;
-                    case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm); return true;
-                    case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm); return true;
-                    case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm); return true;
-                    case "SM2": algorithm = new SM2(hashAlgorithm); return true;
-                    default: break;
+                    if (HashAlgorithmHelper.TryGetAlgorithm(prefix, out IHashAlgorithm hashAlgorithm))
+                    {
+                        switch (suffix)
+                        {
+                            case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm); return true;
+                            case "DSA": algorithm = new DSA(hashAlgorithm); return true;
+                            case "ECDSA": algorithm = new ECDSA(hashAlgorithm); return true;
+                            case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm); return true;
+                            case "ECNR": algorithm = new ECNR(hashAlgorithm); return true;
+                            case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm); return true;
+                            case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm); return true;
+                            case "RSA": algorithm = new RSA(hashAlgorithm); return true;
+                            case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm); return true;
+                            case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm); return true;
+                            case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm); return true;
+                            case "SM2": algorithm = new SM2(hashAlgorithm); return true;
+                            default: break;
+                        }
+                    }
                 }
             }
             algorithm = null;
