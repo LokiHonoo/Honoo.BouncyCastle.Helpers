@@ -38,7 +38,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override IDigest GenerateDigest()
         {
-            if (this.HashSize == 512)
+            if (base.HashSize == 512)
             {
                 return new Gost3411_2012_512Digest();
             }

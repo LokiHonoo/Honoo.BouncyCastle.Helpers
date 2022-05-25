@@ -11,15 +11,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     {
         #region Properties
 
+        private readonly int _hashSize;
+        private readonly string _mechanism;
+
         /// <summary>
         /// Gets hash size bits.
         /// </summary>
-        public int HashSize { get; }
+        public int HashSize => _hashSize;
 
         /// <summary>
         /// Gets mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
         #endregion Properties
 
@@ -38,8 +41,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             {
                 throw new CryptographicException("Unsupported hash size.");
             }
-            this.Mechanism = mechanism;
-            this.HashSize = hashSize;
+            _mechanism = mechanism;
+            _hashSize = hashSize;
         }
 
         #endregion Constructor
@@ -65,7 +68,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             IDigest digest = GenerateDigest();
             digest.BlockUpdate(data, offset, length);
-            byte[] hash = new byte[this.HashSize];
+            byte[] hash = new byte[_hashSize];
             digest.DoFinal(hash, 0);
             return hash;
         }
@@ -82,7 +85,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
     }
 }

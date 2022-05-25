@@ -10,11 +10,6 @@ namespace Honoo.BouncyCastle.Helpers
     public interface ISignatureAlgorithm
     {
         /// <summary>
-        /// Gets the corresponding asymmetric algorithm.
-        /// </summary>
-        IAsymmetricAlgorithm AsymmetricAlgorithm { get; }
-
-        /// <summary>
         /// Gets signature algorithm mechanism.
         /// </summary>
         string Mechanism { get; }
@@ -23,6 +18,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets signature algorithm oid. It's maybe 'null' if not supported.
         /// </summary>
         DerObjectIdentifier Oid { get; }
+
+        /// <summary>
+        /// Generate key pair by the corresponding asymmetric algorithm.
+        /// </summary>
+        /// <returns></returns>
+        AsymmetricCipherKeyPair GenerateKeyPair();
 
         /// <summary>
         /// Generate signer. The signer can be reused.

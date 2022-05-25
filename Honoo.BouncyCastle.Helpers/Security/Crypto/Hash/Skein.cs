@@ -18,11 +18,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         private static readonly KeySizes[] _hashSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
         private static readonly KeySizes[] _stateSizes = new KeySizes[] { new KeySizes(256, 256, 0), new KeySizes(512, 512, 0), new KeySizes(1024, 1024, 0) };
+        private readonly int _stateSize;
 
         /// <summary>
         /// Gets state size bits.
         /// </summary>
-        public int StateSize { get; }
+        public int StateSize => _stateSize;
 
         internal static KeySizes[] HashSizes => _hashSizes;
 
@@ -47,7 +48,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             {
                 throw new CryptographicException("Legal state size 256, 512, 1024 bits.");
             }
-            this.StateSize = stateSize;
+            _stateSize = stateSize;
         }
 
         #endregion Constructor
@@ -58,7 +59,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override IDigest GenerateDigest()
         {
-            return new SkeinDigest(this.StateSize, base.HashSize);
+            return new SkeinDigest(_stateSize, base.HashSize);
         }
     }
 }

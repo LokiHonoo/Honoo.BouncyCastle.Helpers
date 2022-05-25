@@ -9,10 +9,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     {
         #region Properties
 
+        private readonly string _mechanism;
+
         /// <summary>
         /// Gets mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
         #endregion Properties
 
@@ -24,7 +26,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
         protected AsymmetricAlgorithm(string mechanism)
         {
-            this.Mechanism = mechanism;
+            _mechanism = mechanism;
         }
 
         #endregion Constructor
@@ -41,7 +43,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
     }
 }

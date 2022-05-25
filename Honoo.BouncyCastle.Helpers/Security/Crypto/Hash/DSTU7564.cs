@@ -38,7 +38,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override IDigest GenerateDigest()
         {
-            return new Dstu7564Digest(this.HashSize);
+            return new Dstu7564Digest(base.HashSize);
         }
     }
 }

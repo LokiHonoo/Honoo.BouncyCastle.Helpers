@@ -138,7 +138,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
+        /// <param name="expiration">The expiration times from the start time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(ISignatureAlgorithm signatureAlgorithm,
@@ -146,7 +146,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
-                                                         int days)
+                                                         TimeSpan expiration)
         {
             if (signatureAlgorithm is null)
             {
@@ -166,7 +166,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, days);
+                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expiration);
             }
         }
 
@@ -178,7 +178,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
+        /// <param name="expiration">The expiration times from the start time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(string signatureAlgorithm,
@@ -186,7 +186,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
-                                                         int days)
+                                                         TimeSpan expiration)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
@@ -202,7 +202,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, days);
+                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expiration);
             }
             else
             {
@@ -264,7 +264,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
+        /// <param name="expiration">The expiration times from the start time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateSubjectCert(ISignatureAlgorithm signatureAlgorithm,
@@ -274,7 +274,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                           X509Name subjectDN,
                                                           X509Extensions subjectExtensions,
                                                           DateTime start,
-                                                          int days)
+                                                          TimeSpan expiration)
         {
             if (signatureAlgorithm is null)
             {
@@ -302,7 +302,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(start.AddDays(days));
+                issuerCert.CheckValidity(start.Add(expiration));
             }
             catch
             {
@@ -314,7 +314,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, days);
+                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expiration);
             }
         }
 
@@ -328,7 +328,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="days">The valid days from the start time.</param>
+        /// <param name="expiration">The expiration times from the start time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateSubjectCert(string signatureAlgorithm,
@@ -338,7 +338,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                           X509Name subjectDN,
                                                           X509Extensions subjectExtensions,
                                                           DateTime start,
-                                                          int days)
+                                                          TimeSpan expiration)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
@@ -366,7 +366,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(start.AddDays(days));
+                issuerCert.CheckValidity(start.Add(expiration));
             }
             catch
             {
@@ -374,7 +374,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, days);
+                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expiration);
             }
             else
             {
@@ -485,7 +485,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                     X509Name subjectDN,
                                                     X509Extensions subjectExtensions,
                                                     DateTime start,
-                                                    int days)
+                                                    TimeSpan expiration)
         {
             ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.ThreadSecureRandom.Value);
             BigInteger sn = new BigInteger(128, Common.ThreadSecureRandom.Value);
@@ -503,7 +503,7 @@ namespace Honoo.BouncyCastle.Helpers
                 }
             }
             generator.SetNotBefore(start);
-            generator.SetNotAfter(start.AddDays(days));
+            generator.SetNotAfter(start.Add(expiration));
             return generator.Generate(signatureFactory);
         }
 

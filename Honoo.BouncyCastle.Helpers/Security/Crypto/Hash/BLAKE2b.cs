@@ -74,7 +74,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override IDigest GenerateDigest()
         {
-            return new Blake2bDigest(_key, this.HashSize / 8, _salt, _personalization);
+            return new Blake2bDigest(_key, base.HashSize / 8, _salt, _personalization);
         }
     }
 }

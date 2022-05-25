@@ -7,10 +7,12 @@
     {
         #region Properties
 
+        private readonly string _mechanism;
+
         /// <summary>
         /// Gets mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
         #endregion Properties
 
@@ -22,7 +24,7 @@
         /// <param name="mechanism">Symmetric algorithm mechanism.</param>
         protected SymmetricAlgorithm(string mechanism)
         {
-            this.Mechanism = mechanism;
+            _mechanism = mechanism;
         }
 
         #endregion Constructor
@@ -33,7 +35,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
     }
 }

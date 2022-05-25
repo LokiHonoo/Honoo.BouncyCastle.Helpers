@@ -40,47 +40,55 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = Utilities.ScoopBytes(123);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
+            // example 1
+            byte[] hash1 = HashAlgorithmHelper.SHA3_256.ComputeHash(test);
+            // example 2
             IDigest digest = HashAlgorithmHelper.SHA3_256.GenerateDigest();
-            byte[] hash = new byte[digest.GetDigestSize()];
-            //byte[] hash = new byte[HashAlgorithmHelper.SHA3_256.HashSize / 8];
+            byte[] hash2 = new byte[HashAlgorithmHelper.SHA3_256.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
-            digest.DoFinal(hash, 0);
+            digest.DoFinal(hash2, 0);
         }
 
         private static void Demo2()
         {
-            byte[] test = Utilities.ScoopBytes(123);
-            byte[] key = Utilities.ScoopBytes(72);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
+            byte[] key = new byte[72];
+            Utilities.Random.NextBytes(key);
             ICipherParameters parameters = HMACHelper.SHA3_256_HMAC.GenerateParameters(key);
             IMac digest = HMACHelper.SHA3_256_HMAC.GenerateDigest(parameters);
-            byte[] hash = new byte[digest.GetMacSize()];
-            //byte[] hash = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
+            byte[] hash = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash, 0);
         }
 
         private static void Demo3()
         {
-            byte[] test = Utilities.ScoopBytes(123);
-            byte[] key = Utilities.ScoopBytes(128 / 8);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
+            byte[] key = new byte[CMACHelper.AES_CMAC.KeySizes[0].MinSize / 8];
+            Utilities.Random.NextBytes(key);
             ICipherParameters parameters = CMACHelper.AES_CMAC.GenerateParameters(key);
             IMac digest = CMACHelper.AES_CMAC.GenerateDigest(parameters);
-            byte[] hash = new byte[digest.GetMacSize()];
-            //byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
+            byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash, 0);
         }
 
         private static void Demo4()
         {
-            byte[] test = Utilities.ScoopBytes(123);
-            byte[] key = Utilities.ScoopBytes(128 / 8);
-            byte[] iv = Utilities.ScoopBytes(128 / 8);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
+            byte[] key = new byte[MACHelper.AES_MAC.KeySizes[0].MinSize / 8];
+            Utilities.Random.NextBytes(key);
+            _ = MACHelper.AES_MAC.TryGetIVSizes(MACCipherMode.CBC, out KeySizes[] ivSizes);
+            byte[] iv = new byte[ivSizes[0].MinSize];
+            Utilities.Random.NextBytes(iv);
             ICipherParameters parameters = MACHelper.AES_MAC.GenerateParameters(key, iv);
             IMac digest = MACHelper.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
-            byte[] hash = new byte[digest.GetMacSize()];
-            //byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
+            byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash, 0);
         }

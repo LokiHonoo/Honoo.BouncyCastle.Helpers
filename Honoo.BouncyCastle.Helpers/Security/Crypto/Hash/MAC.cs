@@ -19,33 +19,38 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     {
         #region Properties
 
+        private readonly BlockAlgorithm _blockAlgorithm;
+        private readonly int _hashSize;
+        private readonly int _macSize;
+        private readonly string _mechanism;
+
         /// <summary>
         /// Gets block size bits.
         /// </summary>
-        public int BlockSize => this.BlockAlgorithm.BlockSize;
+        public int BlockSize => _blockAlgorithm.BlockSize;
 
         /// <summary>
         /// Gets hash size bits.
         /// </summary>
-        public int HashSize { get; }
+        public int HashSize => _hashSize;
 
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
         public KeySizes[] KeySizes
-        { get { return (KeySizes[])this.BlockAlgorithm.KeySizes.Clone(); } }
+        { get { return (KeySizes[])_blockAlgorithm.KeySizes.Clone(); } }
 
         /// <summary>
         /// Gets mac size bits.
         /// </summary>
-        public int MacSize { get; }
+        public int MacSize => _macSize;
 
         /// <summary>
         /// Gets mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
-        internal BlockAlgorithm BlockAlgorithm { get; }
+        internal IBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
 
         #endregion Properties
 
@@ -76,10 +81,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             {
                 throw new CryptographicException("Legal mac size is between 8 and block size (8 bits increments).");
             }
-            this.Mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/MAC", blockAlgorithm.Mechanism);
-            this.BlockAlgorithm = (BlockAlgorithm)blockAlgorithm;
-            this.MacSize = macSize;
-            this.HashSize = macSize;
+            _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/MAC", blockAlgorithm.Mechanism);
+            _blockAlgorithm = (BlockAlgorithm)blockAlgorithm;
+            _macSize = macSize;
+            _hashSize = macSize;
         }
 
         #endregion Constructor
@@ -111,7 +116,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             IMac digest = GenerateDigest(mode, padding, parameters);
             digest.BlockUpdate(data, offset, length);
-            byte[] hash = new byte[this.HashSize];
+            byte[] hash = new byte[_hashSize];
             digest.DoFinal(hash, 0);
             return hash;
         }
@@ -141,14 +146,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             switch (mode)
             {
                 case MACCipherMode.CBC:
-                    digest = pad is null ? new CbcBlockCipherMac(this.BlockAlgorithm.GenerateEngine(), this.HashSize)
-                        : new CbcBlockCipherMac(this.BlockAlgorithm.GenerateEngine(), this.HashSize, pad);
+                    digest = pad is null ? new CbcBlockCipherMac(_blockAlgorithm.GenerateEngine(), _hashSize)
+                        : new CbcBlockCipherMac(_blockAlgorithm.GenerateEngine(), _hashSize, pad);
                     break;
 
                 case MACCipherMode.CFB:
                     int cfbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    digest = pad is null ? new CfbBlockCipherMac(this.BlockAlgorithm.GenerateEngine(), cfbs, this.HashSize)
-                        : new CfbBlockCipherMac(this.BlockAlgorithm.GenerateEngine(), cfbs, this.HashSize, pad);
+                    digest = pad is null ? new CfbBlockCipherMac(_blockAlgorithm.GenerateEngine(), cfbs, _hashSize)
+                        : new CfbBlockCipherMac(_blockAlgorithm.GenerateEngine(), cfbs, _hashSize, pad);
                     break;
 
                 default: throw new CryptographicException("Unsupported cipher mode.");
@@ -166,7 +171,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <exception cref="Exception"/>
         public ICipherParameters GenerateParameters(byte[] key, byte[] iv)
         {
-            return this.BlockAlgorithm.GenerateParameters(key, iv);
+            return _blockAlgorithm.GenerateParameters(key, iv);
         }
 
         /// <summary>
@@ -182,7 +187,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <exception cref="Exception"/>
         public ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength)
         {
-            return this.BlockAlgorithm.GenerateParameters(key, keyOffset, keyLength, iv, ivOffset, ivLength);
+            return _blockAlgorithm.GenerateParameters(key, keyOffset, keyLength, iv, ivOffset, ivLength);
         }
 
         /// <summary>
@@ -191,7 +196,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
 
         /// <summary>
@@ -204,8 +209,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             switch (mode)
             {
-                case MACCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(this.BlockSize, this.BlockSize, 0) }; return true;
-                case MACCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, this.BlockSize, 8) }; return true;
+                case MACCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(_hashSize, _hashSize, 0) }; return true;
+                case MACCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, _hashSize, 8) }; return true;
                 default: break;
             }
             ivSizes = null;

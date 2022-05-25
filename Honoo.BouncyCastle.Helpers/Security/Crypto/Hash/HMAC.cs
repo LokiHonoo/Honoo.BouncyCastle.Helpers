@@ -14,6 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         #region Properties
 
         private readonly IHashAlgorithm _hashAlgorithm;
+        private readonly string _mechanism;
 
         /// <summary>
         /// Gets hash size bits.
@@ -23,7 +24,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Gets mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
         #endregion Properties
 
@@ -35,7 +36,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         public HMAC(IHashAlgorithm hashAlgorithm)
         {
-            this.Mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/HMAC", hashAlgorithm.Mechanism);
+            _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/HMAC", hashAlgorithm.Mechanism);
             _hashAlgorithm = hashAlgorithm;
         }
 
@@ -64,7 +65,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             IMac digest = GenerateDigest(parameters);
             digest.BlockUpdate(data, offset, length);
-            byte[] hash = new byte[this.HashSize];
+            byte[] hash = new byte[_hashAlgorithm.HashSize];
             digest.DoFinal(hash, 0);
             return hash;
         }
@@ -112,7 +113,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
     }
 }

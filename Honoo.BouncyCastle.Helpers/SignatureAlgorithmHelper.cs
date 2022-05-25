@@ -315,17 +315,13 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion SM2
 
-        /// <summary>
-        /// Try get signature algorithm from mechanism.
-        /// </summary>
-        /// <param name="mechanism">Signature algorithm mechanism.</param>
-        /// <param name="algorithm">Signature algorithm.</param>
-        /// <returns></returns>
 
         /// <summary>
         /// Try get signature algorithm used arguments hash algorithm, asymmetric algorithm.
         /// </summary>
-        /// <param name="model">Signature algorithm model. e.g. ECDSA, RSA, RSAandMGF1, and so on.</param>
+        /// <param name="model">Signature algorithm model.
+        /// <para />e.g. CVC-ECDSA, DSA, ECDSA, ECGOST3410, ECNR, GOST3410, PLAIN-ECDSA, RSA, RSA/ISO9796-2, RSAandMGF1, RSA/X9.31, SM2.
+        /// </param>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         /// <param name="algorithm">Signature algorithm.</param>
@@ -391,7 +387,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Try get signature algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="mechanism">Signature algorithm mechanism. e.g. SHA256withRSA.</param>
         /// <param name="algorithm">Signature algorithm.</param>
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out ISignatureAlgorithm algorithm)
@@ -506,7 +502,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Try get signature algorithm oid from mechanism.
         /// </summary>
-        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="mechanism">Signature algorithm mechanism. e.g. SHA256withRSA.</param>
         /// <param name="oid">Signature algorithm oid.</param>
         /// <returns></returns>
         public static bool TryGetOid(string mechanism, out DerObjectIdentifier oid)

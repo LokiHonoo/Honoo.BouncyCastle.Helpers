@@ -15,12 +15,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     {
         #region Properties
 
+        private readonly int _blockSize;
         private readonly KeySizes[] _keySizes;
 
         /// <summary>
         /// Gets block size bits.
         /// </summary>
-        public int BlockSize { get; }
+        public int BlockSize => _blockSize;
 
         /// <summary>
         /// Gets legal key size bits.
@@ -46,7 +47,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             {
                 throw new CryptographicException("Unsupported block size.");
             }
-            this.BlockSize = blockSize;
+            _blockSize = blockSize;
             _keySizes = keySizes;
         }
 
@@ -122,7 +123,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 case SymmetricCipherMode.GOFB:
-                    if (this.BlockSize == 64)
+                    if (_blockSize == 64)
                     {
                         cipher = pad is null ? new BufferedBlockCipher(new GOfbBlockCipher(engine))
                             : new PaddedBufferedBlockCipher(new GOfbBlockCipher(engine), pad);
@@ -136,7 +137,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.SIC:
-                    if (this.BlockSize >= 128)
+                    if (_blockSize >= 128)
                     {
                         cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
                             : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
@@ -147,7 +148,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.CCM:
                     if (pad is null)
                     {
-                        if (this.BlockSize == 128)
+                        if (_blockSize == 128)
                         {
                             cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
                             break;
@@ -159,7 +160,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.EAX:
                     if (pad is null)
                     {
-                        if (this.BlockSize == 64 || this.BlockSize == 128)
+                        if (_blockSize == 64 || _blockSize == 128)
                         {
                             cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
                             break;
@@ -171,7 +172,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.GCM:
                     if (pad is null)
                     {
-                        if (this.BlockSize == 128)
+                        if (_blockSize == 128)
                         {
                             cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
                             break;
@@ -183,7 +184,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.OCB:
                     if (pad is null)
                     {
-                        if (this.BlockSize == 128)
+                        if (_blockSize == 128)
                         {
                             cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));
                             break;
@@ -274,22 +275,22 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             }
             switch (mode)
             {
-                case SymmetricCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(this.BlockSize, this.BlockSize, 0) }; return true;
+                case SymmetricCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(_blockSize, _blockSize, 0) }; return true;
                 case SymmetricCipherMode.ECB: ivSizes = new KeySizes[] { new KeySizes(0, 0, 0) }; return true;
-                case SymmetricCipherMode.OFB: ivSizes = new KeySizes[] { new KeySizes(8, this.BlockSize, 8) }; return true;
-                case SymmetricCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, this.BlockSize, 8) }; return true;
+                case SymmetricCipherMode.OFB: ivSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) }; return true;
+                case SymmetricCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) }; return true;
                 case SymmetricCipherMode.CTS:
                     if (!pad)
                     {
-                        ivSizes = new KeySizes[] { new KeySizes(this.BlockSize, this.BlockSize, 0) };
+                        ivSizes = new KeySizes[] { new KeySizes(_blockSize, _blockSize, 0) };
                         return true;
                     }
                     break;
 
                 case SymmetricCipherMode.CTR:
                     {
-                        int min = Math.Max(this.BlockSize / 2, this.BlockSize - 64);
-                        ivSizes = new KeySizes[] { new KeySizes(min, this.BlockSize, 8) };
+                        int min = Math.Max(_blockSize / 2, _blockSize - 64);
+                        ivSizes = new KeySizes[] { new KeySizes(min, _blockSize, 8) };
                         return true;
                     }
                 case SymmetricCipherMode.CTS_ECB:
@@ -301,28 +302,28 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.GOFB:
-                    if (this.BlockSize == 64)
+                    if (_blockSize == 64)
                     {
-                        ivSizes = new KeySizes[] { new KeySizes(this.BlockSize, this.BlockSize, 0) };
+                        ivSizes = new KeySizes[] { new KeySizes(_blockSize, _blockSize, 0) };
                         return true;
                     }
                     break;
 
                 case SymmetricCipherMode.OpenPGPCFB:
-                    ivSizes = new KeySizes[] { new KeySizes(8, this.BlockSize, 8) };
+                    ivSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) };
                     return true;
 
                 case SymmetricCipherMode.SIC:
-                    if (this.BlockSize >= 128)
+                    if (_blockSize >= 128)
                     {
-                        int min = Math.Max(this.BlockSize / 2, this.BlockSize - 64);
-                        ivSizes = new KeySizes[] { new KeySizes(min, this.BlockSize, 8) };
+                        int min = Math.Max(_blockSize / 2, _blockSize - 64);
+                        ivSizes = new KeySizes[] { new KeySizes(min, _blockSize, 8) };
                         return true;
                     }
                     break;
 
                 case SymmetricCipherMode.CCM:
-                    if (!pad && this.BlockSize == 128)
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
                         return true;
@@ -330,7 +331,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.EAX:
-                    if (!pad && (this.BlockSize == 64 || this.BlockSize == 128))
+                    if (!pad && (_blockSize == 64 || _blockSize == 128))
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
@@ -338,7 +339,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.GCM:
-                    if (!pad && this.BlockSize == 128)
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
@@ -346,7 +347,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.OCB:
-                    if (!pad && this.BlockSize == 128)
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
                         return true;
@@ -376,7 +377,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             switch (mode)
             {
                 case SymmetricCipherMode.CCM:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 16) };
                         return true;
@@ -384,15 +385,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.EAX:
-                    if (this.BlockSize == 64 || this.BlockSize == 128)
+                    if (_blockSize == 64 || _blockSize == 128)
                     {
-                        macSizes = new KeySizes[] { new KeySizes(8, this.BlockSize, 8) };
+                        macSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) };
                         return true;
                     }
                     break;
 
                 case SymmetricCipherMode.GCM:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 8) };
                         return true;
@@ -400,7 +401,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.OCB:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(64, 128, 8) };
                         return true;
@@ -430,7 +431,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             switch (mode)
             {
                 case SymmetricCipherMode.CCM:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
                         return true;
@@ -438,7 +439,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.EAX:
-                    if (this.BlockSize == 64 || this.BlockSize == 128)
+                    if (_blockSize == 64 || _blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
@@ -446,7 +447,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.GCM:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
@@ -454,7 +455,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     break;
 
                 case SymmetricCipherMode.OCB:
-                    if (this.BlockSize == 128)
+                    if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
                         return true;

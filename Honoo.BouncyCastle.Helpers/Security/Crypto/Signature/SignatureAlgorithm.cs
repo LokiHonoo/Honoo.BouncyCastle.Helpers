@@ -11,20 +11,21 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
     {
         #region Properties
 
-        /// <summary>
-        /// Gets the corresponding asymmetric algorithm.
-        /// </summary>
-        public IAsymmetricAlgorithm AsymmetricAlgorithm { get; }
+        private readonly IAsymmetricAlgorithm _asymmetricAlgorithm;
+        private readonly string _mechanism;
+        private readonly DerObjectIdentifier _oid;
+
+
 
         /// <summary>
         /// Gets signature algorithm mechanism.
         /// </summary>
-        public string Mechanism { get; }
+        public string Mechanism => _mechanism;
 
         /// <summary>
         /// Gets signature algorithm oid. It's maybe 'null' if not supported.
         /// </summary>
-        public DerObjectIdentifier Oid { get; }
+        public DerObjectIdentifier Oid => _oid;
 
         #endregion Properties
 
@@ -37,10 +38,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         protected SignatureAlgorithm(string mechanism, IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            this.Mechanism = mechanism;
-            this.AsymmetricAlgorithm = asymmetricAlgorithm;
+            _mechanism = mechanism;
+            _asymmetricAlgorithm = asymmetricAlgorithm;
             _ = SignatureAlgorithmHelper.TryGetOid(mechanism, out DerObjectIdentifier oid);
-            this.Oid = oid;
+            _oid = oid;
         }
 
         #endregion Constructor
@@ -57,6 +58,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             signer.Init(asymmetricKey.IsPrivate, asymmetricKey);
             return signer;
         }
+        /// <summary>
+        /// Generate key pair by the corresponding asymmetric algorithm.
+        /// </summary>
+        /// <returns></returns>
+        public AsymmetricCipherKeyPair GenerateKeyPair()
+        {
+          return  _asymmetricAlgorithm.GenerateKeyPair();
+        }
 
         /// <summary>
         /// Return mechanism.
@@ -64,7 +73,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Mechanism;
+            return _mechanism;
         }
 
         /// <summary>
