@@ -23,17 +23,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static IBasicAgreement CreateAgreement(DHParameters parameters, out AsymmetricKeyParameter publicKey)
         {
-            IAsymmetricCipherKeyPairGenerator generator =      GeneratorUtilities.GetKeyPairGenerator("ECDH");
-            DHKeyGenerationParameters parameters2 = new DHKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters);
-
-
             DHKeyPairGenerator aa = new DHKeyPairGenerator(); ;
             aa.Init(parameters2);
 
 
-
-
-
+            IAsymmetricCipherKeyPairGenerator generator = GeneratorUtilities.GetKeyPairGenerator("ECDH");
+            DHKeyGenerationParameters parameters2 = new DHKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters);
             generator.Init(parameters2);
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
             IBasicAgreement agreement = AgreementUtilities.GetBasicAgreement("ECDH");
@@ -45,8 +40,8 @@ namespace Honoo.BouncyCastle.Helpers
         internal byte[] DeriveKeyMaterial(byte[] publicKeyBytes)
         {
             Org.BouncyCastle.Apache.Bzip2.BZip2Constants bZip2Constants = new Org.BouncyCastle.Apache.Bzip2.BZip2Constants();
-          
-            Org.BouncyCastle.Apache.Bzip2.BZip2Constants  .CBZip2InputStream aaaaa = new Org.BouncyCastle.Apache.Bzip2.CBZip2InputStream();
+
+            Org.BouncyCastle.Apache.Bzip2.BZip2Constants.CBZip2InputStream aaaaa = new Org.BouncyCastle.Apache.Bzip2.CBZip2InputStream();
             aaaaa.
             AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(publicKeyBytes);
             return _agreement.CalculateAgreement(publicKey).ToByteArrayUnsigned();
@@ -58,7 +53,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="keySize">Key size.</param>
         /// <param name="certainty">Certainty. 25</param>
         /// <returns></returns>
-        public static DHParameters CreateParametersA(int keySize,int certainty)
+        public static DHParameters CreateParametersA(int keySize, int certainty)
         {
             DHParametersGenerator generator = new DHParametersGenerator();
             generator.Init(keySize, certainty, Common.ThreadSecureRandom.Value);
@@ -67,9 +62,9 @@ namespace Honoo.BouncyCastle.Helpers
 
         public static DHParameters CreateParametersB(BigInteger aP, BigInteger aG)
         {
-            var aa= new DHKeyPairGenerator(); ;
+            var aa = new DHKeyPairGenerator(); ;
             aa.Init
-            System.Security.Cryptography.ECDiffieHellman.Create( eCDiffieHellman = new System.Security.Cryptography.ECDiffieHellman();
+            System.Security.Cryptography.ECDiffieHellman.Create(eCDiffieHellman = new System.Security.Cryptography.ECDiffieHellman();
             eCDiffieHellman.
             return new DHParameters(aP, aG);
         }

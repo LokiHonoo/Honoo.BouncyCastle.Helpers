@@ -57,7 +57,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// Generate signer.
         /// </summary>
         /// <returns></returns>
-        protected override ISigner GenerateSigner()
+        protected override ISigner GenerateSignerCore()
         {
             IDigest digest = _hashAlgorithm.GenerateDigest();
             return new RsaDigestSigner(digest);

@@ -60,11 +60,18 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate cipher.
         /// </summary>
-        /// <param name="forEncryption"></param>
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        IBufferedCipher GenerateCipher(bool forEncryption, ICipherParameters parameters);
+        IBufferedCipher GenerateDecryptor(ICipherParameters parameters);
+
+        /// <summary>
+        /// Generate cipher.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        IBufferedCipher GenerateEncryptor(ICipherParameters parameters);
 
         /// <summary>
         /// Generate parameters.

@@ -39,7 +39,7 @@ namespace Test
             bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
             // example 2
             ISigner signer = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Private);
-            ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Public);
+            ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateVerifier(keyPair.Public);
             signer.BlockUpdate(test, 0, test.Length);
             byte[] signature2 = signer.GenerateSignature();
             verifier.BlockUpdate(test, 0, test.Length);
@@ -60,7 +60,7 @@ namespace Test
                     _total++;
                     AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
                     ISigner signer = algorithm.GenerateSigner(keyPair.Private);
-                    ISigner verifier = algorithm.GenerateSigner(keyPair.Public);
+                    ISigner verifier = algorithm.GenerateVerifier(keyPair.Public);
                     XTest(algorithm, signer, verifier, test);
                     _execute++;
                 }
@@ -78,7 +78,7 @@ namespace Test
                 SignatureAlgorithmHelper.TryGetAlgorithm(name, out ISignatureAlgorithm algorithm);
                 AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
                 ISigner signer = algorithm.GenerateSigner(keyPair.Private);
-                ISigner verifier = algorithm.GenerateSigner(keyPair.Public);
+                ISigner verifier = algorithm.GenerateVerifier(keyPair.Public);
                 XTest(algorithm, signer, verifier, test);
             }
         }

@@ -28,28 +28,37 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate signer. The signer can be reused.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        ISigner GenerateSigner(AsymmetricKeyParameter asymmetricKey);
+        ISigner GenerateSigner(AsymmetricKeyParameter privateKey);
+
+        /// <summary>
+        /// Generate signer. The signer can be reused.
+        /// </summary>
+        /// <param name="publicKey">Asymmetric public key.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        ISigner GenerateVerifier(AsymmetricKeyParameter publicKey);
 
         /// <summary>
         /// Generate a new signature algorithm and sign data.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="data">Data.</param>
         /// <returns></returns>
-        byte[] Sign(AsymmetricKeyParameter asymmetricKey, byte[] data);
+        /// <exception cref="Exception"/>
+        byte[] Sign(AsymmetricKeyParameter privateKey, byte[] data);
 
         /// <summary>
         /// Generate a new signature algorithm and sign data.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="data">Data.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Sign(AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length);
+        byte[] Sign(AsymmetricKeyParameter privateKey, byte[] data, int offset, int length);
 
         /// <summary>
         /// Return mechanism.
@@ -60,16 +69,16 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate a new signature algorithm and verify data.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="publicKey">Asymmetric public key.</param>
         /// <param name="data">Data.</param>
         /// <param name="signature">Signature.</param>
         /// <returns></returns>
-        bool Verify(AsymmetricKeyParameter asymmetricKey, byte[] data, byte[] signature);
+        bool Verify(AsymmetricKeyParameter publicKey, byte[] data, byte[] signature);
 
         /// <summary>
         /// Generate a new signature algorithm and sign data.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="publicKey">Asymmetric public key.</param>
         /// <param name="data">Data.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
@@ -77,6 +86,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="signatureOffset">The starting offset to read.</param>
         /// <param name="signatureLength">The length to read.</param>
         /// <returns></returns>
-        bool Verify(AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length, byte[] signature, int signatureOffset, int signatureLength);
+        bool Verify(AsymmetricKeyParameter publicKey, byte[] data, int offset, int length, byte[] signature, int signatureOffset, int signatureLength);
     }
 }

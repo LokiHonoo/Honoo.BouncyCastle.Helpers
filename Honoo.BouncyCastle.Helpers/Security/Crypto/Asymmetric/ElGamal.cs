@@ -3,7 +3,7 @@ using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
@@ -15,67 +15,47 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// </summary>
     public sealed class ElGamal : AsymmetricEncryptionAlgorithm
     {
-        #region Properties
-
-        private readonly int _certainty;
-        private readonly int _keySize;
-
-        /// <summary>
-        /// Certainty.
-        /// </summary>
-        public int Certainty => _certainty;
-
-        /// <summary>
-        /// Key size.
-        /// </summary>
-        public int KeySize => _keySize;
-
-        #endregion Properties
-
         #region Constructor
 
         /// <summary>
         /// ElGamal.
         /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
-        /// <para/>Uses key size 768 bits, certainty 20 by default.
         /// </summary>
-        public ElGamal() : this(768, 20)
+        public ElGamal() : base("ElGamal")
         {
-        }
-
-        /// <summary>
-        /// ElGamal.
-        /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
-        /// <para/>Uses key size 768 bits, certainty 20 by default.
-        /// </summary>
-        /// <param name="keySize">Key size bits.</param>
-        public ElGamal(int keySize) : this(keySize, 20)
-        {
-        }
-
-        /// <summary>
-        /// ElGamal.
-        /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
-        /// <para/>Uses key size 768 bits, certainty 20 by default.
-        /// </summary>
-        /// <param name="keySize">Key size bits.</param>
-        /// <param name="certainty">Certainty.</param>
-        public ElGamal(int keySize, int certainty) : base("ElGamal")
-        {
-            _keySize = keySize;
-            _certainty = certainty;
         }
 
         #endregion Constructor
 
         /// <summary>
-        /// Generate cipher. The cipher can be reused.
+        /// Generate key pair.
+        /// <para/>Uses key size 768 bits, certainty 20 by default.
         /// </summary>
-        /// <param name="padding">Asymmetric algorithm padding mode.</param>
-        /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
         /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public override IAsymmetricBlockCipher GenerateCipher(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
+        public override AsymmetricCipherKeyPair GenerateKeyPair()
+        {
+            return GenerateKeyPair(768, 20);
+        }
+
+        /// <summary>
+        /// Generate key pair.
+        /// </summary>
+        /// <param name="keySize">Key size.</param>
+        /// <param name="certainty">Certainty.</param>
+        /// <returns></returns>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
+        public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
+        {
+            ElGamalParametersGenerator generator2 = new ElGamalParametersGenerator();
+            generator2.Init(keySize, certainty, Common.ThreadSecureRandom.Value);
+            ElGamalParameters parameters2 = generator2.GenerateParameters();
+            KeyGenerationParameters parameters = new ElGamalKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters2);
+            IAsymmetricCipherKeyPairGenerator generator = new ElGamalKeyPairGenerator();
+            generator.Init(parameters);
+            return generator.GenerateKeyPair();
+        }
+
+        protected override IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding)
         {
             if (padding == AsymmetricPaddingMode.ISO9796_1)
             {
@@ -90,23 +70,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                 case AsymmetricPaddingMode.ISO9796_1: break;
                 default: throw new CryptographicException("Unsupported padding mode.");
             }
-            cipher.Init(!asymmetricKey.IsPrivate, asymmetricKey);
             return cipher;
-        }
-
-        /// <summary>
-        /// Generate key pair.
-        /// </summary>
-        /// <returns></returns>
-        public override AsymmetricCipherKeyPair GenerateKeyPair()
-        {
-            ElGamalParametersGenerator generator2 = new ElGamalParametersGenerator();
-            generator2.Init(_keySize, _certainty, Common.ThreadSecureRandom.Value);
-            ElGamalParameters parameters2 = generator2.GenerateParameters();
-            KeyGenerationParameters parameters = new ElGamalKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters2);
-            IAsymmetricCipherKeyPairGenerator generator = new ElGamalKeyPairGenerator();
-            generator.Init(parameters);
-            return generator.GenerateKeyPair();
         }
     }
 }

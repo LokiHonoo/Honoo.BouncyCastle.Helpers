@@ -41,8 +41,8 @@ namespace Test
             byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
             _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
             // example 2
-            IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Public);
-            IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Private);
+            IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.PKCS1, keyPair.Public);
+            IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.PKCS1, keyPair.Private);
             byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
             _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
         }
@@ -69,8 +69,8 @@ namespace Test
                     try
                     {
                         AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
-                        IAsymmetricBlockCipher encryptor = algorithm.GenerateCipher(padding, keyPair.Public);
-                        IAsymmetricBlockCipher decryptor = algorithm.GenerateCipher(padding, keyPair.Private);
+                        IAsymmetricBlockCipher encryptor = algorithm.GenerateEncryptor(padding, keyPair.Public);
+                        IAsymmetricBlockCipher decryptor = algorithm.GenerateDecryptor(padding, keyPair.Private);
                         XTest(mechanism, encryptor, decryptor, test);
                         _execute++;
                     }
@@ -86,8 +86,8 @@ namespace Test
                 {
                     keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
                 }
-                IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.NoPadding, keyPair.Public);
-                IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.NoPadding, keyPair.Private);
+                IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.NoPadding, keyPair.Public);
+                IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.NoPadding, keyPair.Private);
                 XTest("Use .NET RSA KEY 2048", encryptor, decryptor, test);
             }
         }

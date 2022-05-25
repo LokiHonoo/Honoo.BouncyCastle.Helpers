@@ -8,46 +8,52 @@ namespace Honoo.BouncyCastle.Helpers
     public static class AsymmetricAlgorithmHelper
     {
         /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
+        /// DSA.
+        /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
         public static IAsymmetricAlgorithm DSA { get; } = new DSA();
 
         /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
+        /// ECDH.
+        /// </summary>
+        public static IAsymmetricAlgorithm ECDH { get; } = new ECDH();
+
+        /// <summary>
+        /// ECDSA.
+        /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
         public static IAsymmetricAlgorithm ECDSA { get; } = new ECDSA();
 
         /// <summary>
-        /// Uses EllipticCurve.GostR3410x2001CryptoProA by default.
+        /// ECGOST3410.
         /// </summary>
         public static IAsymmetricAlgorithm ECGOST3410 { get; } = new ECGOST3410();
 
         /// <summary>
-        ///
+        /// Ed25519.
         /// </summary>
         public static IAsymmetricAlgorithm Ed25519 { get; } = new Ed25519();
 
         /// <summary>
-        ///
+        /// Ed448.
         /// </summary>
         public static IAsymmetricAlgorithm Ed448 { get; } = new Ed448();
 
         /// <summary>
-        /// Legal key size is more than or equal to 256 bits (64 bits increments).
-        /// <para/>Uses key size 768 bits, certainty 20 by default.
+        /// ElGamal.
+        /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
         /// </summary>
         public static IAsymmetricEncryptionAlgorithm ElGamal { get; } = new ElGamal();
 
         /// <summary>
-        /// Legal key size 512, 1024 bits.
-        /// <para/>Uses key size 1024 bits, procedure 2 by default.
+        /// GOST3410
+        /// <para/>Legal key size 512, 1024 bits.
         /// </summary>
         public static IAsymmetricAlgorithm GOST3410 { get; } = new GOST3410();
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
+        /// RSA.
+        /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
         /// </summary>
         public static IAsymmetricEncryptionAlgorithm RSA { get; } = new RSA();
 
@@ -73,6 +79,7 @@ namespace Honoo.BouncyCastle.Helpers
             switch (mechanism)
             {
                 case "DSA": algorithm = DSA; return true;
+                case "ECDH": algorithm = ECDH; return true;
                 case "ECDSA": algorithm = ECDSA; return true;
                 case "ECGOST3410": case "ECGOST3410-2001": algorithm = ECGOST3410; return true;
                 case "ED25519": algorithm = new Ed25519(); return true;

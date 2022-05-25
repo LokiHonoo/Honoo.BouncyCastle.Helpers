@@ -61,7 +61,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Convert asymmetric key to pem string.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="dekAlgorithmName">DEK algorithm name.</param>
+        /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
         /// <param name="password"></param>
         /// <returns></returns>
         public static string KeyToPem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)

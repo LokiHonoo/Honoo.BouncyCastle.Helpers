@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate key pair by default settings.
         /// </summary>
         /// <returns></returns>
         public abstract AsymmetricCipherKeyPair GenerateKeyPair();

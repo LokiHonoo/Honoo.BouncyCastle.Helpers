@@ -119,16 +119,23 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Generate cipher.
         /// </summary>
-        /// <param name="forEncryption"></param>
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateCipher(bool forEncryption, ICipherParameters parameters)
+        public IBufferedCipher GenerateDecryptor(ICipherParameters parameters)
         {
-            IStreamCipher engine = GenerateEngine();
-            IBufferedCipher cipher = new BufferedStreamCipher(engine);
-            cipher.Init(forEncryption, parameters);
-            return cipher;
+            return GenerateCipher(false, parameters);
+        }
+
+        /// <summary>
+        /// Generate cipher.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public IBufferedCipher GenerateEncryptor(ICipherParameters parameters)
+        {
+            return GenerateCipher(true, parameters);
         }
 
         /// <summary>
@@ -169,5 +176,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// </summary>
         /// <returns></returns>
         protected abstract IStreamCipher GenerateEngine();
+
+        private IBufferedCipher GenerateCipher(bool forEncryption, ICipherParameters parameters)
+        {
+            IStreamCipher engine = GenerateEngine();
+            IBufferedCipher cipher = new BufferedStreamCipher(engine);
+            cipher.Init(forEncryption, parameters);
+            return cipher;
+        }
     }
 }

@@ -1,77 +1,49 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// DSA.
     /// <para/>Legal key size 512-1024 bits (64 bits increments).
-    /// <para/>Uses key size 1024 bits, certainty 80 by default.
     /// </summary>
     public sealed class DSA : AsymmetricAlgorithm
     {
-        #region Properties
-
-        private readonly int _certainty;
-        private readonly int _keySize;
-
-        /// <summary>
-        /// Certainty.
-        /// </summary>
-        public int Certainty => _certainty;
-
-        /// <summary>
-        /// Key size.
-        /// </summary>
-        public int KeySize => _keySize;
-
-        #endregion Properties
-
         #region Constructor
 
         /// <summary>
         /// DSA.
         /// <para/>Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
         /// </summary>
-        public DSA() : this(1024, 80)
+        public DSA() : base("DSA")
         {
-        }
-
-        /// <summary>
-        /// DSA.
-        /// <para/>Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        /// <param name="keySize">Key size bits.</param>
-        public DSA(int keySize) : this(keySize, 80)
-        {
-        }
-
-        /// <summary>
-        /// DSA.
-        /// <para/>Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// <param name="keySize">Key size bits.</param>
-        /// <param name="certainty">Certainty.</param>
-        /// </summary>
-        public DSA(int keySize, int certainty) : base("DSA")
-        {
-            _keySize = keySize;
-            _certainty = certainty;
         }
 
         #endregion Constructor
 
         /// <summary>
         /// Generate key pair.
+        /// <para/>Uses key size 1024 bits, certainty 80 by default.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
+            return GenerateKeyPair(1024, 80);
+        }
+
+        /// <summary>
+        /// Generate key pair.
+        /// </summary>
+        /// <param name="keySize">Key size.</param>
+        /// <param name="certainty">Certainty.</param>
+        /// <returns></returns>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
+        public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
+        {
             DsaParametersGenerator generator2 = new DsaParametersGenerator();
-            generator2.Init(_keySize, _certainty, Common.ThreadSecureRandom.Value);
+            generator2.Init(keySize, certainty, Common.ThreadSecureRandom.Value);
             DsaParameters parameters2 = generator2.GenerateParameters();
             KeyGenerationParameters parameters = new DsaKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters2);
             IAsymmetricCipherKeyPairGenerator generator = new DsaKeyPairGenerator();

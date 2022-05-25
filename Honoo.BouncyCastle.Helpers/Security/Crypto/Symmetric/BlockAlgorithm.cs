@@ -133,149 +133,29 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Generate cipher. The cipher can be reused. Except GCM cipher mode.
+        /// Generate cipher. The cipher can be reused except GCM cipher mode.
         /// </summary>
-        /// <param name="forEncryption"></param>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateCipher(bool forEncryption, SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
+        public IBufferedCipher GenerateDecryptor(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
         {
-            IBlockCipherPadding pad;
-            switch (padding)
-            {
-                case SymmetricPaddingMode.NoPadding: pad = null; break;
-                case SymmetricPaddingMode.PKCS7: pad = Common.PKCS7Padding; break;
-                case SymmetricPaddingMode.Zeros: pad = Common.ZEROBYTEPadding; break;
-                case SymmetricPaddingMode.X923: pad = Common.X923Padding; break;
-                case SymmetricPaddingMode.ISO10126: pad = Common.ISO10126d2Padding; break;
-                case SymmetricPaddingMode.ISO7816_4: pad = Common.ISO7816d4Padding; break;
-                case SymmetricPaddingMode.TBC: pad = Common.TBCPadding; break;
-                default: throw new CryptographicException("Unsupported padding mode.");
-            }
-            IBlockCipher engine = GenerateEngine();
-            IBufferedCipher cipher;
-            switch (mode)
-            {
-                case SymmetricCipherMode.CBC:
-                    cipher = pad is null ? new BufferedBlockCipher(new CbcBlockCipher(engine))
-                        : new PaddedBufferedBlockCipher(new CbcBlockCipher(engine), pad);
-                    break;
+            return GenerateCipher(false, mode, padding, parameters);
+        }
 
-                case SymmetricCipherMode.ECB:
-                    cipher = pad is null ? new BufferedBlockCipher(engine) : new PaddedBufferedBlockCipher(engine, pad);
-                    break;
-
-                case SymmetricCipherMode.OFB:
-                    int ofbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    cipher = pad is null ? new BufferedBlockCipher(new OfbBlockCipher(engine, ofbs))
-                        : new PaddedBufferedBlockCipher(new OfbBlockCipher(engine, ofbs), pad);
-                    break;
-
-                case SymmetricCipherMode.CFB:
-                    int cfbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    cipher = pad is null ? new BufferedBlockCipher(new CfbBlockCipher(engine, cfbs))
-                        : new PaddedBufferedBlockCipher(new CfbBlockCipher(engine, cfbs), pad);
-                    break;
-
-                case SymmetricCipherMode.CTS:
-                    if (pad is null)
-                    {
-                        cipher = new CtsBlockCipher(new CbcBlockCipher(engine));
-                        break;
-                    }
-                    throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                case SymmetricCipherMode.CTR:
-                    cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
-                        : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
-                    break;
-
-                case SymmetricCipherMode.CTS_ECB:
-                    if (pad is null)
-                    {
-                        cipher = new CtsBlockCipher(engine);
-                        break;
-                    }
-                    throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                case SymmetricCipherMode.GOFB:
-                    if (_blockSize == 64)
-                    {
-                        cipher = pad is null ? new BufferedBlockCipher(new GOfbBlockCipher(engine))
-                            : new PaddedBufferedBlockCipher(new GOfbBlockCipher(engine), pad);
-                        break;
-                    }
-                    throw new CryptographicException("GOFB cipher mode uses with a block size of 64 bits algorithm (e.g. DESede).");
-
-                case SymmetricCipherMode.OpenPGPCFB:
-                    cipher = pad is null ? new BufferedBlockCipher(new OpenPgpCfbBlockCipher(engine))
-                        : new PaddedBufferedBlockCipher(new OpenPgpCfbBlockCipher(engine), pad);
-                    break;
-
-                case SymmetricCipherMode.SIC:
-                    if (_blockSize >= 128)
-                    {
-                        cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
-                            : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
-                        break;
-                    }
-                    throw new CryptographicException("SIC cipher mode uses with a block size of at least 128 bits algorithm (e.g. AES).");
-
-                case SymmetricCipherMode.CCM:
-                    if (pad is null)
-                    {
-                        if (_blockSize == 128)
-                        {
-                            cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
-                            break;
-                        }
-                        throw new CryptographicException("CCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
-                    }
-                    throw new CryptographicException("CCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                case SymmetricCipherMode.EAX:
-                    if (pad is null)
-                    {
-                        if (_blockSize == 64 || _blockSize == 128)
-                        {
-                            cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
-                            break;
-                        }
-                        throw new CryptographicException("EAX cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).");
-                    }
-                    throw new CryptographicException("EAX cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                case SymmetricCipherMode.GCM:
-                    if (pad is null)
-                    {
-                        if (_blockSize == 128)
-                        {
-                            cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
-                            break;
-                        }
-                        throw new CryptographicException("GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
-                    }
-                    throw new CryptographicException("GCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                case SymmetricCipherMode.OCB:
-                    if (pad is null)
-                    {
-                        if (_blockSize == 128)
-                        {
-                            cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));
-                            break;
-                        }
-                        throw new CryptographicException("OCB cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
-                    }
-                    throw new CryptographicException("OCB cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
-
-                default: throw new CryptographicException("Unsupported cipher mode.");
-            }
-            cipher.Init(forEncryption, parameters);
-            return cipher;
+        /// <summary>
+        /// Generate cipher. The cipher can be reused except GCM cipher mode.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public IBufferedCipher GenerateEncryptor(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
+        {
+            return GenerateCipher(true, mode, padding, parameters);
         }
 
         /// <summary>
@@ -569,6 +449,143 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         protected virtual KeyParameter GenerateKeyParameter(byte[] key, int offset, int length)
         {
             return new KeyParameter(key, offset, length);
+        }
+
+        private IBufferedCipher GenerateCipher(bool forEncryption, SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
+        {
+            IBlockCipherPadding pad;
+            switch (padding)
+            {
+                case SymmetricPaddingMode.NoPadding: pad = null; break;
+                case SymmetricPaddingMode.PKCS7: pad = Common.PKCS7Padding; break;
+                case SymmetricPaddingMode.Zeros: pad = Common.ZEROBYTEPadding; break;
+                case SymmetricPaddingMode.X923: pad = Common.X923Padding; break;
+                case SymmetricPaddingMode.ISO10126: pad = Common.ISO10126d2Padding; break;
+                case SymmetricPaddingMode.ISO7816_4: pad = Common.ISO7816d4Padding; break;
+                case SymmetricPaddingMode.TBC: pad = Common.TBCPadding; break;
+                default: throw new CryptographicException("Unsupported padding mode.");
+            }
+            IBlockCipher engine = GenerateEngine();
+            IBufferedCipher cipher;
+            switch (mode)
+            {
+                case SymmetricCipherMode.CBC:
+                    cipher = pad is null ? new BufferedBlockCipher(new CbcBlockCipher(engine))
+                        : new PaddedBufferedBlockCipher(new CbcBlockCipher(engine), pad);
+                    break;
+
+                case SymmetricCipherMode.ECB:
+                    cipher = pad is null ? new BufferedBlockCipher(engine) : new PaddedBufferedBlockCipher(engine, pad);
+                    break;
+
+                case SymmetricCipherMode.OFB:
+                    int ofbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
+                    cipher = pad is null ? new BufferedBlockCipher(new OfbBlockCipher(engine, ofbs))
+                        : new PaddedBufferedBlockCipher(new OfbBlockCipher(engine, ofbs), pad);
+                    break;
+
+                case SymmetricCipherMode.CFB:
+                    int cfbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
+                    cipher = pad is null ? new BufferedBlockCipher(new CfbBlockCipher(engine, cfbs))
+                        : new PaddedBufferedBlockCipher(new CfbBlockCipher(engine, cfbs), pad);
+                    break;
+
+                case SymmetricCipherMode.CTS:
+                    if (pad is null)
+                    {
+                        cipher = new CtsBlockCipher(new CbcBlockCipher(engine));
+                        break;
+                    }
+                    throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                case SymmetricCipherMode.CTR:
+                    cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
+                        : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
+                    break;
+
+                case SymmetricCipherMode.CTS_ECB:
+                    if (pad is null)
+                    {
+                        cipher = new CtsBlockCipher(engine);
+                        break;
+                    }
+                    throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                case SymmetricCipherMode.GOFB:
+                    if (_blockSize == 64)
+                    {
+                        cipher = pad is null ? new BufferedBlockCipher(new GOfbBlockCipher(engine))
+                            : new PaddedBufferedBlockCipher(new GOfbBlockCipher(engine), pad);
+                        break;
+                    }
+                    throw new CryptographicException("GOFB cipher mode uses with a block size of 64 bits algorithm (e.g. DESede).");
+
+                case SymmetricCipherMode.OpenPGPCFB:
+                    cipher = pad is null ? new BufferedBlockCipher(new OpenPgpCfbBlockCipher(engine))
+                        : new PaddedBufferedBlockCipher(new OpenPgpCfbBlockCipher(engine), pad);
+                    break;
+
+                case SymmetricCipherMode.SIC:
+                    if (_blockSize >= 128)
+                    {
+                        cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
+                            : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
+                        break;
+                    }
+                    throw new CryptographicException("SIC cipher mode uses with a block size of at least 128 bits algorithm (e.g. AES).");
+
+                case SymmetricCipherMode.CCM:
+                    if (pad is null)
+                    {
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("CCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    }
+                    throw new CryptographicException("CCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                case SymmetricCipherMode.EAX:
+                    if (pad is null)
+                    {
+                        if (_blockSize == 64 || _blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("EAX cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).");
+                    }
+                    throw new CryptographicException("EAX cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                case SymmetricCipherMode.GCM:
+                    if (pad is null)
+                    {
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    }
+                    throw new CryptographicException("GCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                case SymmetricCipherMode.OCB:
+                    if (pad is null)
+                    {
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));
+                            break;
+                        }
+                        throw new CryptographicException("OCB cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    }
+                    throw new CryptographicException("OCB cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
+
+                default: throw new CryptographicException("Unsupported cipher mode.");
+            }
+            cipher.Init(forEncryption, parameters);
+            return cipher;
         }
     }
 }

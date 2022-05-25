@@ -145,8 +145,8 @@ private static void Demo1()
     byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, test, 0, test.Length);
     _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, enc1, 0, enc1.Length);
     // example 2
-    IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(true, SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
-    IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(false, SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
+    IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
+    IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
     byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
     _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
@@ -165,8 +165,8 @@ private static void Demo2()
     byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, test, 0, test.Length);
     _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, enc1, 0, enc1.Length);
     // example 2
-    IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(true, SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
-    IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(false, SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
+    IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
+    IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
     byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
     _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
@@ -184,8 +184,8 @@ private static void Demo3()
     byte[] enc1 = SymmetricAlgorithmHelper.HC128.Encrypt(parameters, test, 0, test.Length);
     _ = SymmetricAlgorithmHelper.HC128.Decrypt(parameters, enc1, 0, enc1.Length);
     // example 2
-    IBufferedCipher encryptor = SymmetricAlgorithmHelper.HC128.GenerateCipher(true, parameters);
-    IBufferedCipher decryptor = SymmetricAlgorithmHelper.HC128.GenerateCipher(false, parameters);
+    IBufferedCipher encryptor = SymmetricAlgorithmHelper.HC128.GenerateEncryptor(parameters);
+    IBufferedCipher decryptor = SymmetricAlgorithmHelper.HC128.GenerateDecryptor(parameters);
     byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
     _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
@@ -205,8 +205,8 @@ private static void Demo1()
     byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
     _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
     // example 2
-    IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Public);
-    IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Private);
+    IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.PKCS1, keyPair.Public);
+    IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.PKCS1, keyPair.Private);
     byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
     _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
 }
@@ -227,7 +227,7 @@ private static void Demo1()
     bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
     // example 2
     ISigner signer = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Private);
-    ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Public);
+    ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateVerifier(keyPair.Public);
     signer.BlockUpdate(test, 0, test.Length);
     byte[] signature2 = signer.GenerateSignature();
     verifier.BlockUpdate(test, 0, test.Length);

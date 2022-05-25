@@ -3,56 +3,45 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// ECDSA.
-    /// <para/>Uses EllipticCurve.SecP256r1 by default.
     /// </summary>
     public sealed class ECDSA : AsymmetricAlgorithm
     {
-        #region Properties
-
-        private readonly ECDSAEllipticCurve _ellipticCurve;
-
-        /// <summary>
-        /// Curve.
-        /// </summary>
-        public ECDSAEllipticCurve EllipticCurve => _ellipticCurve;
-
-        #endregion Properties
-
         #region Constructor
 
         /// <summary>
         /// ECDSA.
-        /// <para/>Uses EllipticCurve.SecP256r1 by default.
         /// </summary>
-        public ECDSA() : this(ECDSAEllipticCurve.SecP256r1)
+        public ECDSA() : base("ECDSA")
         {
-        }
-
-        /// <summary>
-        /// ECDSA.
-        /// <para/>Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        /// <param name="ellipticCurve">Elliptic curve.</param>
-        public ECDSA(ECDSAEllipticCurve ellipticCurve) : base("ECDSA")
-        {
-            _ellipticCurve = ellipticCurve;
         }
 
         #endregion Constructor
 
         /// <summary>
         /// Generate key pair.
+        /// <para/>Uses EllipticCurve.SecP256r1 by default.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            X9ECParameters parameters2 = GenerateEllipticCurve(_ellipticCurve);
+            return GenerateKeyPair(ECDSAEllipticCurve.SecP256r1);
+        }
+
+        /// <summary>
+        /// Generate key pair.
+        /// </summary>
+        /// <returns></returns>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
+        public AsymmetricCipherKeyPair GenerateKeyPair(ECDSAEllipticCurve ellipticCurve)
+        {
+            X9ECParameters parameters2 = GenerateX9(ellipticCurve);
             ECDomainParameters parameters3 = new ECDomainParameters(parameters2);
             KeyGenerationParameters parameters = new ECKeyGenerationParameters(parameters3, Common.ThreadSecureRandom.Value);
             IAsymmetricCipherKeyPairGenerator generator = new ECKeyPairGenerator();
@@ -60,7 +49,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             return generator.GenerateKeyPair();
         }
 
-        internal static X9ECParameters GenerateEllipticCurve(ECDSAEllipticCurve ellipticCurve)
+        private static X9ECParameters GenerateX9(ECDSAEllipticCurve ellipticCurve)
         {
             switch (ellipticCurve)
             {

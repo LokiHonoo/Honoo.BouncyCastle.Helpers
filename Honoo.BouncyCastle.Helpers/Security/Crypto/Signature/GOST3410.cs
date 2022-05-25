@@ -44,7 +44,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// Generate signer.
         /// </summary>
         /// <returns></returns>
-        protected override ISigner GenerateSigner()
+        protected override ISigner GenerateSignerCore()
         {
             IDigest digest = _hashAlgorithm.GenerateDigest();
             return new Gost3410DigestSigner(new Gost3410Signer(), digest);
