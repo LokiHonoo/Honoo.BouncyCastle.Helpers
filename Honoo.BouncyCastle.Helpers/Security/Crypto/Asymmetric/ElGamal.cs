@@ -13,7 +13,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
     /// <para/>Uses key size 768 bits, certainty 20 by default.
     /// </summary>
-    public sealed class ElGamal : AsymmetricAlgorithm, IAsymmetricEncryptionAlgorithm
+    public sealed class ElGamal : AsymmetricEncryptionAlgorithm
     {
         #region Properties
 
@@ -75,7 +75,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IAsymmetricBlockCipher GenerateCipher(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
+        public override IAsymmetricBlockCipher GenerateCipher(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
         {
             if (padding == AsymmetricPaddingMode.ISO9796_1)
             {

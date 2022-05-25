@@ -25,6 +25,50 @@ namespace Honoo.BouncyCastle.Helpers
         string Mechanism { get; }
 
         /// <summary>
+        /// Generate a new Symmetric block algorithm and decrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data);
+
+        /// <summary>
+        /// Generate a new Symmetric block algorithm and decrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length);
+
+        /// <summary>
+        /// Generate a new Symmetric block algorithm and encrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data);
+
+        /// <summary>
+        /// Generate a new Symmetric block algorithm and encrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length);
+
+        /// <summary>
         /// Generate cipher. The cipher can be reused. Except GCM cipher mode.
         /// </summary>
         /// <param name="forEncryption"></param>
@@ -33,7 +77,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-
         IBufferedCipher GenerateCipher(bool forEncryption, SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters);
 
         /// <summary>

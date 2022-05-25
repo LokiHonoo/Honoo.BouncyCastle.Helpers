@@ -8,6 +8,7 @@ using Org.BouncyCastle.Asn1.Nist;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.TeleTrust;
 using Org.BouncyCastle.Asn1.X9;
+using Org.BouncyCastle.Utilities;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -315,7 +316,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion SM2
 
-
         /// <summary>
         /// Try get signature algorithm used arguments hash algorithm, asymmetric algorithm.
         /// </summary>
@@ -338,13 +338,9 @@ namespace Honoo.BouncyCastle.Helpers
                 algorithm = null;
                 return false;
             }
-            if (hashAlgorithm is null)
-            {
-                algorithm = null;
-                return false;
-            }
             model = model.Replace('_', '-').ToUpperInvariant();
             bool corresponding = false;
+            bool ed = false;
             switch (model)
             {
                 case "CVC-ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
@@ -359,25 +355,51 @@ namespace Honoo.BouncyCastle.Helpers
                 case "RSAANDMGF1": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
                 case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
                 case "SM2": corresponding = asymmetricAlgorithm.Mechanism == "SM2"; break;
+
+                case "ED25519": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
+                case "ED25519CTX": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
+                case "ED25519PH": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
+                case "ED448": corresponding = asymmetricAlgorithm.Mechanism == "Ed448"; ed = true; break;
+                case "ED448PH": corresponding = asymmetricAlgorithm.Mechanism == "Ed448"; ed = true; break;
                 default: break;
             }
             if (corresponding)
             {
-                switch (model)
+                if (ed)
                 {
-                    case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "DSA": algorithm = new DSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "ECDSA": algorithm = new ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "ECNR": algorithm = new ECNR(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "RSA": algorithm = new RSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm, asymmetricAlgorithm); return true;
-                    case "SM2": algorithm = new SM2(hashAlgorithm, asymmetricAlgorithm); return true;
-                    default: break;
+                    switch (model)
+                    {
+                        case "ED25519": algorithm = new Ed25519(asymmetricAlgorithm); return true;
+                        case "ED25519CTX": algorithm = new Ed25519ctx(Arrays.EmptyBytes, asymmetricAlgorithm); return true;
+                        case "ED25519PH": algorithm = new Ed25519ph(Arrays.EmptyBytes, asymmetricAlgorithm); return true;
+                        case "ED448": algorithm = new Ed448(Arrays.EmptyBytes, asymmetricAlgorithm); return true;
+                        case "ED448PH": algorithm = new Ed448ph(Arrays.EmptyBytes, asymmetricAlgorithm); return true;
+                        default: break;
+                    }
+                }
+                else
+                {
+                    if (hashAlgorithm is null)
+                    {
+                        algorithm = null;
+                        return false;
+                    }
+                    switch (model)
+                    {
+                        case "CVC-ECDSA": algorithm = new CVC_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "DSA": algorithm = new DSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "ECDSA": algorithm = new ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "ECGOST3410": case "ECGOST3410-2001": algorithm = new ECGOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "ECNR": algorithm = new ECNR(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "RSA": algorithm = new RSA(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "SM2": algorithm = new SM2(hashAlgorithm, asymmetricAlgorithm); return true;
+                        default: break;
+                    }
                 }
             }
             algorithm = null;

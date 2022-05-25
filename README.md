@@ -47,12 +47,15 @@ using Honoo.BouncyCastle.Helpers;
 
 private static void Demo1()
 {
-    byte[] test = Utilities.ScoopBytes(123);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    // example 1
+    byte[] hash1 = HashAlgorithmHelper.SHA3_256.ComputeHash(test);
+    // example 2
     IDigest digest = HashAlgorithmHelper.SHA3_256.GenerateDigest();
-    byte[] hash = new byte[digest.GetDigestSize()];
-    //byte[] hash = new byte[HashAlgorithmHelper.SHA3_256.HashSize / 8];
+    byte[] hash2 = new byte[HashAlgorithmHelper.SHA3_256.HashSize / 8];
     digest.BlockUpdate(test, 0, test.Length);
-    digest.DoFinal(hash, 0);
+    digest.DoFinal(hash2, 0);
 }
 
 ```
@@ -63,14 +66,18 @@ private static void Demo1()
 
 private static void Demo2()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(72);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[72]; // Any value
+    Utilities.Random.NextBytes(key);
     ICipherParameters parameters = HMACHelper.SHA3_256_HMAC.GenerateParameters(key);
+    // example 1
+    byte[] hash1 = HMACHelper.SHA3_256_HMAC.ComputeHash(parameters, test);
+    // example 2
     IMac digest = HMACHelper.SHA3_256_HMAC.GenerateDigest(parameters);
-    byte[] hash = new byte[digest.GetMacSize()];
-    //byte[] hash = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
+    byte[] hash2 = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
     digest.BlockUpdate(test, 0, test.Length);
-    digest.DoFinal(hash, 0);
+    digest.DoFinal(hash2, 0);
 }
 
 ```
@@ -81,12 +88,16 @@ private static void Demo2()
 
 private static void Demo3()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(128 / 8);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[128 / 8]; // AES key size
+    Utilities.Random.NextBytes(key);
     ICipherParameters parameters = CMACHelper.AES_CMAC.GenerateParameters(key);
+    // example 1
+    byte[] hash1 = CMACHelper.AES_CMAC.ComputeHash(parameters, test);
+    // example 2
     IMac digest = CMACHelper.AES_CMAC.GenerateDigest(parameters);
-    byte[] hash = new byte[digest.GetMacSize()];
-    //byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
+    byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
     digest.BlockUpdate(test, 0, test.Length);
     digest.DoFinal(hash, 0);
 }
@@ -99,13 +110,18 @@ private static void Demo3()
 
 private static void Demo4()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(128 / 8);
-    byte[] iv = Utilities.ScoopBytes(128 / 8);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[128 / 8]; // AES key size
+    Utilities.Random.NextBytes(key);
+    byte[] iv = new byte[128 / 8]; // AES IV size
+    Utilities.Random.NextBytes(iv);
     ICipherParameters parameters = MACHelper.AES_MAC.GenerateParameters(key, iv);
+    // example 1
+    byte[] hash1 = MACHelper.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, test);
+    // example 2
     IMac digest = MACHelper.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
-    byte[] hash = new byte[digest.GetMacSize()];
-    //byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
+    byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
     digest.BlockUpdate(test, 0, test.Length);
     digest.DoFinal(hash, 0);
 }
@@ -118,39 +134,60 @@ private static void Demo4()
 
 private static void Demo1()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(128 / 8);
-    byte[] iv = Utilities.ScoopBytes(128 / 8);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[128 / 8]; // AES key size
+    Utilities.Random.NextBytes(key);
+    byte[] iv = new byte[128 / 8]; // AES IV size
+    Utilities.Random.NextBytes(iv);
     ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, iv);
+    // example 1
+    byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, test, 0, test.Length);
+    _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, enc1, 0, enc1.Length);
+    // example 2
     IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(true, SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
     IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(false, SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
-    byte[] enc = encryptor.DoFinal(test, 0, test.Length);
-    _ = decryptor.DoFinal(enc, 0, enc.Length);
+    byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
+    _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
 
 private static void Demo2()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(128 / 8);
-    byte[] nonce = Utilities.ScoopBytes(104 / 8);
-    int macSize = 96;
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[128 / 8]; // AES key size
+    Utilities.Random.NextBytes(key);
+    byte[] nonce = new byte[104 / 8]; // SymmetricCipherMode.CCM legal
+    Utilities.Random.NextBytes(nonce);
+    int macSize = 96; // SymmetricCipherMode.CCM legal
     ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, nonce, macSize, null);
+    // example 1
+    byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, test, 0, test.Length);
+    _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, enc1, 0, enc1.Length);
+    // example 2
     IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(true, SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
     IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateCipher(false, SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
-    byte[] enc = encryptor.DoFinal(test, 0, test.Length);
-    _ = decryptor.DoFinal(enc, 0, enc.Length);
+    byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
+    _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
 
 private static void Demo3()
 {
-    byte[] test = Utilities.ScoopBytes(123);
-    byte[] key = Utilities.ScoopBytes(128 / 8);
-    byte[] iv = Utilities.ScoopBytes(128 / 8);
+    byte[] test = new byte[123];
+    Utilities.Random.NextBytes(test);
+    byte[] key = new byte[128 / 8]; // HC128 key size
+    Utilities.Random.NextBytes(key);
+    byte[] iv = new byte[128 / 8]; // HC128 IV size
+    Utilities.Random.NextBytes(iv);
     ICipherParameters parameters = SymmetricAlgorithmHelper.HC128.GenerateParameters(key, iv);
+    // example 1
+    byte[] enc1 = SymmetricAlgorithmHelper.HC128.Encrypt(parameters, test, 0, test.Length);
+    _ = SymmetricAlgorithmHelper.HC128.Decrypt(parameters, enc1, 0, enc1.Length);
+    // example 2
     IBufferedCipher encryptor = SymmetricAlgorithmHelper.HC128.GenerateCipher(true, parameters);
     IBufferedCipher decryptor = SymmetricAlgorithmHelper.HC128.GenerateCipher(false, parameters);
-    byte[] enc = encryptor.DoFinal(test, 0, test.Length);
-    _ = decryptor.DoFinal(enc, 0, enc.Length);
+    byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
+    _ = decryptor.DoFinal(enc2, 0, enc2.Length);
 }
 
 ```
@@ -161,12 +198,17 @@ private static void Demo3()
 
 private static void Demo1()
 {
-    byte[] test = Utilities.ScoopBytes(4);
+    byte[] test = new byte[5];
+    Utilities.Random.NextBytes(test);
     AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.RSA.GenerateKeyPair();
+    // example 1
+    byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
+    _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
+    // example 2
     IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Public);
     IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Private);
-    byte[] enc = encryptor.ProcessBlock(test, 0, test.Length);
-    _ = decryptor.ProcessBlock(enc, 0, enc.Length);
+    byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
+    _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
 }
 
 ```
@@ -177,15 +219,19 @@ private static void Demo1()
 
 private static void Demo1()
 {
-    byte[] test = Utilities.ScoopBytes(93);
-    //AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair();
-    AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
+    byte[] test = new byte[83];
+    Utilities.Random.NextBytes(test);
+    AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.GenerateKeyPair();
+    // example 1
+    byte[] signature1 = SignatureAlgorithmHelper.SHA256withECDSA.Sign(keyPair.Private, test);
+    bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
+    // example 2
     ISigner signer = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Private);
     ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Public);
     signer.BlockUpdate(test, 0, test.Length);
-    byte[] signature = signer.GenerateSignature();
+    byte[] signature2 = signer.GenerateSignature();
     verifier.BlockUpdate(test, 0, test.Length);
-    bool same = verifier.VerifySignature(signature);
+    bool same2 = verifier.VerifySignature(signature2);
 }
 
 ```
@@ -194,14 +240,15 @@ private static void Demo1()
 
 ```c#
 
-private static void BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
+private static void BuildCAUnit(string asymmetricAlgorithm, string signatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
 {
-    AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair();
+    AsymmetricAlgorithmHelper.TryGetAlgorithm(asymmetricAlgorithm, out IAsymmetricAlgorithm algorithm);
+    AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
     caPrivateKey = keyPair.Private;
     Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
     {
         new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST Root CA")
+        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST Root CA")
     };
     X509Name dn = X509Helper.GenerateX509Name(names);
     Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -210,12 +257,13 @@ private static void BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X50
         new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
     };
     X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-    caCert = X509Helper.GenerateIssuerCert("SHA224withECDSA",
+    caCert = X509Helper.GenerateIssuerCert(signatureAlgorithm,
                                             keyPair,
                                             dn,
                                             extensions,
                                             DateTime.UtcNow.AddDays(-1),
-                                            365);
+                                            TimeSpan.FromDays(120));
+
     _ = PemHelper.KeyToPem(keyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
     _ = PemHelper.KeyToPem(keyPair.Public);
     _ = PemHelper.CertToPem(caCert);
@@ -225,14 +273,15 @@ private static void BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X50
 
 ```c#
 
-private static void BuildClientUnit(out Pkcs10CertificationRequest clientCsr)
+private static void BuildUserUnit(out AsymmetricKeyParameter userPrivateKey, out Pkcs10CertificationRequest userCsr)
 {
     ISignatureAlgorithm algorithm = SignatureAlgorithmHelper.GOST3411withECGOST3410;
     AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
+    userPrivateKey = keyPair.Private;
     Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
     {
         new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Client")
+        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST User")
     };
     X509Name dn = X509Helper.GenerateX509Name(names);
     Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
@@ -241,104 +290,58 @@ private static void BuildClientUnit(out Pkcs10CertificationRequest clientCsr)
         new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
     };
     X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-    clientCsr = X509Helper.GenerateCsr(algorithm, keyPair, dn, extensions);
+    userCsr = X509Helper.GenerateCsr(algorithm, keyPair, dn, extensions);
 }
 
 ```
 
 ```c#
 
-private static void BuildServerUnit(out Pkcs10CertificationRequest serverCsr)
-{
-    AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECGOST3410.GenerateKeyPair();
-    Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
-    {
-        new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"Sockets TEST TCP Server")
-    };
-    X509Name dn = X509Helper.GenerateX509Name(names);
-    Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
-    {
-        new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
-        new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
-    };
-    X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-    serverCsr = X509Helper.GenerateCsr("GOST3411withECGOST3410", keyPair, dn, extensions);
-}
-
-```
-
-```c#
-
-private static void Demo()
+private static void Demo(string caAsymmetricAlgorithm, string caSignatureAlgorithm, string subjectSignatureAlgorithm)
 {
     //
-    // CA work
+    // CA build self.
     //
-    BuildCAUnit(out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
+    BuildCAUnit(caAsymmetricAlgorithm, caSignatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
     //
-    // Subject work
+    // User create csr and sand to CA.
     //
-    BuildServerUnit(out Pkcs10CertificationRequest serverCsr);
-    BuildClientUnit(out Pkcs10CertificationRequest clientCsr);
+    BuildUserUnit(out AsymmetricKeyParameter _, out Pkcs10CertificationRequest userCsr);
     //
-    // CA work
+    // CA extract csr and create user cert.
     //
-    X509Helper.ExtractCsr(serverCsr, out AsymmetricKeyParameter serverPublicKey, out X509Name serverDN, out X509Extensions serverExtensions);
-    X509Certificate serverCert = X509Helper.GenerateSubjectCert("SHA256WithECDSA",
+    X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDN, out X509Extensions userExtensions);
+    X509Certificate userCert = X509Helper.GenerateSubjectCert(subjectSignatureAlgorithm,
                                                                 caPrivateKey,
                                                                 caCert,
-                                                                serverPublicKey,
-                                                                serverDN,
-                                                                serverExtensions,
+                                                                userPublicKey,
+                                                                userDN,
+                                                                userExtensions,
                                                                 DateTime.UtcNow.AddDays(-1),
-                                                                90);
-    X509Helper.ExtractCsr(clientCsr, out AsymmetricKeyParameter clientPublicKey, out X509Name clientDN, out X509Extensions clientExtensions);
-    //
-    SignatureAlgorithmHelper.TryGetAlgorithm("SHA256WithECDSA", out ISignatureAlgorithm signatureAlgorithm);
-    X509Certificate clientCert = X509Helper.GenerateSubjectCert(signatureAlgorithm,
-                                                                caPrivateKey,
-                                                                caCert,
-                                                                clientPublicKey,
-                                                                clientDN,
-                                                                clientExtensions,
-                                                                DateTime.UtcNow.AddDays(-1),
-                                                                90);
+                                                                TimeSpan.FromDays(90));
     //
     //
     // Print
     //
     Console.WriteLine("====  CA Cert  =====================================================================================");
     Console.WriteLine(caCert.ToString());
-    Console.WriteLine("====  Server Cert  =================================================================================");
-    Console.WriteLine(serverCert.ToString());
-    Console.WriteLine("====  Client Cert  =================================================================================");
-    Console.WriteLine(clientCert.ToString());
+    Console.WriteLine("====  User Cert  =================================================================================");
+    Console.WriteLine(userCert.ToString());
     Console.WriteLine();
     //
-    // Verify
+    // User verify cert.
     //
     bool validated;
     try
     {
-        serverCert.Verify(caCert.GetPublicKey());
+        userCert.Verify(caCert.GetPublicKey());
         validated = true;
     }
     catch
     {
         validated = false;
     }
-    Console.WriteLine("Verify server cert - " + validated);
-    try
-    {
-        clientCert.Verify(caCert.GetPublicKey());
-        validated = true;
-    }
-    catch
-    {
-        validated = false;
-    }
-    Console.WriteLine("Verify client cert - " + validated);
+    Console.WriteLine("Verify user cert - " + validated);
 }
 
 ```

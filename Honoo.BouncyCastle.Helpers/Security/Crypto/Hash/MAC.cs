@@ -60,7 +60,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// MAC.
         /// <para/>Legal mac size is between 8 and block size (8 bits increments).
         /// <para/>Legal mac size must be at least 24 bits (FIPS Publication 81) or 16 bits if being used as a data authenticator (FIPS Publication 113).
-        /// <para/>Used (block size / 2) as mac size by default.
+        /// <para/>Default mac size used as block size / 2.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         public MAC(IBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize / 2)
@@ -71,7 +71,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// MAC.
         /// <para/>Legal mac size is between 8 and block size (8 bits increments).
         /// <para/>Legal mac size must be at least 24 bits (FIPS Publication 81) or 16 bits if being used as a data authenticator (FIPS Publication 113).
-        /// <para/>Used (block size / 2) as mac size by default.
+        /// <para/>Default mac size used as block size / 2.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         /// <param name="macSize">MAC size bits.</param>
@@ -114,6 +114,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public byte[] ComputeHash(MACCipherMode mode, MACPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
         {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             IMac digest = GenerateDigest(mode, padding, parameters);
             digest.BlockUpdate(data, offset, length);
             byte[] hash = new byte[_hashSize];
@@ -209,8 +217,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             switch (mode)
             {
-                case MACCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(_hashSize, _hashSize, 0) }; return true;
-                case MACCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, _hashSize, 8) }; return true;
+                case MACCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(_blockAlgorithm.BlockSize, _blockAlgorithm.BlockSize, 0) }; return true;
+                case MACCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, _blockAlgorithm.BlockSize, 8) }; return true;
                 default: break;
             }
             ivSizes = null;

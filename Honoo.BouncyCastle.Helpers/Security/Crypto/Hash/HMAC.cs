@@ -63,6 +63,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public byte[] ComputeHash(ICipherParameters parameters, byte[] data, int offset, int length)
         {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             IMac digest = GenerateDigest(parameters);
             digest.BlockUpdate(data, offset, length);
             byte[] hash = new byte[_hashAlgorithm.HashSize];

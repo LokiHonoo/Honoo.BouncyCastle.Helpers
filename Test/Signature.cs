@@ -31,20 +31,25 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = Utilities.ScoopBytes(93);
-            //AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair();
-            AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
+            byte[] test = new byte[83];
+            Utilities.Random.NextBytes(test);
+            AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.GenerateKeyPair();
+            // example 1
+            byte[] signature1 = SignatureAlgorithmHelper.SHA256withECDSA.Sign(keyPair.Private, test);
+            bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
+            // example 2
             ISigner signer = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Private);
             ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Public);
             signer.BlockUpdate(test, 0, test.Length);
-            byte[] signature = signer.GenerateSignature();
+            byte[] signature2 = signer.GenerateSignature();
             verifier.BlockUpdate(test, 0, test.Length);
-            bool same = verifier.VerifySignature(signature);
+            bool same2 = verifier.VerifySignature(signature2);
         }
 
         private static void Test1()
         {
-            byte[] test = Utilities.ScoopBytes(93);
+            byte[] test = new byte[83];
+            Utilities.Random.NextBytes(test);
             //
             Type type = typeof(SignatureAlgorithmHelper);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -53,7 +58,7 @@ namespace Test
                 if (property.GetValue(type, null) is ISignatureAlgorithm algorithm)
                 {
                     _total++;
-                    AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
+                    AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
                     ISigner signer = algorithm.GenerateSigner(keyPair.Private);
                     ISigner verifier = algorithm.GenerateSigner(keyPair.Public);
                     XTest(algorithm, signer, verifier, test);
@@ -71,7 +76,7 @@ namespace Test
                 _total++;
                 _execute++;
                 SignatureAlgorithmHelper.TryGetAlgorithm(name, out ISignatureAlgorithm algorithm);
-                AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
+                AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
                 ISigner signer = algorithm.GenerateSigner(keyPair.Private);
                 ISigner verifier = algorithm.GenerateSigner(keyPair.Public);
                 XTest(algorithm, signer, verifier, test);

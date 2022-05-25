@@ -5,7 +5,6 @@ using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
-using Org.BouncyCastle.Security;
 using System;
 using System.Security.Cryptography;
 
@@ -16,7 +15,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
     /// <para/>Uses key size 2048 bits, certainty 25 by default.
     /// </summary>
-    public sealed class RSA : AsymmetricAlgorithm, IAsymmetricEncryptionAlgorithm
+    public sealed class RSA : AsymmetricEncryptionAlgorithm
     {
         #region Properties
 
@@ -90,7 +89,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IAsymmetricBlockCipher GenerateCipher(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
+        public override IAsymmetricBlockCipher GenerateCipher(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
         {
             IAsymmetricBlockCipher cipher = new RsaBlindedEngine();
             switch (padding)
@@ -115,26 +114,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             IAsymmetricCipherKeyPairGenerator generator = new RsaKeyPairGenerator();
             generator.Init(parameters);
             return generator.GenerateKeyPair();
-        }
-
-        /// <summary>
-        /// Generate key pair.
-        /// </summary>
-        /// <param name="dotNET">Extract from .NET RSA key pool.</param>
-        /// <returns></returns>
-        public AsymmetricCipherKeyPair GenerateKeyPair(bool dotNET)
-        {
-            if (dotNET)
-            {
-                using (System.Security.Cryptography.RSACryptoServiceProvider rsa = new System.Security.Cryptography.RSACryptoServiceProvider(_keySize))
-                {
-                    return DotNetUtilities.GetRsaKeyPair(rsa);
-                }
-            }
-            else
-            {
-                return GenerateKeyPair();
-            }
         }
     }
 }

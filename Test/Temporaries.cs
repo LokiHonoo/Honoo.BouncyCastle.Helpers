@@ -17,24 +17,6 @@ namespace Test
     {
         internal static void Test()
         {
-            if (SignatureAlgorithmHelper.TryGetOid("SHA512withSM2", out Org.BouncyCastle.Asn1.DerObjectIdentifier a))
-            {
-                Console.WriteLine(a.Id);
-            }
-
-            if (SignatureAlgorithmHelper.TryGetAlgorithm("SHA512withSM2", out var b))
-            {
-                byte[] test = Utilities.ScoopBytes(93);
-                AsymmetricCipherKeyPair keyPair = b.AsymmetricAlgorithm.GenerateKeyPair();
-                ISigner signer = b.GenerateSigner(keyPair.Private);
-                ISigner verifier = b.GenerateSigner(keyPair.Public);
-                signer.BlockUpdate(test, 0, test.Length);
-                byte[] signature = signer.GenerateSignature();
-                verifier.BlockUpdate(test, 0, test.Length);
-                Console.WriteLine(verifier.VerifySignature(signature));
-            }
-
-            //
             Console.WriteLine("\r\n\r\n");
 
 

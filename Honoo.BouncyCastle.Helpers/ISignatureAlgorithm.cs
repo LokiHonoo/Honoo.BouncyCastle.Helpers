@@ -34,9 +34,49 @@ namespace Honoo.BouncyCastle.Helpers
         ISigner GenerateSigner(AsymmetricKeyParameter asymmetricKey);
 
         /// <summary>
+        /// Generate a new signature algorithm and sign data.
+        /// </summary>
+        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        byte[] Sign(AsymmetricKeyParameter asymmetricKey, byte[] data);
+
+        /// <summary>
+        /// Generate a new signature algorithm and sign data.
+        /// </summary>
+        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        byte[] Sign(AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length);
+
+        /// <summary>
         /// Return mechanism.
         /// </summary>
         /// <returns></returns>
         string ToString();
+
+        /// <summary>
+        /// Generate a new signature algorithm and verify data.
+        /// </summary>
+        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="signature">Signature.</param>
+        /// <returns></returns>
+        bool Verify(AsymmetricKeyParameter asymmetricKey, byte[] data, byte[] signature);
+
+        /// <summary>
+        /// Generate a new signature algorithm and sign data.
+        /// </summary>
+        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <param name="signature">Signature.</param>
+        /// <param name="signatureOffset">The starting offset to read.</param>
+        /// <param name="signatureLength">The length to read.</param>
+        /// <returns></returns>
+        bool Verify(AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length, byte[] signature, int signatureOffset, int signatureLength);
     }
 }

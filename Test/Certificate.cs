@@ -53,7 +53,7 @@ namespace Test
         private static void BuildUserUnit(out AsymmetricKeyParameter userPrivateKey, out Pkcs10CertificationRequest userCsr)
         {
             ISignatureAlgorithm algorithm = SignatureAlgorithmHelper.GOST3411withECGOST3410;
-            AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
+            AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
             userPrivateKey = keyPair.Private;
             Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
             {

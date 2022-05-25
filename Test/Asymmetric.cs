@@ -1,11 +1,11 @@
 ﻿using Honoo.BouncyCastle.Helpers;
-using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
+using System.Security.Cryptography;
 
 namespace Test
 {
@@ -34,14 +34,18 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = Utilities.ScoopBytes(4);
+            byte[] test = new byte[5];
+            Utilities.Random.NextBytes(test);
             AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.RSA.GenerateKeyPair();
+            // example 1
+            byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
+            _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
+            // example 2
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Public);
             IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.PKCS1, keyPair.Private);
-            byte[] enc = encryptor.ProcessBlock(test, 0, test.Length);
-            _ = decryptor.ProcessBlock(enc, 0, enc.Length);
+            byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
+            _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
         }
-
 
         private static void Test1()
         {
@@ -53,7 +57,8 @@ namespace Test
             AsymmetricAlgorithmHelper.TryGetAlgorithm("RSA", out encryption);
             algorithms.Add(encryption);
             //
-            byte[] test = Utilities.ScoopBytes(4);
+            byte[] test = new byte[5];
+            Utilities.Random.NextBytes(test);
             foreach (IAsymmetricEncryptionAlgorithm algorithm in algorithms)
             {
                 foreach (int paddingValue in paddings)
@@ -76,10 +81,14 @@ namespace Test
                 }
             }
             {
-                AsymmetricCipherKeyPair keyPair = ((RSA)AsymmetricAlgorithmHelper.RSA).GenerateKeyPair(true);
+                AsymmetricCipherKeyPair keyPair;
+                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048))
+                {
+                    keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
+                }
                 IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.NoPadding, keyPair.Public);
                 IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateCipher(AsymmetricPaddingMode.NoPadding, keyPair.Private);
-                XTest(".NET RSA KEY 2048", encryptor, decryptor, test);
+                XTest("Use .NET RSA KEY 2048", encryptor, decryptor, test);
             }
         }
 

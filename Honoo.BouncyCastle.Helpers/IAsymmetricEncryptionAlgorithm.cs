@@ -14,6 +14,50 @@ namespace Honoo.BouncyCastle.Helpers
         string Mechanism { get; }
 
         /// <summary>
+        /// Generate a new asymmetric encryption algorithm and decrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey, byte[] data);
+
+        /// <summary>
+        /// Generate a new asymmetric encryption algorithm and decrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="asymmetricKey">Asymmetric private key.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length);
+
+        /// <summary>
+        /// Generate a new asymmetric encryption algorithm and encrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey, byte[] data);
+
+        /// <summary>
+        /// Generate a new asymmetric encryption algorithm and encrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="asymmetricKey">Asymmetric public key.</param>
+        /// <param name="data">Data.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey, byte[] data, int offset, int length);
+
+        /// <summary>
         /// Generate cipher. The cipher can be reused.
         /// </summary>
         /// <param name="padding">Asymmetric algorithm padding mode.</param>

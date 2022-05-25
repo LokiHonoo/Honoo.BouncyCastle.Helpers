@@ -46,6 +46,77 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         #endregion Constructor
 
         /// <summary>
+        /// Generate a new symmetric stream algorithm and decrypt data.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Decrypt(ICipherParameters parameters, byte[] data)
+        {
+            return Decrypt(parameters, data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric stream algorithm and decrypt data.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Decrypt(ICipherParameters parameters, byte[] data, int offset, int length)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            IBufferedCipher decryptor = GenerateCipher(false, parameters);
+            return decryptor.DoFinal(data, offset, length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric stream algorithm and encrypt data.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Encrypt(ICipherParameters parameters, byte[] data)
+        {
+            return Encrypt(parameters, data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric stream algorithm and encrypt data.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Encrypt(ICipherParameters parameters, byte[] data, int offset, int length)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            IBufferedCipher encryptor = GenerateCipher(true, parameters);
+            return encryptor.DoFinal(data, offset, length);
+        }
+
+        /// <summary>
         /// Generate cipher.
         /// </summary>
         /// <param name="forEncryption"></param>

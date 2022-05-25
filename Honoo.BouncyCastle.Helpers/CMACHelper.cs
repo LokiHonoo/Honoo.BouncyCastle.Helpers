@@ -50,30 +50,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         public static ICMAC DSTU7624_128_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.DSTU7624_128);
 
-        /// <summary>
-        /// Hash size 256 bits. Legal key size 256, 512 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC DSTU7624_256_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.DSTU7624_256);
 
-        /// <summary>
-        /// Hash size 512 bits. Legal key size 512 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC DSTU7624_512_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.DSTU7624_512);
-
-        /// <summary>
-        /// Hash size 512 bits. Legal key size 512 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Threefish_512_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Threefish_512);
-
-        /// <summary>
-        /// Hash size 1024 bits. Legal key size 1024 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Threefish_1024_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Threefish_1024);
-
-        /// <summary>
-        /// Hash size 256 bits. Legal key size 256 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Threefish_256_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Threefish_256);
 
         /// <summary>
         /// Hash size 64 bits. Legal key size 256 bits. Default mac size used as block size.
@@ -114,26 +91,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// Hash size 128 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
         /// </summary>
         public static ICMAC Rijndael_128_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Rijndael_128);
-
-        /// <summary>
-        /// Hash size 160 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Rijndael_160_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Rijndael_160);
-
-        /// <summary>
-        /// Hash size 192 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Rijndael_192_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Rijndael_192);
-
-        /// <summary>
-        /// Hash size 224 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Rijndael_224_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Rijndael_224);
-
-        /// <summary>
-        /// Hash size 256 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
-        /// </summary>
-        public static ICMAC Rijndael_256_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.Rijndael_256);
 
         /// <summary>
         /// Hash size 128 bits. Legal key size 128 bits. Default mac size used as block size.
@@ -220,8 +177,6 @@ namespace Honoo.BouncyCastle.Helpers
                 case "DES": return TryGetAlgorithmNano(DES_CMAC, macSize, out algorithm);
                 case "DESEDE": case "DESEDE3": case "TDEA": case "TRIPLEDES": case "3DES": return TryGetAlgorithmNano(DESede_CMAC, macSize, out algorithm);
                 case "DSTU7624-128": return TryGetAlgorithmNano(DSTU7624_128_CMAC, macSize, out algorithm);
-                case "DSTU7624-256": return TryGetAlgorithmNano(DSTU7624_256_CMAC, macSize, out algorithm);
-                case "DSTU7624-512": return TryGetAlgorithmNano(DSTU7624_512_CMAC, macSize, out algorithm);
                 case "GOST28147": return TryGetAlgorithmNano(GOST28147_CMAC, macSize, out algorithm);
                 case "IDEA": return TryGetAlgorithmNano(IDEA_CMAC, macSize, out algorithm);
                 case "NOEKEON": return TryGetAlgorithmNano(Noekeon_CMAC, macSize, out algorithm);
@@ -230,18 +185,11 @@ namespace Honoo.BouncyCastle.Helpers
                 case "RC5-64": return TryGetAlgorithmNano(RC5_64_CMAC, macSize, out algorithm);
                 case "RC6": return TryGetAlgorithmNano(RC6_CMAC, macSize, out algorithm);
                 case "RIJNDAEL-128": case "RIJNDAEL128": return TryGetAlgorithmNano(Rijndael_128_CMAC, macSize, out algorithm);
-                case "RIJNDAEL-160": case "RIJNDAEL160": return TryGetAlgorithmNano(Rijndael_128_CMAC, macSize, out algorithm);
-                case "RIJNDAEL-192": case "RIJNDAEL192": return TryGetAlgorithmNano(Rijndael_192_CMAC, macSize, out algorithm);
-                case "RIJNDAEL-224": case "RIJNDAEL224": return TryGetAlgorithmNano(Rijndael_224_CMAC, macSize, out algorithm);
-                case "RIJNDAEL-256": case "RIJNDAEL256": return TryGetAlgorithmNano(Rijndael_256_CMAC, macSize, out algorithm);
                 case "SEED": return TryGetAlgorithmNano(SEED_CMAC, macSize, out algorithm);
                 case "SERPENT": return TryGetAlgorithmNano(Serpent_CMAC, macSize, out algorithm);
                 case "SKIPJACK": return TryGetAlgorithmNano(SKIPJACK_CMAC, macSize, out algorithm);
                 case "SM4": return TryGetAlgorithmNano(SM4_CMAC, macSize, out algorithm);
                 case "TEA": return TryGetAlgorithmNano(TEA_CMAC, macSize, out algorithm);
-                case "THREEFISH-256": case "THREEFISH256": return TryGetAlgorithmNano(Threefish_256_CMAC, macSize, out algorithm);
-                case "THREEFISH-512": case "THREEFISH512": return TryGetAlgorithmNano(Threefish_512_CMAC, macSize, out algorithm);
-                case "THREEFISH-1024": case "THREEFISH1024": return TryGetAlgorithmNano(Threefish_1024_CMAC, macSize, out algorithm);
                 case "TNEPRES": return TryGetAlgorithmNano(Tnepres_CMAC, macSize, out algorithm);
                 case "TWOFISH": return TryGetAlgorithmNano(Twofish_CMAC, macSize, out algorithm);
                 case "XTEA": return TryGetAlgorithmNano(XTEA_CMAC, macSize, out algorithm);

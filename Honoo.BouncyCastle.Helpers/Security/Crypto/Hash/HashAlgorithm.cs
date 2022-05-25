@@ -1,5 +1,6 @@
 ﻿using Honoo.BouncyCastle.Helpers.Utilities;
 using Org.BouncyCastle.Crypto;
+using System;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
@@ -52,6 +53,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         /// <param name="data">Data bytes.</param>
         /// <returns></returns>
+        /// <exception cref="Exception"/>
         public byte[] ComputeHash(byte[] data)
         {
             return ComputeHash(data, 0, data.Length);
@@ -64,11 +66,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
+        /// <exception cref="Exception"/>
         public byte[] ComputeHash(byte[] data, int offset, int length)
         {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             IDigest digest = GenerateDigest();
             digest.BlockUpdate(data, offset, length);
-            byte[] hash = new byte[_hashSize];
+            byte[] hash = new byte[_hashSize / 8];
             digest.DoFinal(hash, 0);
             return hash;
         }

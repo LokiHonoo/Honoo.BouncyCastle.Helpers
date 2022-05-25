@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// CMAC.
         /// <para/>Legal mac size is between 8 and block size (8 bits increments).
-        /// <para/>Used block size as mac size by default.
+        /// <para/>Default mac size used as block size.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         public CMAC(IBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize)
@@ -66,7 +66,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// CMAC.
         /// <para/>Legal mac size is between 8 and block size (8 bits increments).
-        /// <para/>Used block size as mac size by default.
+        /// <para/>Default mac size used as block size.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         /// <param name="macSize">MAC size bits.</param>
@@ -87,6 +87,45 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         #endregion Constructor
+
+        /// <summary>
+        /// Generate a new digest and compute data hash.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] ComputeHash(ICipherParameters parameters, byte[] data)
+        {
+            return ComputeHash(parameters, data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Generate a new digest and compute data hash.
+        /// </summary>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] ComputeHash(ICipherParameters parameters, byte[] data, int offset, int length)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            IMac digest = GenerateDigest(parameters);
+
+            byte[] hash = new byte[_hashSize / 8];
+            digest.BlockUpdate(data, offset, length);
+            digest.DoFinal(hash, 0);
+            return hash;
+        }
 
         /// <summary>
         /// Generate digest. The digest can be reused.

@@ -6,16 +6,5 @@ namespace Test
     {
         private static readonly byte[] _pool = new byte[1048576];
         internal static Random Random = new Random();
-        static Utilities()
-        {
-            new Random().NextBytes(_pool);
-        }
-
-        internal static byte[] ScoopBytes(int length)
-        {
-            byte[] bytes = new byte[length];
-            Buffer.BlockCopy(_pool, 0, bytes, 0, length);
-            return bytes;
-        }
     }
 }

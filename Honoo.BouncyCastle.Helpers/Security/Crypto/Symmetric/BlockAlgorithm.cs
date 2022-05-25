@@ -54,6 +54,85 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         #endregion Constructor
 
         /// <summary>
+        /// Generate a new symmetric block algorithm and decrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data)
+        {
+            return Decrypt(mode, padding, parameters, data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric block algorithm and decrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            IBufferedCipher decryptor = GenerateCipher(false, mode, padding, parameters);
+            return decryptor.DoFinal(data, offset, length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric block algorithm and encrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data)
+        {
+            return Encrypt(mode, padding, parameters, data, 0, data.Length);
+        }
+
+        /// <summary>
+        /// Generate a new symmetric block algorithm and encrypt data.
+        /// </summary>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <param name="parameters">Parameters.</param>
+        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="offset">The starting offset to read.</param>
+        /// <param name="length">The length to read.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            IBufferedCipher encryptor = GenerateCipher(true, mode, padding, parameters);
+            return encryptor.DoFinal(data, offset, length);
+        }
+
+        /// <summary>
         /// Generate cipher. The cipher can be reused. Except GCM cipher mode.
         /// </summary>
         /// <param name="forEncryption"></param>

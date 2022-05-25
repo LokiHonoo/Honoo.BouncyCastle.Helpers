@@ -55,22 +55,28 @@ namespace Test
         {
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
-            byte[] key = new byte[72];
+            byte[] key = new byte[72]; // Any value
             Utilities.Random.NextBytes(key);
             ICipherParameters parameters = HMACHelper.SHA3_256_HMAC.GenerateParameters(key);
+            // example 1
+            byte[] hash1 = HMACHelper.SHA3_256_HMAC.ComputeHash(parameters, test);
+            // example 2
             IMac digest = HMACHelper.SHA3_256_HMAC.GenerateDigest(parameters);
-            byte[] hash = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
+            byte[] hash2 = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
-            digest.DoFinal(hash, 0);
+            digest.DoFinal(hash2, 0);
         }
 
         private static void Demo3()
         {
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
-            byte[] key = new byte[CMACHelper.AES_CMAC.KeySizes[0].MinSize / 8];
+            byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
             ICipherParameters parameters = CMACHelper.AES_CMAC.GenerateParameters(key);
+            // example 1
+            byte[] hash1 = CMACHelper.AES_CMAC.ComputeHash(parameters, test);
+            // example 2
             IMac digest = CMACHelper.AES_CMAC.GenerateDigest(parameters);
             byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
@@ -81,12 +87,14 @@ namespace Test
         {
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
-            byte[] key = new byte[MACHelper.AES_MAC.KeySizes[0].MinSize / 8];
+            byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
-            _ = MACHelper.AES_MAC.TryGetIVSizes(MACCipherMode.CBC, out KeySizes[] ivSizes);
-            byte[] iv = new byte[ivSizes[0].MinSize];
+            byte[] iv = new byte[128 / 8]; // AES IV size
             Utilities.Random.NextBytes(iv);
             ICipherParameters parameters = MACHelper.AES_MAC.GenerateParameters(key, iv);
+            // example 1
+            byte[] hash1 = MACHelper.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, test);
+            // example 2
             IMac digest = MACHelper.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
             byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
@@ -121,7 +129,8 @@ namespace Test
 
         private static void Test1()
         {
-            byte[] test = Utilities.ScoopBytes(123);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
             //
             Type type = typeof(HashAlgorithmHelper);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -151,9 +160,10 @@ namespace Test
 
         private static void Test2()
         {
-            byte[] test = Utilities.ScoopBytes(123);
-            byte[] key = Utilities.ScoopBytes(31);
-            ICipherParameters parameters = Org.BouncyCastle.Security.ParameterUtilities.CreateKeyParameter("AES", key);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
+            byte[] key = new byte[19];
+            Utilities.Random.NextBytes(key);
             //
             Type type = typeof(HMACHelper);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -162,6 +172,7 @@ namespace Test
                 if (property.GetValue(type, null) is IHMAC algorithm)
                 {
                     _total++;
+                    ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
                     XTest(algorithm.Mechanism, digest, test);
                     _execute++;
@@ -173,7 +184,8 @@ namespace Test
 
         private static void Test3()
         {
-            byte[] test = Utilities.ScoopBytes(123);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
             //
             Type type = typeof(CMACHelper);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -183,7 +195,8 @@ namespace Test
                 {
                     _total++;
                     int keySize = GetQualitySize(algorithm.KeySizes);
-                    byte[] key = Utilities.ScoopBytes(keySize / 8);
+                    byte[] key = new byte[keySize / 8];
+                    Utilities.Random.NextBytes(key);
                     ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
                     XTest(algorithm.Mechanism, digest, test);
@@ -197,7 +210,8 @@ namespace Test
         {
             Array modes = Enum.GetValues(typeof(MACCipherMode));
             Array paddings = Enum.GetValues(typeof(MACPaddingMode));
-            byte[] test = Utilities.ScoopBytes(123);
+            byte[] test = new byte[123];
+            Utilities.Random.NextBytes(test);
             //
             Type type = typeof(MACHelper);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -209,10 +223,12 @@ namespace Test
                     {
                         MACCipherMode mode = (MACCipherMode)modeValue;
                         int keySize = GetQualitySize(algorithm.KeySizes);
-                        byte[] key = Utilities.ScoopBytes(keySize / 8);
+                        byte[] key = new byte[keySize / 8];
+                        Utilities.Random.NextBytes(key);
                         algorithm.TryGetIVSizes(mode, out KeySizes[] ivSizes);
                         int ivSize = GetQualitySize(ivSizes);
-                        byte[] iv = Utilities.ScoopBytes(ivSize / 8);
+                        byte[] iv = new byte[ivSize / 8];
+                        Utilities.Random.NextBytes(iv);
                         ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
                         foreach (int paddingValue in paddings)
                         {
