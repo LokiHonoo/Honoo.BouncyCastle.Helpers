@@ -37,11 +37,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Symmetric block algorithm.
         /// </summary>
         /// <param name="mechanism">Symmetric block algorithm mechanism.</param>
+        /// <param name="algorithmKind">Symmetric algorithm kind.</param>
         /// <param name="blockSizes">Block sizes.</param>
         /// <param name="blockSize">Block size.</param>
         /// <param name="keySizes">Key sizes.</param>
         /// <exception cref="CryptographicException"></exception>
-        protected BlockAlgorithm(string mechanism, KeySizes[] blockSizes, int blockSize, KeySizes[] keySizes) : base(mechanism)
+        protected BlockAlgorithm(string mechanism, SymmetricAlgorithmKind algorithmKind, KeySizes[] blockSizes, int blockSize, KeySizes[] keySizes)
+            : base(mechanism, algorithmKind)
         {
             if (!DetectionUtilities.ValidSize(blockSizes, blockSize))
             {

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// RC4, ARC4.
         /// <para/>Legal key size 256 bits. Not need IV.
         /// </summary>
-        public RC4() : base("RC4", _keySizes, _ivSizes)
+        public RC4() : base("RC4", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {
         }
 

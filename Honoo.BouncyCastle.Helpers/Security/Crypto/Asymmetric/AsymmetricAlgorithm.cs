@@ -9,7 +9,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     {
         #region Properties
 
+        private readonly AsymmetricAlgorithmKind _algorithmKind;
         private readonly string _mechanism;
+
+        /// <summary>
+        /// Asymmetric algorithm kind.
+        /// </summary>
+        public AsymmetricAlgorithmKind AlgorithmKind => _algorithmKind;
 
         /// <summary>
         /// Gets mechanism.
@@ -24,9 +30,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// Asymmetric algorithm.
         /// </summary>
         /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
-        protected AsymmetricAlgorithm(string mechanism)
+        /// <param name="algorithmKind">Asymmetric algorithm kind.</param>
+        protected AsymmetricAlgorithm(string mechanism, AsymmetricAlgorithmKind algorithmKind)
         {
             _mechanism = mechanism;
+            _algorithmKind = algorithmKind;
         }
 
         #endregion Constructor

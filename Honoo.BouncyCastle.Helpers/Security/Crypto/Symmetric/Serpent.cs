@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Serpent.
         /// <para/>Legal block size 128 bits. Legal key size 32-512 bits (32 bits increments).
         /// </summary>
-        public Serpent() : base("Serpent", _blockSizes, 128, _keySizes)
+        public Serpent() : base("Serpent", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// CAST6.
         /// <para/>Legal block size 128 bits. Legal key size 128-256 bits (8 bits increments).
         /// </summary>
-        public CAST6() : base("CAST6", _blockSizes, 128, _keySizes)
+        public CAST6() : base("CAST6", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

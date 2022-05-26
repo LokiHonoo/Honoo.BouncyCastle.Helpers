@@ -24,7 +24,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// DES.
         /// <para/>Legal block size 64 bits. Legal key size 64 bits.
         /// </summary>
-        public DES() : base("DES", _blockSizes, 64, _keySizes)
+        public DES() : base("DES", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

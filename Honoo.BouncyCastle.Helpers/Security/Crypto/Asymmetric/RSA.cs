@@ -22,7 +22,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// RSA.
         /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
         /// </summary>
-        public RSA() : base("RSA")
+        public RSA() : base("RSA", AsymmetricAlgorithmKind.Both)
         {
         }
 

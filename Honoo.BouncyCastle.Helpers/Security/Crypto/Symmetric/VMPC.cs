@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// VMPC.
         /// <para/>Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
         /// </summary>
-        public VMPC() : base("VMPC", _keySizes, _ivSizes)
+        public VMPC() : base("VMPC", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {
         }
 

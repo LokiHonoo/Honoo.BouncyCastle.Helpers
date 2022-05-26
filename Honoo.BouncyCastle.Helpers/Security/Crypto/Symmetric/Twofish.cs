@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Twofish.
         /// <para/>Legal block size 128 bits. Legal key size 64-256 bits (64 bits increments).
         /// </summary>
-        public Twofish() : base("Twofish", _blockSizes, 128, _keySizes)
+        public Twofish() : base("Twofish", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

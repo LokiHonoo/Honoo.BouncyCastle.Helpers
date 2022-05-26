@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// RC6.
         /// <para/>Legal block size 128 bits. Legal key size is more than or equal to 8 bits (8 bits increments).
         /// </summary>
-        public RC6() : base("RC6", _blockSizes, 128, _keySizes)
+        public RC6() : base("RC6", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

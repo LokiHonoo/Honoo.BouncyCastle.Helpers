@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// AES.
         /// <para/>Legal block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
-        public AES() : base("AES", _blockSizes, 128, _keySizes)
+        public AES() : base("AES", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

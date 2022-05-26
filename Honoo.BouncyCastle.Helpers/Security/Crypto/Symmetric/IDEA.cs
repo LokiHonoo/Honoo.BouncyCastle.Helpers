@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// IDEA.
         /// <para/>Legal block size 64 bits. Legal key size 8-128 bits (8 bits increments).
         /// </summary>
-        public IDEA() : base("IDEA", _blockSizes, 64, _keySizes)
+        public IDEA() : base("IDEA", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

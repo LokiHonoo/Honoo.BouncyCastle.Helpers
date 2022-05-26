@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// ECDiffieHellman.
         /// </summary>
-        public ECDH() : base("ECDH")
+        public ECDH() : base("ECDH", AsymmetricAlgorithmKind.Neither)
         {
         }
 

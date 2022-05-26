@@ -242,6 +242,28 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mechanism">Symmetric algorithm mechanism.</param>
         /// <param name="algorithm">Symmetric algorithm.</param>
         /// <returns></returns>
+        public static bool TryGetAlgorithm(string mechanism, out ISymmetricAlgorithm algorithm)
+        {
+            if (TryGetAlgorithm(mechanism, out IBlockAlgorithm blockAlgorithm))
+            {
+                algorithm = (ISymmetricAlgorithm)blockAlgorithm;
+                return true;
+            }
+            else if (TryGetAlgorithm(mechanism, out IStreamAlgorithm streamAlgorithm))
+            {
+                algorithm = (ISymmetricAlgorithm)streamAlgorithm;
+                return true;
+            }
+            algorithm = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Try get symmetric algorithm from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
+        /// <param name="algorithm">Symmetric algorithm.</param>
+        /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out IBlockAlgorithm algorithm)
         {
             if (string.IsNullOrWhiteSpace(mechanism))

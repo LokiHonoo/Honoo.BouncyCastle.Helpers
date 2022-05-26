@@ -36,7 +36,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         /// <param name="rounds">Rounds. Must be an even number.</param>
-        public ChaCha(int rounds) : base("ChaCha", _keySizes, _ivSizes)
+        public ChaCha(int rounds) : base("ChaCha", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {
             _rounds = rounds;
         }

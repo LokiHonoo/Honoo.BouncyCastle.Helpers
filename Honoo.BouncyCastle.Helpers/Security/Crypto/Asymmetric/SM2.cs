@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// SM2.
         /// </summary>
-        public SM2() : base("SM2")
+        public SM2() : base("SM2", AsymmetricAlgorithmKind.Signature)
         {
         }
 

@@ -70,7 +70,6 @@ namespace Test
             names.AddRange(new string[] { "ED25519", "ED25519CTX", "ED25519PH", "ED448", "ED448PH" });
             names.AddRange(new string[] { "SHA3-256withRSA/ISO9796-2", "SHA1withRSA/X9.31" });
             names.AddRange(new string[] { "RIPEMD128WITHSM2", "RIPEMD160WITHSM2", "RIPEMD256WITHSM2", "RIPEMD256WITHSM2" });
-            names.AddRange(new string[] { "SHA1WITHSM2", "SHA224WITHSM2", "SHA256WITHSM2", "SHA384WITHSM2", "SHA512WITHSM2" });
             foreach (string name in names)
             {
                 _total++;

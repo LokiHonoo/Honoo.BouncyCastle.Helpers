@@ -18,7 +18,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// ECGOST3410.
         /// </summary>
-        public ECGOST3410() : base("ECGOST3410")
+        public ECGOST3410() : base("ECGOST3410", AsymmetricAlgorithmKind.Signature)
         {
         }
 

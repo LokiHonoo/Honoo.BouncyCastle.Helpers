@@ -594,10 +594,8 @@ namespace Honoo.BouncyCastle.Helpers
                 case "1.2.156.10197.1.503": case "SHA256WITHSM2": case "SHA-256WITHSM2": oid = GMObjectIdentifiers.sm2sign_with_sha256; return true;
                 case "1.2.156.10197.1.501": case "SM3WITHSM2": oid = GMObjectIdentifiers.sm2sign_with_sm3; return true;
 
-                default: break;
+                default: oid = null; return false;
             }
-            oid = null;
-            return false;
         }
     }
 }

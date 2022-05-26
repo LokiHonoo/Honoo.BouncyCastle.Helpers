@@ -18,7 +18,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// ECDSA.
         /// </summary>
-        public ECDSA() : base("ECDSA")
+        public ECDSA() : base("ECDSA", AsymmetricAlgorithmKind.Signature)
         {
         }
 

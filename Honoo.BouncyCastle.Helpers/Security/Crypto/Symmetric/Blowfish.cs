@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Blowfish.
         /// <para/>Legal block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public Blowfish() : base("Blowfish", _blockSizes, 64, _keySizes)
+        public Blowfish() : base("Blowfish", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

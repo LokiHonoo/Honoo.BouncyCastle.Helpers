@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// XTEA.
         /// <para/>Legal block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public XTEA() : base("XTEA", _blockSizes, 64, _keySizes)
+        public XTEA() : base("XTEA", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

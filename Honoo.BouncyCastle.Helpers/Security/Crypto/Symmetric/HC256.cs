@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// HC256.
         /// <para/>Legal key size 128, 256 bits. Legal iv size 128-256 bits (8 bits increments).
         /// </summary>
-        public HC256() : base("HC256", _keySizes, _ivSizes)
+        public HC256() : base("HC256", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {
         }
 

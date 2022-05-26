@@ -25,7 +25,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// RC5, RC5-32.
         /// <para/>Legal block size 64 bits. Legal key size 8-2040 bits (8 bits increments).
         /// </summary>
-        public RC5_32() : base("RC5", _blockSizes, 64, _keySizes)
+        public RC5_32() : base("RC5", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

@@ -7,7 +7,13 @@
     {
         #region Properties
 
+        private readonly SymmetricAlgorithmKind _algorithmKind;
         private readonly string _mechanism;
+
+        /// <summary>
+        /// Asymmetric algorithm kind.
+        /// </summary>
+        public SymmetricAlgorithmKind AlgorithmKind => _algorithmKind;
 
         /// <summary>
         /// Gets mechanism.
@@ -22,9 +28,11 @@
         /// Symmetric algorithm.
         /// </summary>
         /// <param name="mechanism">Symmetric algorithm mechanism.</param>
-        protected SymmetricAlgorithm(string mechanism)
+        /// <param name="algorithmKind">Symmetric algorithm kind.</param>
+        protected SymmetricAlgorithm(string mechanism, SymmetricAlgorithmKind algorithmKind)
         {
             _mechanism = mechanism;
+            _algorithmKind = algorithmKind;
         }
 
         #endregion Constructor

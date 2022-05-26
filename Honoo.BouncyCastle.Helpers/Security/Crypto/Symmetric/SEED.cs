@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// SEED.
         /// <para/>Legal block size 128 bits. Legal key size 128 bits.
         /// </summary>
-        public SEED() : base("SEED", _blockSizes, 128, _keySizes)
+        public SEED() : base("SEED", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// ISAAC.
         /// <para/>Legal key size 64-8192 bits (16 bits increments). Not need IV.
         /// </summary>
-        public ISAAC() : base("ISAAC", _keySizes, _ivSizes)
+        public ISAAC() : base("ISAAC", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {
         }
 

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Camellia.
         /// <para/>Legal block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
-        public Camellia() : base("Camellia", _blockSizes, 128, _keySizes)
+        public Camellia() : base("Camellia", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

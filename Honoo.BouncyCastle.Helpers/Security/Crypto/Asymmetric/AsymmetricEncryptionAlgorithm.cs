@@ -14,7 +14,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// Asymmetric encryption algorithm.
         /// </summary>
         /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
-        protected AsymmetricEncryptionAlgorithm(string mechanism) : base(mechanism)
+        /// <param name="algorithmKind">Asymmetric algorithm kind.</param>
+        protected AsymmetricEncryptionAlgorithm(string mechanism, AsymmetricAlgorithmKind algorithmKind) : base(mechanism, algorithmKind)
         {
         }
 

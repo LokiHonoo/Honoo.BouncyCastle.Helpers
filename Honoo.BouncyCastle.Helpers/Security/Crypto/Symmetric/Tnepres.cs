@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// Tnepres.
         /// <para/>Legal block size 128 bits. Legal key size 32-512 bits (32 bits increments).
         /// </summary>
-        public Tnepres() : base("Tnepres", _blockSizes, 128, _keySizes)
+        public Tnepres() : base("Tnepres", SymmetricAlgorithmKind.Block, _blockSizes, 128, _keySizes)
         {
         }
 

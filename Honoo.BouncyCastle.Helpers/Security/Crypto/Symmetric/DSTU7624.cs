@@ -46,7 +46,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="blockSize">Block size bits.</param>
         /// <exception cref="Exception"/>
         public DSTU7624(int blockSize)
-            : base(string.Format(CultureInfo.InvariantCulture, "DSTU7624-{0}", blockSize), _blockSizes, blockSize, GetKeySizes(blockSize))
+            : base(string.Format(CultureInfo.InvariantCulture, "DSTU7624-{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, GetKeySizes(blockSize))
         {
         }
 

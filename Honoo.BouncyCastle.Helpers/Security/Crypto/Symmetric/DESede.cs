@@ -24,7 +24,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// DESede, DESede3, TDEA, TripleDES, 3DES.
         /// <para/>Legal block size 64 bits. Legal key size 128, 192 bits.
         /// </summary>
-        public DESede() : base("DESede", _blockSizes, 64, _keySizes)
+        public DESede() : base("DESede", SymmetricAlgorithmKind.Block, _blockSizes, 64, _keySizes)
         {
         }
 

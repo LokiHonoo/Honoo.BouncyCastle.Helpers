@@ -18,7 +18,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// GOST3410.
         /// <para/>Legal key size 512, 1024 bits.
         /// </summary>
-        public GOST3410() : base("GOST3410")
+        public GOST3410() : base("GOST3410", AsymmetricAlgorithmKind.Signature)
         {
         }
 
