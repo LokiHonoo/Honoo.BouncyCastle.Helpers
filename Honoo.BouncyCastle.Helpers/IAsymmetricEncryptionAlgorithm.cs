@@ -76,7 +76,7 @@ namespace Honoo.BouncyCastle.Helpers
         IAsymmetricBlockCipher GenerateEncryptor(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey);
 
         /// <summary>
-        /// Generate Key pair.
+        /// Generate Key pair by default settings.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"/>

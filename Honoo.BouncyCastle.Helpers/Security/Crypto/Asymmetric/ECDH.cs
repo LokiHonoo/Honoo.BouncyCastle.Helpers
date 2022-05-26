@@ -1,10 +1,13 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.X509;
 using System;
-using System.Text;
+using System.Collections.Generic;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -25,31 +28,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Derive key material from the other asymmetric public key.
-        /// </summary>
-        /// <param name="agreement">Agreement.</param>
-        /// <param name="otherPublicKey">The other asymmetric public key.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public byte[] DeriveKeyMaterial(IBasicAgreement agreement, AsymmetricKeyParameter otherPublicKey)
-        {
-            return agreement.CalculateAgreement(otherPublicKey).ToByteArrayUnsigned();
-        }
-
-        /// <summary>
-        /// Generate agreement.
-        /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public IBasicAgreement GenerateAgreement(AsymmetricKeyParameter privateKey)
-        {
-            ECDHBasicAgreement agreement = new ECDHBasicAgreement();
-            agreement.Init(privateKey);
-            return agreement;
-        }
-
-        /// <summary>
         /// Generate key pair. NOT Implemented.
         /// </summary>
         /// <returns></returns>
@@ -60,69 +38,24 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        /// Generate key pair.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public AsymmetricCipherKeyPair GenerateKeyPair(DHParameters parameters)
-        {
-            if (parameters is null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-            ECKeyPairGenerator generator = new ECKeyPairGenerator("ECDH");
-            DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
-            generator.Init(generationParameters);
-            return generator.GenerateKeyPair();
-        }
-
-        /// <summary>
-        /// Generate parameters Alice.
-        /// <para/>Uses key size 256 bits, certainty 25 by default.
+        /// Generate ECDH terminal Alice.
+        /// <para/>Uses key size 256 bits, certainty 20 by default.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public DHParameters GenerateParametersA()
+        public IECDHTerminalA GenerateTerminalA()
         {
-            return GenerateParametersA(256, 25);
-        }
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="keySize">Key size.</param>
-        /// <param name="certainty">Certainty.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public DHParameters GenerateParametersA(int keySize, int certainty)
-        {
-            DHParametersGenerator generator = new DHParametersGenerator();
-            generator.Init(keySize, certainty, Common.SecureRandom);
-            return generator.GenerateParameters();
-        }
-
-        /// <summary>
-        /// Generate parameters Bob.
-        /// </summary>
-        /// <param name="ParametersAP">ParametersA P.</param>
-        /// <param name="ParametersAG">ParametersA G.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public DHParameters GenerateParametersB(BigInteger ParametersAP, BigInteger ParametersAG)
-        {
-            return new DHParameters(ParametersAP, ParametersAG);
+            return GenerateTerminalA(256, 20);
         }
 
         /// <summary>
         /// Generate ECDH terminal Alice.
         /// </summary>
-        /// <param name="keySize">
+        /// <param name="keySize">Key size.
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
-        public ECDHTerminal GenerateTerminalA(int keySize, int certainty)
+        public IECDHTerminalA GenerateTerminalA(int keySize, int certainty)
         {
             DHParametersGenerator parametersGenerator = new DHParametersGenerator();
             parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
@@ -133,14 +66,62 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
             ECDHBasicAgreement agreement = new ECDHBasicAgreement();
             agreement.Init(keyPair.Private);
-            StringBuilder sb = new StringBuilder();
-            sb.Append(PemHelper.KeyToPem(keyPair.Public));
-            sb.Append("<DIVIDE>");
-            sb.Append(parameters.P.ToString());
-            sb.Append("<DIVIDE>");
-            sb.Append(parameters.G.ToString());
-            byte[] exchange = Encoding.UTF8.GetBytes(sb.ToString());
-            return new ECDHTerminal(agreement, exchange);
+            //
+            List<byte> exchange = new List<byte>();
+            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
+            byte[] publicKeyBytes = publicKeyInfo.GetEncoded();
+            exchange.AddRange(BitConverter.GetBytes(publicKeyBytes.Length));
+            exchange.AddRange(publicKeyBytes);
+            byte[] pBytes = parameters.P.ToByteArray();
+            exchange.AddRange(BitConverter.GetBytes(pBytes.Length));
+            exchange.AddRange(pBytes);
+            byte[] gBytes = parameters.G.ToByteArray();
+            exchange.AddRange(BitConverter.GetBytes(gBytes.Length));
+            exchange.AddRange(gBytes);
+            //
+            return new ECDHTerminalA(agreement, exchange.ToArray());
+        }
+
+        /// <summary>
+        /// Generate ECDH terminal Bob.
+        /// </summary>
+        /// <param name="exchangeA">Terminal Alice's exchange.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public IECDHTerminalB GenerateTerminalB(byte[] exchangeA)
+        {
+            if (exchangeA is null)
+            {
+                throw new ArgumentNullException(nameof(exchangeA));
+            }
+            int index = 0;
+            int length = BitConverter.ToInt32(exchangeA, index);
+            index += 4;
+            byte[] publicKeyBytes = new byte[length];
+            Buffer.BlockCopy(exchangeA, index, publicKeyBytes, 0, length);
+            index += length;
+            length = BitConverter.ToInt32(exchangeA, index);
+            index += 4;
+            byte[] pBytes = new byte[length];
+            Buffer.BlockCopy(exchangeA, index, pBytes, 0, length);
+            index += length;
+            length = BitConverter.ToInt32(exchangeA, index);
+            index += 4;
+            byte[] gBytes = new byte[length];
+            Buffer.BlockCopy(exchangeA, index, gBytes, 0, length);
+            //
+            AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(publicKeyBytes);
+            DHParameters parameters = new DHParameters(new BigInteger(pBytes), new BigInteger(gBytes));
+            ECKeyPairGenerator generator = new ECKeyPairGenerator("ECDH");
+            DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
+            generator.Init(generationParameters);
+            AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
+            ECDHBasicAgreement agreement = new ECDHBasicAgreement();
+            agreement.Init(keyPair.Private);
+            //
+            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
+            //
+            return new ECDHTerminalB(agreement, publicKeyInfo.GetEncoded(), publicKey);
         }
     }
 }

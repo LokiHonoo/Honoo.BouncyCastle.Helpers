@@ -16,80 +16,65 @@ namespace Test
             Console.WriteLine("====  Certificate Test  ================================================================================================");
             Console.WriteLine();
             //
-            Demo("SM2", "SHA256withSM2", "SM3withSM2");
+            Demo();
             //
             Console.WriteLine("\r\n\r\n\r\n");
         }
 
-        private static void BuildCAUnit(string asymmetricAlgorithm, string signatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert)
+        private static void Demo()
         {
-            AsymmetricAlgorithmHelper.TryGetAlgorithm(asymmetricAlgorithm, out IAsymmetricAlgorithm algorithm);
-            AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
-            caPrivateKey = keyPair.Private;
-            Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
+            string caSignatureAlgorithmName = "SHA512withECDSA";
+            string userSignatureAlgorithmName = "SHA256withECDSA";
+            //
+            // CA build self.
+            //
+            _ = SignatureAlgorithmHelper.TryGetAlgorithm(caSignatureAlgorithmName, out ISignatureAlgorithm caSignatureAlgorithm);
+            AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.GenerateKeyPair();
+            //
+            Tuple<X509NameLabel, string>[] caDNEntitys = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
                 new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST Root CA")
             };
-            X509Name dn = X509Helper.GenerateX509Name(names);
-            Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
+            X509Name caDN = X509Helper.GenerateX509Name(caDNEntitys);
+            Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] caExtensionEntitys = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
             {
                 new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
                 new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
             };
-            X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            caCert = X509Helper.GenerateIssuerCert(signatureAlgorithm,
-                                                   keyPair,
-                                                   dn,
-                                                   extensions,
-                                                   DateTime.UtcNow.AddDays(-1),
-                                                   TimeSpan.FromDays(120));
+            X509Extensions caExtensions = X509Helper.GenerateX509Extensions(caExtensionEntitys);
+            X509Certificate caCert = X509Helper.GenerateIssuerCert(caSignatureAlgorithm,
+                                                                   caKeyPair,
+                                                                   caDN,
+                                                                   caExtensions,
+                                                                   DateTime.UtcNow.AddDays(-1),
+                                                                   TimeSpan.FromDays(120));
 
-            _ = PemHelper.KeyToPem(keyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
-            _ = PemHelper.KeyToPem(keyPair.Public);
+            _ = PemHelper.KeyToPem(caKeyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
+            _ = PemHelper.KeyToPem(caKeyPair.Public);
             _ = PemHelper.CertToPem(caCert);
-        }
-
-        private static void BuildUserUnit(out AsymmetricKeyParameter userPrivateKey, out Pkcs10CertificationRequest userCsr)
-        {
-            ISignatureAlgorithm algorithm = SignatureAlgorithmHelper.GOST3411withECGOST3410;
-            AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
-            userPrivateKey = keyPair.Private;
-            Tuple<X509NameLabel, string>[] names = new Tuple<X509NameLabel, string>[]
+            //
+            // User create csr and sand to CA.
+            //
+            AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.GenerateKeyPair();
+            Tuple<X509NameLabel, string>[] userDNEntitys = new Tuple<X509NameLabel, string>[]
             {
                 new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
                 new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST User")
             };
-            X509Name dn = X509Helper.GenerateX509Name(names);
-            Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] exts = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
-            {
-                new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
-                new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
-            };
-            X509Extensions extensions = X509Helper.GenerateX509Extensions(exts);
-            userCsr = X509Helper.GenerateCsr(algorithm, keyPair, dn, extensions);
-        }
-
-        private static void Demo(string caAsymmetricAlgorithm, string caSignatureAlgorithm, string subjectSignatureAlgorithm)
-        {
-            //
-            // CA build self.
-            //
-            BuildCAUnit(caAsymmetricAlgorithm, caSignatureAlgorithm, out AsymmetricKeyParameter caPrivateKey, out X509Certificate caCert);
-            //
-            // User create csr and sand to CA.
-            //
-            BuildUserUnit(out AsymmetricKeyParameter _, out Pkcs10CertificationRequest userCsr);
+            X509Name userDN = X509Helper.GenerateX509Name(userDNEntitys);
+            X509Extensions userExtensions = null;
+            Pkcs10CertificationRequest userCsr = X509Helper.GenerateCsr(SignatureAlgorithmHelper.GOST3411withECGOST3410, userKeyPair, userDN, userExtensions);
             //
             // CA extract csr and create user cert.
             //
-            X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDN, out X509Extensions userExtensions);
-            X509Certificate userCert = X509Helper.GenerateSubjectCert(subjectSignatureAlgorithm,
-                                                                      caPrivateKey,
+            X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDNExtracted, out X509Extensions userExtensionsExtracted);
+            X509Certificate userCert = X509Helper.GenerateSubjectCert(userSignatureAlgorithmName,
+                                                                      caKeyPair.Private,
                                                                       caCert,
                                                                       userPublicKey,
-                                                                      userDN,
-                                                                      userExtensions,
+                                                                      userDNExtracted,
+                                                                      userExtensionsExtracted,
                                                                       DateTime.UtcNow.AddDays(-1),
                                                                       TimeSpan.FromDays(90));
             //

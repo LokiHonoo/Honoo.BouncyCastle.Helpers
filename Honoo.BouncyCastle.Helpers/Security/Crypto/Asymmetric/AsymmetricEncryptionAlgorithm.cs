@@ -142,6 +142,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             return GenerateCipher(true, padding, publicKey);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="padding"></param>
+        /// <returns></returns>
         protected abstract IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding);
 
         private IAsymmetricBlockCipher GenerateCipher(bool encryption, AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)

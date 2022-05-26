@@ -1,7 +1,4 @@
-﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Math;
-using System;
+﻿using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -11,56 +8,28 @@ namespace Honoo.BouncyCastle.Helpers
     public interface IECDH
     {
         /// <summary>
-        /// Derive key material from the other asymmetric public key.
-        /// </summary>
-        /// <param name="agreement">Agreement.</param>
-        /// <param name="otherPublicKey">The other asymmetric public key.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        byte[] DeriveKeyMaterial(IBasicAgreement agreement, AsymmetricKeyParameter otherPublicKey);
-
-        /// <summary>
-        /// Generate agreement.
-        /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        IBasicAgreement GenerateAgreement(AsymmetricKeyParameter privateKey);
-
-        /// <summary>
-        /// Generate key pair.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        AsymmetricCipherKeyPair GenerateKeyPair(DHParameters parameters);
-
-        /// <summary>
-        /// Generate parameters Alice.
+        /// Generate ECDH terminal Alice.
         /// <para/>Uses key size 256 bits, certainty 25 by default.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="Exception"/>
-        DHParameters GenerateParametersA();
+        IECDHTerminalA GenerateTerminalA();
 
         /// <summary>
-        /// Generate parameters.
+        /// Generate ECDH terminal Alice.
         /// </summary>
-        /// <param name="keySize">Key size.
+        /// <param name="keySize">
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
-        /// <exception cref="Exception"/>
-        DHParameters GenerateParametersA(int keySize, int certainty);
+        IECDHTerminalA GenerateTerminalA(int keySize, int certainty);
 
         /// <summary>
-        /// Generate parameters Bob.
+        /// Generate ECDH terminal Bob.
         /// </summary>
-        /// <param name="ParametersAP">ParametersA P.</param>
-        /// <param name="ParametersAG">ParametersA G.</param>
+        /// <param name="exchangeA">Terminal Alice's exchange.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        DHParameters GenerateParametersB(BigInteger ParametersAP, BigInteger ParametersAG);
+        IECDHTerminalB GenerateTerminalB(byte[] exchangeA);
     }
 }

@@ -54,6 +54,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             return generator.GenerateKeyPair();
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="padding"></param>
+        /// <returns></returns>
+        /// <exception cref="CryptographicException"></exception>
         protected override IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding)
         {
             IAsymmetricBlockCipher cipher = new RsaBlindedEngine();
