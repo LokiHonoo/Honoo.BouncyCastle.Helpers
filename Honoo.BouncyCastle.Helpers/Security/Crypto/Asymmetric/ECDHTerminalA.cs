@@ -40,6 +40,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <exception cref="Exception"/>
         public byte[] DeriveKeyMaterial(byte[] exchangeB)
         {
+            if (exchangeB is null)
+            {
+                throw new ArgumentNullException(nameof(exchangeB));
+            }
             AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(exchangeB);
             return _agreement.CalculateAgreement(publicKey).ToByteArrayUnsigned();
         }

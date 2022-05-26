@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// XTEA.
     /// <para/>Legal block size 64 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class XTEA : BlockAlgorithm
+    public sealed class XTEA : SymmetricBlockAlgorithm
     {
         #region Properties
 

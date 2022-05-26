@@ -9,7 +9,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// DESede, DESede3, TDEA, TripleDES, 3DES.
     /// <para/>Legal block size 64 bits. Legal key size 128, 192 bits.
     /// </summary>
-    public sealed class DESede : BlockAlgorithm
+    public sealed class DESede : SymmetricBlockAlgorithm
     {
         #region Properties
 

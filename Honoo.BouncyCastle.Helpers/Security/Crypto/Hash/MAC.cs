@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     {
         #region Properties
 
-        private readonly BlockAlgorithm _blockAlgorithm;
+        private readonly SymmetricBlockAlgorithm _blockAlgorithm;
         private readonly int _hashSize;
         private readonly int _macSize;
         private readonly string _mechanism;
@@ -50,7 +50,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         public string Mechanism => _mechanism;
 
-        internal IBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
+        internal ISymmetricBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
 
         #endregion Properties
 
@@ -63,7 +63,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <para/>Default mac size used as block size / 2.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
-        public MAC(IBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize / 2)
+        public MAC(ISymmetricBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize / 2)
         {
         }
 
@@ -75,14 +75,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         /// <param name="macSize">MAC size bits.</param>
-        public MAC(IBlockAlgorithm blockAlgorithm, int macSize)
+        public MAC(ISymmetricBlockAlgorithm blockAlgorithm, int macSize)
         {
             if (macSize < 8 || macSize > blockAlgorithm.BlockSize || macSize % 8 != 0)
             {
                 throw new CryptographicException("Legal mac size is between 8 and block size (8 bits increments).");
             }
             _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/MAC", blockAlgorithm.Mechanism);
-            _blockAlgorithm = (BlockAlgorithm)blockAlgorithm;
+            _blockAlgorithm = (SymmetricBlockAlgorithm)blockAlgorithm;
             _macSize = macSize;
             _hashSize = macSize;
         }

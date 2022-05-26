@@ -7,13 +7,8 @@ namespace Honoo.BouncyCastle.Helpers
     /// <summary>
     /// Symmetric block algorithm interface.
     /// </summary>
-    public interface IBlockAlgorithm
+    public interface ISymmetricBlockAlgorithm : ISymmetricAlgorithm
     {
-        /// <summary>
-        /// Symmetric algorithm kind.
-        /// </summary>
-        SymmetricAlgorithmKind AlgorithmKind { get; }
-
         /// <summary>
         /// Gets block size bits.
         /// </summary>
@@ -23,11 +18,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets legal key size bits.
         /// </summary>
         KeySizes[] KeySizes { get; }
-
-        /// <summary>
-        /// Gets mechanism.
-        /// </summary>
-        string Mechanism { get; }
 
         /// <summary>
         /// Generate a new Symmetric block algorithm and decrypt data.
@@ -125,12 +115,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         ICipherParameters GenerateParameters(byte[] key, byte[] nonce, int macSize, byte[] associatedText);
-
-        /// <summary>
-        /// Return mechanism.
-        /// </summary>
-        /// <returns></returns>
-        string ToString();
 
         /// <summary>
         /// Try get legal iv sizes.

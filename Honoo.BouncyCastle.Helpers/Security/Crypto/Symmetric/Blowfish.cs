@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// Blowfish.
     /// <para/>Legal block size 64 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class Blowfish : BlockAlgorithm
+    public sealed class Blowfish : SymmetricBlockAlgorithm
     {
         #region Properties
 

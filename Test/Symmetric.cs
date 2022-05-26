@@ -129,7 +129,7 @@ namespace Test
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
-                if (property.GetValue(type, null) is IBlockAlgorithm algorithm)
+                if (property.GetValue(type, null) is ISymmetricBlockAlgorithm algorithm)
                 {
                     foreach (int modeValue in modes)
                     {
@@ -193,7 +193,7 @@ namespace Test
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
-                if (property.GetValue(type, null) is IStreamAlgorithm algorithm)
+                if (property.GetValue(type, null) is ISymmetricStreamAlgorithm algorithm)
                 {
                     _total++;
                     int keySize = GetQualitySize(algorithm.KeySizes);

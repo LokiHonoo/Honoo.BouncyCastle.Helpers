@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// GOST28147.
     /// <para/>Legal block size 64 bits. Legal key size 256 bits.
     /// </summary>
-    public sealed class GOST28147 : BlockAlgorithm
+    public sealed class GOST28147 : SymmetricBlockAlgorithm
     {
         #region Properties
 

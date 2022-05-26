@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// TEA.
     /// <para/>Legal block size 64 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class TEA : BlockAlgorithm
+    public sealed class TEA : SymmetricBlockAlgorithm
     {
         #region Properties
 

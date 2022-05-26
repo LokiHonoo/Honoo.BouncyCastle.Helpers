@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// SM4.
     /// <para/>Legal block size 128 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class SM4 : BlockAlgorithm
+    public sealed class SM4 : SymmetricBlockAlgorithm
     {
         #region Properties
 

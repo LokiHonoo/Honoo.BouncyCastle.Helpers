@@ -13,168 +13,168 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm AES { get; } = new AES();
+        public static ISymmetricBlockAlgorithm AES { get; } = new AES();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm Blowfish { get; } = new Blowfish();
+        public static ISymmetricBlockAlgorithm Blowfish { get; } = new Blowfish();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Camellia { get; } = new Camellia();
+        public static ISymmetricBlockAlgorithm Camellia { get; } = new Camellia();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 40-128 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm CAST5 { get; } = new CAST5();
+        public static ISymmetricBlockAlgorithm CAST5 { get; } = new CAST5();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128-256 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm CAST6 { get; } = new CAST6();
+        public static ISymmetricBlockAlgorithm CAST6 { get; } = new CAST6();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 64 bits.
         /// </summary>
-        public static IBlockAlgorithm DES { get; } = new DES();
+        public static ISymmetricBlockAlgorithm DES { get; } = new DES();
 
         /// <summary>
         /// DESede, DESede3, TDEA, TripleDES, 3DES.
         /// <para/>Block size 64 bits. Legal key size 128, 192 bits.
         /// </summary>
-        public static IBlockAlgorithm DESede { get; } = new DESede();
+        public static ISymmetricBlockAlgorithm DESede { get; } = new DESede();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm DSTU7624_128 { get; } = new DSTU7624(128);
+        public static ISymmetricBlockAlgorithm DSTU7624_128 { get; } = new DSTU7624(128);
 
         /// <summary>
         /// Block size 256 bits. Legal key size 256, 512 bits.
         /// </summary>
-        public static IBlockAlgorithm DSTU7624_256 { get; } = new DSTU7624(256);
+        public static ISymmetricBlockAlgorithm DSTU7624_256 { get; } = new DSTU7624(256);
 
         /// <summary>
         /// Block size 512 bits. Legal key size 512 bits.
         /// </summary>
-        public static IBlockAlgorithm DSTU7624_512 { get; } = new DSTU7624(512);
+        public static ISymmetricBlockAlgorithm DSTU7624_512 { get; } = new DSTU7624(512);
 
         /// <summary>
         /// Block size 64 bits. Legal key size 256 bits.
         /// </summary>
-        public static IBlockAlgorithm GOST28147 { get; } = new GOST28147();
+        public static ISymmetricBlockAlgorithm GOST28147 { get; } = new GOST28147();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 8-128 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm IDEA { get; } = new IDEA();
+        public static ISymmetricBlockAlgorithm IDEA { get; } = new IDEA();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm Noekeon { get; } = new Noekeon();
+        public static ISymmetricBlockAlgorithm Noekeon { get; } = new Noekeon();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 8-1024 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm RC2 { get; } = new RC2();
+        public static ISymmetricBlockAlgorithm RC2 { get; } = new RC2();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 8-2040 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm RC5 { get; } = new RC5_32();
+        public static ISymmetricBlockAlgorithm RC5 { get; } = new RC5_32();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 8-2040 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm RC5_64 { get; } = new RC5_64();
+        public static ISymmetricBlockAlgorithm RC5_64 { get; } = new RC5_64();
 
         /// <summary>
         /// Block size 128 bits. Legal key size is more than or equal to 8 bits (8 bits increments).
         /// </summary>
-        public static IBlockAlgorithm RC6 { get; } = new RC6();
+        public static ISymmetricBlockAlgorithm RC6 { get; } = new RC6();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Rijndael_128 { get; } = new Rijndael(128);
+        public static ISymmetricBlockAlgorithm Rijndael_128 { get; } = new Rijndael(128);
 
         /// <summary>
         /// Block size 160 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Rijndael_160 { get; } = new Rijndael(160);
+        public static ISymmetricBlockAlgorithm Rijndael_160 { get; } = new Rijndael(160);
 
         /// <summary>
         /// Block size 192 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Rijndael_192 { get; } = new Rijndael(192);
+        public static ISymmetricBlockAlgorithm Rijndael_192 { get; } = new Rijndael(192);
 
         /// <summary>
         /// Block size 224 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Rijndael_224 { get; } = new Rijndael(224);
+        public static ISymmetricBlockAlgorithm Rijndael_224 { get; } = new Rijndael(224);
 
         /// <summary>
         /// Block size 256 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Rijndael_256 { get; } = new Rijndael(256);
+        public static ISymmetricBlockAlgorithm Rijndael_256 { get; } = new Rijndael(256);
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm SEED { get; } = new SEED();
+        public static ISymmetricBlockAlgorithm SEED { get; } = new SEED();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 32-512 bits (32 bits increments).
         /// </summary>
-        public static IBlockAlgorithm Serpent { get; } = new Serpent();
+        public static ISymmetricBlockAlgorithm Serpent { get; } = new Serpent();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm SKIPJACK { get; } = new SKIPJACK();
+        public static ISymmetricBlockAlgorithm SKIPJACK { get; } = new SKIPJACK();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm SM4 { get; } = new SM4();
+        public static ISymmetricBlockAlgorithm SM4 { get; } = new SM4();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm TEA { get; } = new TEA();
+        public static ISymmetricBlockAlgorithm TEA { get; } = new TEA();
 
         /// <summary>
         /// Block size 1024 bits. Legal key size 1024 bits.
         /// </summary>
-        public static IBlockAlgorithm Threefish_1024 { get; } = new Threefish(1024);
+        public static ISymmetricBlockAlgorithm Threefish_1024 { get; } = new Threefish(1024);
 
         /// <summary>
         /// Block size 256 bits. Legal key size 256 bits.
         /// </summary>
-        public static IBlockAlgorithm Threefish_256 { get; } = new Threefish(256);
+        public static ISymmetricBlockAlgorithm Threefish_256 { get; } = new Threefish(256);
 
         /// <summary>
         /// Block size 512 bits. Legal key size 512 bits.
         /// </summary>
-        public static IBlockAlgorithm Threefish_512 { get; } = new Threefish(512);
+        public static ISymmetricBlockAlgorithm Threefish_512 { get; } = new Threefish(512);
 
         /// <summary>
         /// Block size 128 bits. Legal key size 32-512 bits (32 bits increments).
         /// </summary>
-        public static IBlockAlgorithm Tnepres { get; } = new Tnepres();
+        public static ISymmetricBlockAlgorithm Tnepres { get; } = new Tnepres();
 
         /// <summary>
         /// Block size 128 bits. Legal key size 64-256 bits (64 bits increments).
         /// </summary>
-        public static IBlockAlgorithm Twofish { get; } = new Twofish();
+        public static ISymmetricBlockAlgorithm Twofish { get; } = new Twofish();
 
         /// <summary>
         /// Block size 64 bits. Legal key size 128 bits.
         /// </summary>
-        public static IBlockAlgorithm XTEA { get; } = new XTEA();
+        public static ISymmetricBlockAlgorithm XTEA { get; } = new XTEA();
 
         #endregion Block algorithms
 
@@ -184,56 +184,56 @@ namespace Honoo.BouncyCastle.Helpers
         /// Legal key size 128, 256 bits. Legal iv size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
-        public static IStreamAlgorithm ChaCha { get; } = new ChaCha();
+        public static ISymmetricStreamAlgorithm ChaCha { get; } = new ChaCha();
 
         /// <summary>
         /// ChaCha7539, ChaCha20.
         /// <para/>Legal key size 256 bits. Legal iv size 96 bits.
         /// </summary>
-        public static IStreamAlgorithm ChaCha7539 { get; } = new ChaCha7539();
+        public static ISymmetricStreamAlgorithm ChaCha7539 { get; } = new ChaCha7539();
 
         /// <summary>
         /// Legal key size 128 bits. Legal iv size 0-128 bits (8 bits increments).
         /// </summary>
-        public static IStreamAlgorithm HC128 { get; } = new HC128();
+        public static ISymmetricStreamAlgorithm HC128 { get; } = new HC128();
 
         /// <summary>
         /// Legal key size 128, 256 bits. Legal iv size 128-256 bits (8 bits increments).
         /// </summary>
-        public static IStreamAlgorithm HC256 { get; } = new HC256();
+        public static ISymmetricStreamAlgorithm HC256 { get; } = new HC256();
 
         /// <summary>
         /// Legal key size 64-8192 bits (16 bits increments). Not need IV.
         /// </summary>
-        public static IStreamAlgorithm ISAAC { get; } = new ISAAC();
+        public static ISymmetricStreamAlgorithm ISAAC { get; } = new ISAAC();
 
         /// <summary>
         /// RC4, ARC4.
         /// <para/>Legal key size 256 bits. Not need IV.
         /// </summary>
-        public static IStreamAlgorithm RC4 { get; } = new RC4();
+        public static ISymmetricStreamAlgorithm RC4 { get; } = new RC4();
 
         /// <summary>
         /// Salsa20.
         /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
-        public static IStreamAlgorithm Salsa20 { get; } = new Salsa20();
+        public static ISymmetricStreamAlgorithm Salsa20 { get; } = new Salsa20();
 
         /// <summary>
         /// Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
         /// </summary>
-        public static IStreamAlgorithm VMPC { get; } = new VMPC();
+        public static ISymmetricStreamAlgorithm VMPC { get; } = new VMPC();
 
         /// <summary>
         /// Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
         /// </summary>
-        public static IStreamAlgorithm VMPC_KSA3 { get; } = new VMPC_KSA3();
+        public static ISymmetricStreamAlgorithm VMPC_KSA3 { get; } = new VMPC_KSA3();
 
         /// <summary>
         /// Legal key size 256 bits. Legal iv size 192 bits.
         /// </summary>
-        public static IStreamAlgorithm XSalsa20 { get; } = new XSalsa20();
+        public static ISymmetricStreamAlgorithm XSalsa20 { get; } = new XSalsa20();
 
         #endregion Stream algorithms
 
@@ -245,14 +245,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetAlgorithm(string mechanism, out ISymmetricAlgorithm algorithm)
         {
-            if (TryGetAlgorithm(mechanism, out IBlockAlgorithm blockAlgorithm))
+            if (TryGetAlgorithm(mechanism, out ISymmetricBlockAlgorithm blockAlgorithm))
             {
-                algorithm = (ISymmetricAlgorithm)blockAlgorithm;
+                algorithm = blockAlgorithm;
                 return true;
             }
-            else if (TryGetAlgorithm(mechanism, out IStreamAlgorithm streamAlgorithm))
+            else if (TryGetAlgorithm(mechanism, out ISymmetricStreamAlgorithm streamAlgorithm))
             {
-                algorithm = (ISymmetricAlgorithm)streamAlgorithm;
+                algorithm = streamAlgorithm;
                 return true;
             }
             algorithm = null;
@@ -260,12 +260,12 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Try get symmetric algorithm from mechanism.
+        /// Try get symmetric block algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
-        /// <param name="algorithm">Symmetric algorithm.</param>
+        /// <param name="mechanism">Symmetric block algorithm mechanism.</param>
+        /// <param name="algorithm">Symmetric block algorithm.</param>
         /// <returns></returns>
-        public static bool TryGetAlgorithm(string mechanism, out IBlockAlgorithm algorithm)
+        public static bool TryGetAlgorithm(string mechanism, out ISymmetricBlockAlgorithm algorithm)
         {
             if (string.IsNullOrWhiteSpace(mechanism))
             {
@@ -313,12 +313,12 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Try get symmetric algorithm from mechanism.
+        /// Try get symmetric stream algorithm from mechanism.
         /// </summary>
-        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
-        /// <param name="algorithm">Symmetric algorithm.</param>
+        /// <param name="mechanism">Symmetric stream algorithm mechanism.</param>
+        /// <param name="algorithm">Symmetric stream algorithm.</param>
         /// <returns></returns>
-        public static bool TryGetAlgorithm(string mechanism, out IStreamAlgorithm algorithm)
+        public static bool TryGetAlgorithm(string mechanism, out ISymmetricStreamAlgorithm algorithm)
         {
             if (string.IsNullOrWhiteSpace(mechanism))
             {

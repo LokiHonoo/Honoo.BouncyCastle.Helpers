@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// <summary>
     /// Symmetric stream algorithm.
     /// </summary>
-    public abstract class StreamAlgorithm : SymmetricAlgorithm, IStreamAlgorithm
+    public abstract class SymmetricStreamAlgorithm : SymmetricAlgorithm, ISymmetricStreamAlgorithm
     {
         #region Properties
 
@@ -38,7 +38,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="algorithmKind">Symmetric algorithm kind.</param>
         /// <param name="keySizes">Key sizes.</param>
         /// <param name="ivSizes">IV sizes.</param>
-        protected StreamAlgorithm(string mechanism, SymmetricAlgorithmKind algorithmKind, KeySizes[] keySizes, KeySizes[] ivSizes) : base(mechanism, algorithmKind)
+        protected SymmetricStreamAlgorithm(string mechanism, SymmetricAlgorithmKind algorithmKind, KeySizes[] keySizes, KeySizes[] ivSizes) : base(mechanism, algorithmKind)
         {
             _keySizes = keySizes;
             _ivSizes = ivSizes;

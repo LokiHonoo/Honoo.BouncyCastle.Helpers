@@ -384,96 +384,46 @@ namespace Honoo.BouncyCastle.Helpers
 
         /// <summary>
         /// Generate x509 extensions.
-        /// <para/>Example: var extension1 = new Tuple&lt;X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false));
-        /// <para/>Example: var extension1 = new Tuple&lt;X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign));
         /// </summary>
-        /// <param name="extensions">X509 extension collection.</param>
+        /// <param name="entities">X509 extension collection.</param>
         /// <returns></returns>
-        public static X509Extensions GenerateX509Extensions(IEnumerable<Tuple<X509ExtensionLabel, bool, Asn1Encodable>> extensions)
+        public static X509Extensions GenerateX509Extensions(IEnumerable<X509ExtensionEntity> entities)
         {
-            if (extensions is null)
+            if (entities is null)
             {
-                throw new ArgumentNullException(nameof(extensions));
+                throw new ArgumentNullException(nameof(entities));
             }
             List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
             Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
-            IEnumerator<Tuple<X509ExtensionLabel, bool, Asn1Encodable>> enumerator = extensions.GetEnumerator();
+            IEnumerator<X509ExtensionEntity> enumerator = entities.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                DerObjectIdentifier oid = GetX509ExtensionOid(enumerator.Current.Item1);
+                DerObjectIdentifier oid = GetX509ExtensionOid(enumerator.Current.Label);
                 ordering.Add(oid);
-                attributes.Add(oid, new X509Extension(enumerator.Current.Item2, new DerOctetString(enumerator.Current.Item3)));
-            }
-            return new X509Extensions(ordering, attributes);
-        }
-
-        /// <summary>
-        /// Generate x509 extensions.
-        /// <para/>Example: var extension1 = new Tuple&lt;DerObjectIdentifier, bool, Asn1Encodable>(X509Extensions.BasicConstraints, true, new BasicConstraints(false));
-        /// <para/>Example: var extension1 = new Tuple&lt;DerObjectIdentifier, bool, Asn1Encodable>(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign));
-        /// </summary>
-        /// <param name="extensions">X509 extension collection.</param>
-        /// <returns></returns>
-        public static X509Extensions GenerateX509Extensions(IEnumerable<Tuple<DerObjectIdentifier, bool, Asn1Encodable>> extensions)
-        {
-            if (extensions is null)
-            {
-                throw new ArgumentNullException(nameof(extensions));
-            }
-            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
-            Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
-            IEnumerator<Tuple<DerObjectIdentifier, bool, Asn1Encodable>> enumerator = extensions.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                ordering.Add(enumerator.Current.Item1);
-                attributes.Add(enumerator.Current.Item1, new X509Extension(enumerator.Current.Item2, new DerOctetString(enumerator.Current.Item3)));
+                attributes.Add(oid, new X509Extension(enumerator.Current.IsCritical, new DerOctetString(enumerator.Current.Value)));
             }
             return new X509Extensions(ordering, attributes);
         }
 
         /// <summary>
         /// Generate x509 name.
-        /// <para/>Example: var name = new Tuple&lt;X509NameLabel, string>(X509NameLabel.CN, "Demo Cert");
         /// </summary>
-        /// <param name="names">X509 name collection.</param>
+        /// <param name="entities">X509 name collection.</param>
         /// <returns></returns>
-        public static X509Name GenerateX509Name(IEnumerable<Tuple<X509NameLabel, string>> names)
+        public static X509Name GenerateX509Name(IEnumerable<X509NameEntity> entities)
         {
-            if (names is null)
+            if (entities is null)
             {
-                throw new ArgumentNullException(nameof(names));
+                throw new ArgumentNullException(nameof(entities));
             }
             List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
             Dictionary<DerObjectIdentifier, string> attributes = new Dictionary<DerObjectIdentifier, string>();
-            IEnumerator<Tuple<X509NameLabel, string>> enumerator = names.GetEnumerator();
+            IEnumerator<X509NameEntity> enumerator = entities.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                DerObjectIdentifier oid = GetX509NameOid(enumerator.Current.Item1);
+                DerObjectIdentifier oid = GetX509NameOid(enumerator.Current.Label);
                 ordering.Add(oid);
-                attributes.Add(oid, enumerator.Current.Item2);
-            }
-            return new X509Name(ordering, attributes);
-        }
-
-        /// <summary>
-        /// Generate x509 name.
-        /// <para/>Example: var name = new Tuple&lt;DerObjectIdentifier, string>(X509Name.CN, "Demo Cert");
-        /// </summary>
-        /// <param name="names">X509 name collection.</param>
-        /// <returns></returns>
-        public static X509Name GenerateX509Name(IEnumerable<Tuple<DerObjectIdentifier, string>> names)
-        {
-            if (names is null)
-            {
-                throw new ArgumentNullException(nameof(names));
-            }
-            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
-            Dictionary<DerObjectIdentifier, string> attributes = new Dictionary<DerObjectIdentifier, string>();
-            IEnumerator<Tuple<DerObjectIdentifier, string>> enumerator = names.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                ordering.Add(enumerator.Current.Item1);
-                attributes.Add(enumerator.Current.Item1, enumerator.Current.Item2);
+                attributes.Add(oid, enumerator.Current.Value);
             }
             return new X509Name(ordering, attributes);
         }

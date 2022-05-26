@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// SEED.
     /// <para/>Legal block size 128 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class SEED : BlockAlgorithm
+    public sealed class SEED : SymmetricBlockAlgorithm
     {
         #region Properties
 

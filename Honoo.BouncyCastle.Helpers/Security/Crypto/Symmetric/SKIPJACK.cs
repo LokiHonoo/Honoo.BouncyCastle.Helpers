@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// SKIPJACK.
     /// <para/>Legal block size 64 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class SKIPJACK : BlockAlgorithm
+    public sealed class SKIPJACK : SymmetricBlockAlgorithm
     {
         #region Properties
 

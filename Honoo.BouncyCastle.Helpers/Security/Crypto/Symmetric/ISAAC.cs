@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// ISAAC.
     /// <para/>Legal key size 64-8192 bits (16 bits increments). Not need IV.
     /// </summary>
-    public sealed class ISAAC : StreamAlgorithm
+    public sealed class ISAAC : SymmetricStreamAlgorithm
     {
         #region Properties
 

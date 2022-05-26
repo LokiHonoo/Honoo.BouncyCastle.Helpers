@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// <para/>When block size is 256 bits, Legal key size 256, 512 bits.
     /// <para/>When block size is 512 bits, Legal key size 512 bits.
     /// </summary>
-    public sealed class DSTU7624 : BlockAlgorithm
+    public sealed class DSTU7624 : SymmetricBlockAlgorithm
     {
         #region Properties
 

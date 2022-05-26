@@ -6,18 +6,8 @@ namespace Honoo.BouncyCastle.Helpers
     /// <summary>
     /// Asymmetric encryption algorithm interface.
     /// </summary>
-    public interface IAsymmetricEncryptionAlgorithm
+    public interface IAsymmetricEncryptionAlgorithm : IAsymmetricAlgorithm
     {
-        /// <summary>
-        /// Asymmetric algorithm kind.
-        /// </summary>
-        AsymmetricAlgorithmKind AlgorithmKind { get; }
-
-        /// <summary>
-        /// Gets mechanism.
-        /// </summary>
-        string Mechanism { get; }
-
         /// <summary>
         /// Generate a new asymmetric encryption algorithm and decrypt data.
         /// </summary>
@@ -79,18 +69,5 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         IAsymmetricBlockCipher GenerateEncryptor(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey);
-
-        /// <summary>
-        /// Generate Key pair by default settings.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        AsymmetricCipherKeyPair GenerateKeyPair();
-
-        /// <summary>
-        /// Return mechanism.
-        /// </summary>
-        /// <returns></returns>
-        string ToString();
     }
 }

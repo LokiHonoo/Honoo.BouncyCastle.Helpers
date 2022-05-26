@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// Noekeon.
     /// <para/>Legal block size 128 bits. Legal key size 128 bits.
     /// </summary>
-    public sealed class Noekeon : BlockAlgorithm
+    public sealed class Noekeon : SymmetricBlockAlgorithm
     {
         #region Properties
 

@@ -9,7 +9,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
     /// <para/>Uses rounds 20 by default.
     /// </summary>
-    public sealed class ChaCha : StreamAlgorithm
+    public sealed class ChaCha : SymmetricStreamAlgorithm
     {
         #region Properties
 

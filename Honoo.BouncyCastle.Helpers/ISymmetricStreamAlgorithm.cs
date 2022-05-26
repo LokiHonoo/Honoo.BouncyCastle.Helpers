@@ -7,13 +7,8 @@ namespace Honoo.BouncyCastle.Helpers
     /// <summary>
     /// Symmetric stream algorithm interface.
     /// </summary>
-    public interface IStreamAlgorithm
+    public interface ISymmetricStreamAlgorithm : ISymmetricAlgorithm
     {
-        /// <summary>
-        /// Symmetric algorithm kind.
-        /// </summary>
-        SymmetricAlgorithmKind AlgorithmKind { get; }
-
         /// <summary>
         /// Gets legal iv size bits.
         /// </summary>
@@ -23,11 +18,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets legal key size bits.
         /// </summary>
         KeySizes[] KeySizes { get; }
-
-        /// <summary>
-        /// Gets mechanism.
-        /// </summary>
-        string Mechanism { get; }
 
         /// <summary>
         /// Generate a new symmetric stream algorithm and decrypt data.
@@ -99,11 +89,5 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength);
-
-        /// <summary>
-        /// Return mechanism.
-        /// </summary>
-        /// <returns></returns>
-        string ToString();
     }
 }

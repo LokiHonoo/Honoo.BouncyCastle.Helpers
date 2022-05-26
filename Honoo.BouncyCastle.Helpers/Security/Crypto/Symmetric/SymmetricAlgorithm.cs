@@ -11,7 +11,7 @@
         private readonly string _mechanism;
 
         /// <summary>
-        /// Asymmetric algorithm kind.
+        /// Symmetric algorithm kind.
         /// </summary>
         public SymmetricAlgorithmKind AlgorithmKind => _algorithmKind;
 

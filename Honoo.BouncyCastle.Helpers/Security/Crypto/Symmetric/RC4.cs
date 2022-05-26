@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// RC4, ARC4.
     /// <para/>Legal key size 256 bits. Not need IV.
     /// </summary>
-    public sealed class RC4 : StreamAlgorithm
+    public sealed class RC4 : SymmetricStreamAlgorithm
     {
         #region Properties
 

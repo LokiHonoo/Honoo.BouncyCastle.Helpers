@@ -80,14 +80,14 @@ namespace Honoo.BouncyCastle.Helpers
             switch (mechanism)
             {
                 case "DSA": algorithm = DSA; return true;
-                case "ECDH": algorithm = (IAsymmetricAlgorithm)ECDH; return true;
+                case "ECDH": algorithm = ECDH; return true;
                 case "ECDSA": algorithm = ECDSA; return true;
                 case "ECGOST3410": case "ECGOST3410-2001": algorithm = ECGOST3410; return true;
                 case "ED25519": algorithm = new Ed25519(); return true;
                 case "ED448": algorithm = new Ed448(); return true;
-                case "ELGAMAL": algorithm = (IAsymmetricAlgorithm)ElGamal; return true;
+                case "ELGAMAL": algorithm = ElGamal; return true;
                 case "GOST3410": case "GOST3410-94": algorithm = GOST3410; return true;
-                case "RSA": algorithm = (IAsymmetricAlgorithm)RSA; return true;
+                case "RSA": algorithm = RSA; return true;
                 case "SM2": algorithm = SM2; return true;
                 default: algorithm = null; return false;
             }

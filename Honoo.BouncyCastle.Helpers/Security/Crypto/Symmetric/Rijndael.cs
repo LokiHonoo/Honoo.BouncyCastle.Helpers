@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// Rijndael.
     /// <para/>Legal block size 128, 160, 192, 224, 256 bits. Legal key size 128, 160, 192, 224, 256 bits.
     /// </summary>
-    public sealed class Rijndael : BlockAlgorithm
+    public sealed class Rijndael : SymmetricBlockAlgorithm
     {
         #region Properties
 

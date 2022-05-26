@@ -11,7 +11,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// Threefish.
     /// <para/>Legal block size 256, 512, 1024 bits. Legal key size 256, 512, 1024 bits. Key size must be same as block size.
     /// </summary>
-    public sealed class Threefish : BlockAlgorithm
+    public sealed class Threefish : SymmetricBlockAlgorithm
     {
         #region Properties
 

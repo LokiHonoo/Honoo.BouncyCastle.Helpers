@@ -5,7 +5,7 @@ namespace Honoo.BouncyCastle.Helpers
     /// <summary>
     /// ECDiffieHellman.
     /// </summary>
-    public interface IECDH
+    public interface IECDH : IAsymmetricAlgorithm
     {
         /// <summary>
         /// Generate ECDH terminal Alice.

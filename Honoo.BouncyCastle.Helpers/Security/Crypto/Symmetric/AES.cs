@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// AES.
     /// <para/>Legal block size 128 bits. Legal key size 128, 192, 256 bits.
     /// </summary>
-    public sealed class AES : BlockAlgorithm
+    public sealed class AES : SymmetricBlockAlgorithm
     {
         #region Properties
 

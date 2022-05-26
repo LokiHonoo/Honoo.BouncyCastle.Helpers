@@ -9,7 +9,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// DES.
     /// <para/>Legal block size 64 bits. Legal key size 64 bits.
     /// </summary>
-    public sealed class DES : BlockAlgorithm
+    public sealed class DES : SymmetricBlockAlgorithm
     {
         #region Properties
 

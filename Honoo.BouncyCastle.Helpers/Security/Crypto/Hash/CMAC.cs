@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     {
         #region Properties
 
-        private readonly BlockAlgorithm _blockAlgorithm;
+        private readonly SymmetricBlockAlgorithm _blockAlgorithm;
         private readonly int _hashSize;
         private readonly int _macSize;
         private readonly string _mechanism;
@@ -47,7 +47,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         public string Mechanism => _mechanism;
 
-        internal IBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
+        internal ISymmetricBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
 
         #endregion Properties
 
@@ -59,7 +59,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <para/>Default mac size used as block size.
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
-        public CMAC(IBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize)
+        public CMAC(ISymmetricBlockAlgorithm blockAlgorithm) : this(blockAlgorithm, blockAlgorithm.BlockSize)
         {
         }
 
@@ -70,7 +70,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         /// <param name="blockAlgorithm">Symmetric block algorithm.</param>
         /// <param name="macSize">MAC size bits.</param>
-        public CMAC(IBlockAlgorithm blockAlgorithm, int macSize)
+        public CMAC(ISymmetricBlockAlgorithm blockAlgorithm, int macSize)
         {
             if (blockAlgorithm.BlockSize != 64 && blockAlgorithm.BlockSize != 128)
             {
@@ -81,7 +81,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
                 throw new CryptographicException("Legal mac size is between 8 and block size (8 bits increments).");
             }
             _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/CMAC", blockAlgorithm.Mechanism);
-            _blockAlgorithm = (BlockAlgorithm)blockAlgorithm;
+            _blockAlgorithm = (SymmetricBlockAlgorithm)blockAlgorithm;
             _macSize = macSize;
             _hashSize = macSize;
         }
