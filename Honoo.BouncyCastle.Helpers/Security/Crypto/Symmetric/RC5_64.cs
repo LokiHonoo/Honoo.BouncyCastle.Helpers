@@ -35,6 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
             return new RC564Engine();
         }
+
         /// <summary>
         /// Generate KeyParameter.
         /// </summary>
@@ -44,6 +45,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
             return new RC5Parameters(key, 12);
         }
+
         /// <summary>
         /// Generate KeyParameter.
         /// </summary>

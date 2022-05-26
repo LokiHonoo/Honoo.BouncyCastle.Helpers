@@ -50,8 +50,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         public static ICMAC DSTU7624_128_CMAC { get; } = new CMAC(SymmetricAlgorithmHelper.DSTU7624_128);
 
-
-
         /// <summary>
         /// Hash size 64 bits. Legal key size 256 bits. Default mac size used as block size.
         /// </summary>
