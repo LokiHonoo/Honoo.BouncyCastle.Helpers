@@ -1,4 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Hash;
+using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -245,6 +246,66 @@ namespace Honoo.BouncyCastle.Helpers
                 case "TWOFISH": return TryGetAlgorithmNano(Twofish_MAC, macSize, out algorithm);
                 case "XTEA": return TryGetAlgorithmNano(XTEA_MAC, macSize, out algorithm);
                 default: algorithm = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get MAC algorithm ciper mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">MAC algorithm cipher mode mechanism.</param>
+        /// <param name="mode">MAC algorithm cipher mode.</param>
+        /// <returns></returns>
+        public static bool TryGetCipherMode(string mechanism, out MACCipherMode? mode)
+        {
+            if (mechanism is null)
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "CBC": mode = MACCipherMode.CBC; return true;
+                case "CFB": mode = MACCipherMode.CFB; return true;
+                default: mode = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get MAC algorithm padding mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">MAC algorithm padding mode mechanism.</param>
+        /// <param name="padding">MAC algorithm padding mode.</param>
+        /// <returns></returns>
+        public static bool TryGetPaddingMode(string mechanism, out MACPaddingMode? padding)
+        {
+            if (mechanism is null)
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "NOPADDING": padding = MACPaddingMode.NoPadding; return true;
+                case "PKCS7": case "PKCS7PADDING": case "PKCS5": case "PKCS5PADDING": padding = MACPaddingMode.PKCS7; return true;
+                case "ZEROS": case "ZEROSPADDING": case "ZERO": case "ZEROPADDING": padding = MACPaddingMode.Zeros; return true;
+                case "X923":
+                case "X923PADDING":
+                case "X9.23":
+                case "X9.23PADDING":
+                case "ANSIX923":
+                case "ANSIX923PADDING":
+                case "ANSIX9.23":
+                case "ANSIX9.23PADDING": padding = MACPaddingMode.X923; return true;
+                case "ISO7816-4":
+                case "ISO7816-4PADDING":
+                case "ISO7816D4":
+                case "ISO7816D4PADDING":
+                case "ISO9797-1":
+                case "ISO9797-1PADDING":
+                case "ISO9797D1":
+                case "ISO9797D1PADDING": padding = MACPaddingMode.ISO7816_4; return true;
+                case "TBC": case "TBCPADDING": padding = MACPaddingMode.TBC; return true;
+                default: padding = null; return false;
             }
         }
 

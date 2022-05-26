@@ -1,4 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric;
+using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -338,6 +339,84 @@ namespace Honoo.BouncyCastle.Helpers
                 case "VMPC-KSA3": case "VMPCKSA3": algorithm = VMPC_KSA3; return true;
                 case "XSALSA20": algorithm = XSalsa20; return true;
                 default: algorithm = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get symmetric algorithm ciper mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Symmetric algorithm cipher mode mechanism.</param>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <returns></returns>
+        public static bool TryGetCipherMode(string mechanism, out SymmetricCipherMode? mode)
+        {
+            if (mechanism is null)
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "CBC": mode = SymmetricCipherMode.CBC; return true;
+                case "ECB": mode = SymmetricCipherMode.ECB; return true;
+                case "OFB": mode = SymmetricCipherMode.OFB; return true;
+                case "CFB": mode = SymmetricCipherMode.CFB; return true;
+                case "CTS": mode = SymmetricCipherMode.CTS; return true;
+                case "CTR": mode = SymmetricCipherMode.CTR; return true;
+                case "CTS-ECB": mode = SymmetricCipherMode.CTS_ECB; return true;
+                case "GOFB": mode = SymmetricCipherMode.GOFB; return true;
+                case "OPENPGPCFB": mode = SymmetricCipherMode.OpenPGPCFB; return true;
+                case "SIC": mode = SymmetricCipherMode.SIC; return true;
+                case "CCM": mode = SymmetricCipherMode.CCM; return true;
+                case "EAX": mode = SymmetricCipherMode.EAX; return true;
+                case "GCM": mode = SymmetricCipherMode.GCM; return true;
+                case "OCB": mode = SymmetricCipherMode.OCB; return true;
+                default: mode = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get symmetric algorithm padding mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Symmetric algorithm padding mode mechanism.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
+        /// <returns></returns>
+        public static bool TryGetPaddingMode(string mechanism, out SymmetricPaddingMode? padding)
+        {
+            if (mechanism is null)
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "NOPADDING": padding = SymmetricPaddingMode.NoPadding; return true;
+                case "PKCS7": case "PKCS7PADDING": case "PKCS5": case "PKCS5PADDING": padding = SymmetricPaddingMode.PKCS7; return true;
+                case "ZEROS": case "ZEROSPADDING": case "ZERO": case "ZEROPADDING": padding = SymmetricPaddingMode.Zeros; return true;
+                case "X923":
+                case "X923PADDING":
+                case "X9.23":
+                case "X9.23PADDING":
+                case "ANSIX923":
+                case "ANSIX923PADDING":
+                case "ANSIX9.23":
+                case "ANSIX9.23PADDING": padding = SymmetricPaddingMode.X923; return true;
+                case "ISO10126":
+                case "ISO10126PADDING":
+                case "ISO10126-2":
+                case "ISO10126-2PADDING":
+                case "ISO10126D2":
+                case "ISO10126D2PADDING": padding = SymmetricPaddingMode.ISO10126; return true;
+                case "ISO7816-4":
+                case "ISO7816-4PADDING":
+                case "ISO7816D4":
+                case "ISO7816D4PADDING":
+                case "ISO9797-1":
+                case "ISO9797-1PADDING":
+                case "ISO9797D1":
+                case "ISO9797D1PADDING": padding = SymmetricPaddingMode.ISO7816_4; return true;
+                case "TBC": case "TBCPADDING": padding = SymmetricPaddingMode.TBC; return true;
+                default: padding = null; return false;
             }
         }
     }

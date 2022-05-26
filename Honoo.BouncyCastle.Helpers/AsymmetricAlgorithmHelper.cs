@@ -1,4 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
+using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -111,6 +112,30 @@ namespace Honoo.BouncyCastle.Helpers
                 case "ELGAMAL": algorithm = ElGamal; return true;
                 case "RSA": algorithm = RSA; return true;
                 default: algorithm = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get asymmetric algorithm padding mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Asymmetric algorithm padding mode mechanism.</param>
+        /// <param name="padding">Asymmetric algorithm padding mode.</param>
+        /// <returns></returns>
+        public static bool TryGetPaddingMode(string mechanism, out AsymmetricPaddingMode? padding)
+        {
+            if (mechanism is null)
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
+            switch (mechanism)
+            {
+                case "NOPADDING": padding = AsymmetricPaddingMode.NoPadding; return true;
+                case "PKCS1": case "PKCS1PADDING": padding = AsymmetricPaddingMode.PKCS1; return true;
+                case "OAEP": case "OAEPPADDING": padding = AsymmetricPaddingMode.OAEP; return true;
+                case "ISO9796_1": case "ISO9796_1PADDING": case "ISO9796D1": case "ISO9796D1PADDING": padding = AsymmetricPaddingMode.ISO9796_1; return true;
+
+                default: padding = null; return false;
             }
         }
     }
