@@ -10,6 +10,11 @@ namespace Honoo.BouncyCastle.Helpers
     public interface IBlockAlgorithm
     {
         /// <summary>
+        /// Symmetric algorithm kind.
+        /// </summary>
+        SymmetricAlgorithmKind AlgorithmKind { get; }
+
+        /// <summary>
         /// Gets block size bits.
         /// </summary>
         int BlockSize { get; }

@@ -10,6 +10,11 @@ namespace Honoo.BouncyCastle.Helpers
     public interface IStreamAlgorithm
     {
         /// <summary>
+        /// Symmetric algorithm kind.
+        /// </summary>
+        SymmetricAlgorithmKind AlgorithmKind { get; }
+
+        /// <summary>
         /// Gets legal iv size bits.
         /// </summary>
         KeySizes[] IVSizes { get; }

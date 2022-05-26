@@ -9,6 +9,11 @@ namespace Honoo.BouncyCastle.Helpers
     public interface IAsymmetricEncryptionAlgorithm
     {
         /// <summary>
+        /// Asymmetric algorithm kind.
+        /// </summary>
+        AsymmetricAlgorithmKind AlgorithmKind { get; }
+
+        /// <summary>
         /// Gets mechanism.
         /// </summary>
         string Mechanism { get; }
