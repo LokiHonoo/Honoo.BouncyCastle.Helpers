@@ -1,6 +1,5 @@
 ﻿using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Security;
-using System.Threading;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -8,7 +7,8 @@ namespace Honoo.BouncyCastle.Helpers
     {
         #region First
 
-        internal static ThreadLocal<SecureRandom> ThreadSecureRandom { get; } = new ThreadLocal<SecureRandom>(GenerateSecureRandom);
+        private static readonly SecureRandom _secureRandom = SecureRandom.GetInstance("SHA1PRNG");
+        internal static SecureRandom SecureRandom => _secureRandom;
 
         #endregion First
 
@@ -19,15 +19,10 @@ namespace Honoo.BouncyCastle.Helpers
         internal static IBlockCipherPadding X923Padding { get; } = new X923Padding();
         internal static IBlockCipherPadding ZEROBYTEPadding { get; } = new ZeroBytePadding();
 
-        private static SecureRandom GenerateSecureRandom()
-        {
-            return SecureRandom.GetInstance("SHA1PRNG");
-        }
-
         private static IBlockCipherPadding GetISO10126d2Padding()
         {
             IBlockCipherPadding padding = new ISO10126d2Padding();
-            padding.Init(ThreadSecureRandom.Value);
+            padding.Init(_secureRandom);
             return padding;
         }
     }

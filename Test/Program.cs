@@ -20,7 +20,7 @@ namespace Test
                 Console.WriteLine("  3. Asymmetric Encryption");
                 Console.WriteLine("  4. Signature");
                 Console.WriteLine("  5. Certificate");
-                Console.WriteLine("  6. ");
+                Console.WriteLine("  6. ECDH ");
                 Console.WriteLine("  7. ");
                 Console.WriteLine("  8. ");
                 Console.WriteLine("  9. ");
@@ -58,6 +58,11 @@ namespace Test
                         case '5':
                             Console.Clear();
                             Certificate.Test();
+                            goto end;
+
+                        case '6':
+                            Console.Clear();
+                            ECDH.Test();
                             goto end;
 
                         case 'Z':

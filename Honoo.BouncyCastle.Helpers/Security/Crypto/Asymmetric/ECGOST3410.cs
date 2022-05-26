@@ -41,11 +41,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(ECGOST3410EllipticCurve ellipticCurve)
         {
-            X9ECParameters parameters2 = GenerateX9(ellipticCurve);
-            ECDomainParameters parameters3 = new ECDomainParameters(parameters2);
-            KeyGenerationParameters parameters = new ECKeyGenerationParameters(parameters3, Common.ThreadSecureRandom.Value);
-            IAsymmetricCipherKeyPairGenerator generator = new ECKeyPairGenerator();
-            generator.Init(parameters);
+            X9ECParameters x9Parameters = GenerateX9(ellipticCurve);
+            ECDomainParameters domainParameters = new ECDomainParameters(x9Parameters);
+            ECKeyGenerationParameters generationParameters = new ECKeyGenerationParameters(domainParameters, Common.SecureRandom);
+            ECKeyPairGenerator generator = new ECKeyPairGenerator();
+            generator.Init(generationParameters);
             return generator.GenerateKeyPair();
         }
 

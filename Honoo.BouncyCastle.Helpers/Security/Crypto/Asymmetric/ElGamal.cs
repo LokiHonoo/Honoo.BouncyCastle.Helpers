@@ -48,13 +48,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
         {
-            ElGamalParametersGenerator generator2 = new ElGamalParametersGenerator();
-            generator2.Init(keySize, certainty, Common.ThreadSecureRandom.Value);
-            ElGamalParameters parameters2 = generator2.GenerateParameters();
-            KeyGenerationParameters parameters = new ElGamalKeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters2);
-            IAsymmetricCipherKeyPairGenerator generator = new ElGamalKeyPairGenerator();
-            generator.Init(parameters);
-            return generator.GenerateKeyPair();
+            ElGamalParametersGenerator parametersGenerator = new ElGamalParametersGenerator();
+            parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
+            ElGamalParameters parameters = parametersGenerator.GenerateParameters();
+            ElGamalKeyGenerationParameters generationParameters = new ElGamalKeyGenerationParameters(Common.SecureRandom, parameters);
+            ElGamalKeyPairGenerator keyPairGenerator = new ElGamalKeyPairGenerator();
+            keyPairGenerator.Init(generationParameters);
+            return keyPairGenerator.GenerateKeyPair();
         }
 
         protected override IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding)

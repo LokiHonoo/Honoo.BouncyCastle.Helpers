@@ -6,7 +6,7 @@ using System;
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// ECDH.
+    /// ECDiffieHellman.
     /// </summary>
     public interface IECDH
     {
@@ -28,7 +28,7 @@ namespace Honoo.BouncyCastle.Helpers
         IBasicAgreement GenerateAgreement(AsymmetricKeyParameter privateKey);
 
         /// <summary>
-        /// Generate key pair. NOT Implemented.
+        /// Generate key pair.
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
@@ -46,7 +46,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="keySize">Key size.</param>
+        /// <param name="keySize">Key size.
+        /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
+        /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
@@ -55,10 +57,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate parameters Bob.
         /// </summary>
-        /// <param name="aP">ParametersA P.</param>
-        /// <param name="aG">ParametersA G.</param>
+        /// <param name="ParametersAP">ParametersA P.</param>
+        /// <param name="ParametersAG">ParametersA G.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        DHParameters GenerateParametersB(BigInteger aP, BigInteger aG);
+        DHParameters GenerateParametersB(BigInteger ParametersAP, BigInteger ParametersAG);
     }
 }

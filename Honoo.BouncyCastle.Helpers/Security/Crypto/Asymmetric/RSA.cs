@@ -48,8 +48,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
         {
-            KeyGenerationParameters parameters = new RsaKeyGenerationParameters(BigInteger.ValueOf(0x10001), Common.ThreadSecureRandom.Value, keySize, certainty);
-            IAsymmetricCipherKeyPairGenerator generator = new RsaKeyPairGenerator();
+            RsaKeyGenerationParameters parameters = new RsaKeyGenerationParameters(BigInteger.ValueOf(0x10001), Common.SecureRandom, keySize, certainty);
+            RsaKeyPairGenerator generator = new RsaKeyPairGenerator();
             generator.Init(parameters);
             return generator.GenerateKeyPair();
         }

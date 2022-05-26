@@ -27,8 +27,8 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            IAsymmetricCipherKeyPairGenerator generator = new Ed448KeyPairGenerator();
-            KeyGenerationParameters parameters = new Ed448KeyGenerationParameters(Common.ThreadSecureRandom.Value);
+            Ed448KeyPairGenerator generator = new Ed448KeyPairGenerator();
+            Ed448KeyGenerationParameters parameters = new Ed448KeyGenerationParameters(Common.SecureRandom);
             generator.Init(parameters);
             return generator.GenerateKeyPair();
         }

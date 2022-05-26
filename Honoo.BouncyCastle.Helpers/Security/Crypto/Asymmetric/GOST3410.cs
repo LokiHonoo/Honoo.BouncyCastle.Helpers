@@ -44,13 +44,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int procedure)
         {
-            Gost3410ParametersGenerator generator2 = new Gost3410ParametersGenerator();
-            generator2.Init(keySize, procedure, Common.ThreadSecureRandom.Value);
-            Gost3410Parameters parameters2 = generator2.GenerateParameters();
-            KeyGenerationParameters parameters = new Gost3410KeyGenerationParameters(Common.ThreadSecureRandom.Value, parameters2);
-            IAsymmetricCipherKeyPairGenerator generator = new Gost3410KeyPairGenerator();
-            generator.Init(parameters);
-            return generator.GenerateKeyPair();
+            Gost3410ParametersGenerator parametersGenerator = new Gost3410ParametersGenerator();
+            parametersGenerator.Init(keySize, procedure, Common.SecureRandom);
+            Gost3410Parameters parameters = parametersGenerator.GenerateParameters();
+            Gost3410KeyGenerationParameters generationParameters = new Gost3410KeyGenerationParameters(Common.SecureRandom, parameters);
+            Gost3410KeyPairGenerator keyPairGenerator = new Gost3410KeyPairGenerator();
+            keyPairGenerator.Init(generationParameters);
+            return keyPairGenerator.GenerateKeyPair();
         }
     }
 }

@@ -120,7 +120,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, keyPair.Private, Common.ThreadSecureRandom.Value);
+                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, keyPair.Private, Common.SecureRandom);
                 DerSet attribute = extensions is null ? null : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(extensions)));
                 return new Pkcs10CertificationRequest(signatureFactory, dn, keyPair.Public, attribute);
             }
@@ -248,7 +248,7 @@ namespace Honoo.BouncyCastle.Helpers
                 }
                 store.SetKeyEntry(privateKeyAlias, new AsymmetricKeyEntry(privateKey), certEntries.ToArray());
                 char[] pass = string.IsNullOrWhiteSpace(password) ? null : password.ToCharArray();
-                store.Save(ms, pass, Common.ThreadSecureRandom.Value);
+                store.Save(ms, pass, Common.SecureRandom);
                 ms.Flush();
                 return new Pkcs12Store(ms, pass);
             }
@@ -487,8 +487,8 @@ namespace Honoo.BouncyCastle.Helpers
                                                     DateTime start,
                                                     TimeSpan expiration)
         {
-            ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.ThreadSecureRandom.Value);
-            BigInteger sn = new BigInteger(128, Common.ThreadSecureRandom.Value);
+            ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.SecureRandom);
+            BigInteger sn = new BigInteger(128, Common.SecureRandom);
             X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
             generator.SetSerialNumber(sn);
             generator.SetIssuerDN(issuerDN);

@@ -43,7 +43,7 @@ namespace Test
                                                    dn,
                                                    extensions,
                                                    DateTime.UtcNow.AddDays(-1),
-                                                  TimeSpan.FromDays(120));
+                                                   TimeSpan.FromDays(120));
 
             _ = PemHelper.KeyToPem(keyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
             _ = PemHelper.KeyToPem(keyPair.Public);
@@ -91,7 +91,7 @@ namespace Test
                                                                       userDN,
                                                                       userExtensions,
                                                                       DateTime.UtcNow.AddDays(-1),
-                                                                     TimeSpan.FromDays(90));
+                                                                      TimeSpan.FromDays(90));
             //
             //
             // Print

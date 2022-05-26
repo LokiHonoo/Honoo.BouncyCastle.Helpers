@@ -78,7 +78,7 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 PemWriter pemWriter = new PemWriter(writer);
 
-                pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.ThreadSecureRandom.Value);
+                pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
                 return writer.ToString();
             }
         }
@@ -114,6 +114,44 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Convert pem string to asymmetric key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter PemToKey(string pem)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader).ReadObject();
+                return (AsymmetricKeyParameter)obj;
+            }
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter PemToKey(string pem, string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return PemToKey(pem);
+            }
+            else
+            {
+                using (StringReader reader = new StringReader(pem))
+                {
+                    object obj = new PemReader(reader, new Password(password)).ReadObject();
+                    return (AsymmetricKeyParameter)obj;
+                }
+            }
+        }
+
+        /// <summary>
         /// Convert pem string to asymmetric key pair.
         /// </summary>
         /// <param name="pem">pem string.</param>
@@ -121,9 +159,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// <exception cref="Exception"/>
         public static AsymmetricCipherKeyPair PemToKeyPair(string pem)
         {
-            using (var reader = new StringReader(pem))
+            using (StringReader reader = new StringReader(pem))
             {
-                var obj = new PemReader(reader).ReadObject();
+                object obj = new PemReader(reader).ReadObject();
                 return (AsymmetricCipherKeyPair)obj;
             }
         }
@@ -142,9 +180,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                using (var reader = new StringReader(pem))
+                using (StringReader reader = new StringReader(pem))
                 {
-                    var obj = new PemReader(reader, new Password(password)).ReadObject();
+                    object obj = new PemReader(reader, new Password(password)).ReadObject();
                     return (AsymmetricCipherKeyPair)obj;
                 }
             }

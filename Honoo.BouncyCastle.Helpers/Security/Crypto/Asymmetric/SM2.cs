@@ -28,11 +28,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            X9ECParameters parameters2 = GMNamedCurves.GetByOid(GMObjectIdentifiers.sm2p256v1);
-            ECDomainParameters parameters3 = new ECDomainParameters(parameters2);
-            KeyGenerationParameters parameters = new ECKeyGenerationParameters(parameters3, Common.ThreadSecureRandom.Value);
-            IAsymmetricCipherKeyPairGenerator generator = new ECKeyPairGenerator();
-            generator.Init(parameters);
+            X9ECParameters x9Parameters = GMNamedCurves.GetByOid(GMObjectIdentifiers.sm2p256v1);
+            ECDomainParameters domainParameters = new ECDomainParameters(x9Parameters);
+            ECKeyGenerationParameters generationParameters = new ECKeyGenerationParameters(domainParameters, Common.SecureRandom);
+            ECKeyPairGenerator generator = new ECKeyPairGenerator();
+            generator.Init(generationParameters);
             return generator.GenerateKeyPair();
         }
     }
