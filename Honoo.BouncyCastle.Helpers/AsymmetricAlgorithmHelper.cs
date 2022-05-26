@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// ECDH.
         /// </summary>
-        public static IAsymmetricAlgorithm ECDH { get; } = new ECDH();
+        public static IECDH ECDH { get; } = new ECDH();
 
         /// <summary>
         /// ECDSA.
@@ -79,7 +79,7 @@ namespace Honoo.BouncyCastle.Helpers
             switch (mechanism)
             {
                 case "DSA": algorithm = DSA; return true;
-                case "ECDH": algorithm = ECDH; return true;
+                case "ECDH": algorithm = (IAsymmetricAlgorithm)ECDH; return true;
                 case "ECDSA": algorithm = ECDSA; return true;
                 case "ECGOST3410": case "ECGOST3410-2001": algorithm = ECGOST3410; return true;
                 case "ED25519": algorithm = new Ed25519(); return true;

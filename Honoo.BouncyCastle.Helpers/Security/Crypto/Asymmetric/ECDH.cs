@@ -3,7 +3,6 @@ using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
-using Org.BouncyCastle.Security;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +11,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDH.
     /// </summary>
-    public sealed class ECDH : AsymmetricAlgorithm
+    public sealed class ECDH : AsymmetricAlgorithm, IECDH
     {
         #region Constructor
 
@@ -26,31 +25,29 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
+        /// Derive key material from the other asymmetric public key.
+        /// </summary>
+        /// <param name="agreement">Agreement.</param>
+        /// <param name="otherPublicKey">The other asymmetric public key.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public byte[] DeriveKeyMaterial(IBasicAgreement agreement, AsymmetricKeyParameter otherPublicKey)
+        {
+            return agreement.CalculateAgreement(otherPublicKey).ToByteArrayUnsigned();
+        }
+
+        /// <summary>
         /// Generate agreement.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public IBasicAgreement GenerateAgreement(AsymmetricKeyParameter privateKey)
         {
             //IBasicAgreement agreement = AgreementUtilities.GetBasicAgreement("ECDH");
             ECDHBasicAgreement agreement = new ECDHBasicAgreement();
             agreement.Init(privateKey);
             return agreement;
-        }
-
-
-        /// <summary>
-        /// Derive key material from the other asymmetric public key.
-        /// </summary>
-        /// <param name="agreement">Agreement.</param>
-        /// <param name="otherPublicKey">The other asymmetric public key.</param>
-        /// <returns></returns>
-        public byte[] DeriveKeyMaterial(IBasicAgreement agreement, AsymmetricKeyParameter otherPublicKey)
-        {
-            AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(publicKeyBytes);
-            return agreement.CalculateAgreement(otherPublicKey).ToByteArrayUnsigned(); 
         }
 
         /// <summary>
@@ -64,11 +61,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate key pair. NOT Implemented.
         /// </summary>
+        /// <param name="parameters"></param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(DHParameters parameters)
         {
             //IAsymmetricCipherKeyPairGenerator generator = GeneratorUtilities.GetKeyPairGenerator("ECDH");
@@ -96,7 +93,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public DHParameters GenerateParametersA(int keySize, int certainty)
         {
             DHParametersGenerator generator = new DHParametersGenerator();
@@ -111,7 +107,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="aG">ParametersA G.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public DHParameters GenerateParametersB(BigInteger aP, BigInteger aG)
         {
             return new DHParameters(aP, aG);

@@ -3,6 +3,7 @@ using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
@@ -43,6 +44,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="keySize">Key size.</param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
+        /// <exception cref="Exception"/>
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
         {
