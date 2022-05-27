@@ -1,5 +1,4 @@
 ﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
@@ -59,50 +58,30 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         ///
         /// </summary>
         /// <param name="padding"></param>
+        /// <param name="mgf1HashAlgorithm1"></param>
+        /// <param name="mgf1HashAlgorithm2"></param>
         /// <returns></returns>
         /// <exception cref="CryptographicException"></exception>
-        protected override IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2)
+        protected override IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding,
+                                                                     IHashAlgorithm mgf1HashAlgorithm1,
+                                                                     IHashAlgorithm mgf1HashAlgorithm2)
         {
             IAsymmetricBlockCipher cipher = new RsaBlindedEngine();
             switch (padding)
             {
                 case AsymmetricPaddingMode.PKCS1: cipher = new Pkcs1Encoding(cipher); break;
                 case AsymmetricPaddingMode.OAEP:
-                    IDigest digest1;
-                    IDigest digest2;
-                    switch (mgfPadding1)
-                    {
-                        case OAEPMGF1PaddingMode.MD5: digest1 = new MD5Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA1: digest1 = new Sha1Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA224: digest1 = new Sha224Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA256: digest1 = new Sha256Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA384: digest1 = new Sha384Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA512: digest1 = new Sha512Digest(); break;
-                        case OAEPMGF1PaddingMode.None:
-                        default: digest1 = null; break;
-                    }
-                    switch (mgfPadding2)
-                    {
-                        case OAEPMGF1PaddingMode.MD5: digest2 = new MD5Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA1: digest2 = new Sha1Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA224: digest2 = new Sha224Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA256: digest2 = new Sha256Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA384: digest2 = new Sha384Digest(); break;
-                        case OAEPMGF1PaddingMode.SHA512: digest2 = new Sha512Digest(); break;
-                        case OAEPMGF1PaddingMode.None:
-                        default: digest2 = null; break;
-                    }
-                    if (digest1 is null)
+                    if (mgf1HashAlgorithm1 is null)
                     {
                         cipher = new OaepEncoding(cipher);
                     }
-                    else if (digest2 is null)
+                    else if (mgf1HashAlgorithm2 is null)
                     {
-                        cipher = new OaepEncoding(cipher, digest1);
+                        cipher = new OaepEncoding(cipher, mgf1HashAlgorithm1.GenerateDigest());
                     }
                     else
                     {
-                        cipher = new OaepEncoding(cipher, digest1, digest2, null);
+                        cipher = new OaepEncoding(cipher, mgf1HashAlgorithm1.GenerateDigest(), mgf1HashAlgorithm2.GenerateDigest(), null);
                     }
                     break;
 

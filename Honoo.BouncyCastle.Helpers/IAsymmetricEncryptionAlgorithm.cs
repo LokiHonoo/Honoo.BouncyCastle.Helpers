@@ -22,6 +22,22 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new asymmetric encryption algorithm and decrypt data.
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Decrypt(AsymmetricPaddingMode padding,
+                       IHashAlgorithm mgf1HashAlgorithm1,
+                       IHashAlgorithm mgf1HashAlgorithm2,
+                       AsymmetricKeyParameter privateKey,
+                       byte[] data);
+
+        /// <summary>
+        /// Generate a new asymmetric encryption algorithm and decrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="data">Data.</param>
         /// <param name="offset">The starting offset to read.</param>
@@ -34,27 +50,21 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new asymmetric encryption algorithm and decrypt data.
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        byte[] Decrypt(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter privateKey, byte[] data);
-
-        /// <summary>
-        /// Generate a new asymmetric encryption algorithm and decrypt data.
-        /// </summary>
-        /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="data">Data.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] Decrypt(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter privateKey, byte[] data, int offset, int length);
+        byte[] Decrypt(AsymmetricPaddingMode padding,
+                       IHashAlgorithm mgf1HashAlgorithm1,
+                       IHashAlgorithm mgf1HashAlgorithm2,
+                       AsymmetricKeyParameter privateKey,
+                       byte[] data,
+                       int offset,
+                       int length);
 
         /// <summary>
         /// Generate a new asymmetric encryption algorithm and encrypt data.
@@ -65,6 +75,22 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey, byte[] data);
+
+        /// <summary>
+        /// Generate a new asymmetric encryption algorithm and encrypt data.
+        /// </summary>
+        /// <param name="padding">Asymmetric padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
+        /// <param name="publicKey">Asymmetric public key.</param>
+        /// <param name="data">Data.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        byte[] Encrypt(AsymmetricPaddingMode padding,
+                       IHashAlgorithm mgf1HashAlgorithm1,
+                       IHashAlgorithm mgf1HashAlgorithm2,
+                       AsymmetricKeyParameter publicKey,
+                       byte[] data);
 
         /// <summary>
         /// Generate a new asymmetric encryption algorithm and encrypt data.
@@ -82,27 +108,21 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new asymmetric encryption algorithm and encrypt data.
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
-        /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        byte[] Encrypt(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter publicKey, byte[] data);
-
-        /// <summary>
-        /// Generate a new asymmetric encryption algorithm and encrypt data.
-        /// </summary>
-        /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
         /// <param name="data">Data.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] Encrypt(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter publicKey, byte[] data, int offset, int length);
+        byte[] Encrypt(AsymmetricPaddingMode padding,
+                       IHashAlgorithm mgf1HashAlgorithm1,
+                       IHashAlgorithm mgf1HashAlgorithm2,
+                       AsymmetricKeyParameter publicKey,
+                       byte[] data,
+                       int offset,
+                       int length);
 
         /// <summary>
         /// Generate cipher. The cipher can be reused.
@@ -117,12 +137,15 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate cipher. The cipher can be reused.
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        IAsymmetricBlockCipher GenerateDecryptor(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter privateKey);
+        IAsymmetricBlockCipher GenerateDecryptor(AsymmetricPaddingMode padding,
+                                                 IHashAlgorithm mgf1HashAlgorithm1,
+                                                 IHashAlgorithm mgf1HashAlgorithm2,
+                                                 AsymmetricKeyParameter privateKey);
 
         /// <summary>
         /// Generate cipher. The cipher can be reused.
@@ -137,11 +160,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate cipher. The cipher can be reused.
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
-        /// <param name="mgfPadding1">OAEP MGF1 padding mode.</param>
-        /// <param name="mgfPadding2">OAEP MGF1 padding mode.</param>
+        /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
+        /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        IAsymmetricBlockCipher GenerateEncryptor(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2, AsymmetricKeyParameter publicKey);
+        IAsymmetricBlockCipher GenerateEncryptor(AsymmetricPaddingMode padding,
+                                                 IHashAlgorithm mgf1HashAlgorithm1,
+                                                 IHashAlgorithm mgf1HashAlgorithm2,
+                                                 AsymmetricKeyParameter publicKey);
     }
 }

@@ -209,7 +209,10 @@ private static void Demo1()
     IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.PKCS1, keyPair.Public);
     IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.PKCS1, keyPair.Private);
     byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
-    _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
+    byte[] dec2 = decryptor.ProcessBlock(enc2, 0, enc2.Length);
+    //
+    Console.WriteLine(BitConverter.ToString(test).Replace("-", ""));
+    Console.WriteLine(BitConverter.ToString(dec2).Replace("-", ""));
 }
 
 ```

@@ -25,6 +25,7 @@ namespace Test
             Console.WriteLine();
             //
             Demo1();
+            Demo2();
             ////
             Test1();
             //
@@ -44,7 +45,33 @@ namespace Test
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.PKCS1, keyPair.Public);
             IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.PKCS1, keyPair.Private);
             byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
-            _ = decryptor.ProcessBlock(enc2, 0, enc2.Length);
+            byte[] dec2 = decryptor.ProcessBlock(enc2, 0, enc2.Length);
+            //
+            Console.WriteLine(BitConverter.ToString(test).Replace("-", ""));
+            Console.WriteLine(BitConverter.ToString(dec2).Replace("-", ""));
+        }
+
+        private static void Demo2()
+        {
+            byte[] test = new byte[5];
+            Utilities.Random.NextBytes(test);
+            AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.RSA.GenerateKeyPair();
+            // example 1
+            byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
+            _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
+            // example 2
+            IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.OAEP,
+                                                                                               HashAlgorithmHelper.RIPEMD160,
+                                                                                               HashAlgorithmHelper.SHAKE_256,
+                                                                                               keyPair.Public);
+            IAsymmetricBlockCipher decryptor = AsymmetricAlgorithmHelper.RSA.GenerateDecryptor(AsymmetricPaddingMode.OAEP,
+                                                                                               HashAlgorithmHelper.RIPEMD160,
+                                                                                               HashAlgorithmHelper.SHAKE_256,
+                                                                                               keyPair.Private);
+            byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
+            byte[] dec2 = decryptor.ProcessBlock(enc2, 0, enc2.Length);
+            Console.WriteLine(BitConverter.ToString(test).Replace("-", ""));
+            Console.WriteLine(BitConverter.ToString(dec2).Replace("-", ""));
         }
 
         private static void Test1()

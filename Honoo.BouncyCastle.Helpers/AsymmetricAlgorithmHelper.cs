@@ -134,60 +134,6 @@ namespace Honoo.BouncyCastle.Helpers
                 case "OAEP": case "OAEPPADDING": padding = AsymmetricPaddingMode.OAEP; return true;
                 case "NOPADDING": padding = AsymmetricPaddingMode.NoPadding; return true;
                 case "ISO9796_1": case "ISO9796_1PADDING": case "ISO9796D1": case "ISO9796D1PADDING": padding = AsymmetricPaddingMode.ISO9796_1; return true;
-                case "OAEPWITHMD5ANDMGF1": case "OAEPWITHMD5ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithMD5andMGF1; return true;
-                case "OAEPWITHSHA1ANDMGF1":
-                case "OAEPWITHSHA1ANDMGF1PADDING":
-                case "OAEPWITHSHA-1ANDMGF1":
-                case "OAEPWITHSHA-1ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA1andMGF1; return true;
-                case "OAEPWITHSHA224ANDMGF1":
-                case "OAEPWITHSHA224ANDMGF1PADDING":
-                case "OAEPWITHSHA-224ANDMGF1":
-                case "OAEPWITHSHA-224ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA224andMGF1; return true;
-                case "OAEPWITHSHA256ANDMGF1":
-                case "OAEPWITHSHA256ANDMGF1PADDING":
-                case "OAEPWITHSHA-256ANDMGF1":
-                case "OAEPWITHSHA-256ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA256andMGF1; return true;
-                case "OAEPWITHSHA384ANDMGF1":
-                case "OAEPWITHSHA384ANDMGF1PADDING":
-                case "OAEPWITHSHA-384ANDMGF1":
-                case "OAEPWITHSHA-384ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA384andMGF1; return true;
-                case "OAEPWITHSHA512ANDMGF1":
-                case "OAEPWITHSHA512ANDMGF1PADDING":
-                case "OAEPWITHSHA-512ANDMGF1":
-                case "OAEPWITHSHA-512ANDMGF1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA512andMGF1; return true;
-                case "OAEPWITHSHA1ANDMGF1WITHSHA1":
-                case "OAEPWITHSHA1ANDMGF1WITHSHA1PADDING":
-                case "OAEPWITHSHA-1ANDMGF1WITHSHA-1":
-                case "OAEPWITHSHA-1ANDMGF1WITHSHA-1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA1andMGF1withSHA1; return true;
-                case "OAEPWITHSHA224ANDMGF1WITHSHA1":
-                case "OAEPWITHSHA224ANDMGF1WITHSHA1PADDING":
-                case "OAEPWITHSHA-224ANDMGF1WITHSHA-1":
-                case "OAEPWITHSHA-224ANDMGF1WITHSHA-1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA224andMGF1withSHA1; return true;
-                case "OAEPWITHSHA256ANDMGF1WITHSHA1":
-                case "OAEPWITHSHA256ANDMGF1WITHSHA1PADDING":
-                case "OAEPWITHSHA-256ANDMGF1WITHSHA-1":
-                case "OAEPWITHSHA-256ANDMGF1WITHSHA-1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA256andMGF1withSHA1; return true;
-                case "OAEPWITHSHA384ANDMGF1WITHSHA1":
-                case "OAEPWITHSHA384ANDMGF1WITHSHA1PADDING":
-                case "OAEPWITHSHA-384ANDMGF1WITHSHA-1":
-                case "OAEPWITHSHA-384ANDMGF1WITHSHA-1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA384andMGF1withSHA1; return true;
-                case "OAEPWITHSHA512ANDMGF1WITHSHA1":
-                case "OAEPWITHSHA512ANDMGF1WITHSHA1PADDING":
-                case "OAEPWITHSHA-512ANDMGF1WITHSHA-1":
-                case "OAEPWITHSHA-512ANDMGF1WITHSHA-1PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA512andMGF1withSHA1; return true;
-                case "OAEPWITHSHA256ANDMGF1WITHSHA256":
-                case "OAEPWITHSHA256ANDMGF1WITHSHA256PADDING":
-                case "OAEPWITHSHA-256ANDMGF1WITHSHA-256":
-                case "OAEPWITHSHA-256ANDMGF1WITHSHA-256PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA256andMGF1withSHA256; return true;
-                case "OAEPWITHSHA384ANDMGF1WITHSHA256":
-                case "OAEPWITHSHA384ANDMGF1WITHSHA256PADDING":
-                case "OAEPWITHSHA-384ANDMGF1WITHSHA-256":
-                case "OAEPWITHSHA-384ANDMGF1WITHSHA-256PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA384andMGF1withSHA256; return true;
-                case "OAEPWITHSHA512ANDMGF1WITHSHA256":
-                case "OAEPWITHSHA512ANDMGF1WITHSHA256PADDING":
-                case "OAEPWITHSHA-512ANDMGF1WITHSHA-256":
-                case "OAEPWITHSHA-512ANDMGF1WITHSHA-256PADDING": padding = AsymmetricPaddingMode.OAEPwithSHA512andMGF1withSHA256; return true;
-
                 default: padding = null; return false;
             }
         }
