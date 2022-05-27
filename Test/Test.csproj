@@ -26,4 +26,10 @@
     <ProjectReference Include="..\Honoo.BouncyCastle.Helpers\Honoo.BouncyCastle.Helpers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="aaa.crl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

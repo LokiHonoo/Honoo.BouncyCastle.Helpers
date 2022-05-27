@@ -17,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="cert">Certificate.</param>
         /// <returns></returns>
-        public static string CertToPem(X509Certificate cert)
+        public static string Cert2Pem(X509Certificate cert)
         {
             using (StringWriter writer = new StringWriter())
             {
@@ -28,11 +28,26 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Convert certificate revocation list to pem string.
+        /// </summary>
+        /// <param name="crl">Certificate revocation list.</param>
+        /// <returns></returns>
+        public static string Crl2Pem(X509Crl crl)
+        {
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(crl);
+                return writer.ToString();
+            }
+        }
+
+        /// <summary>
         /// Convert certificate signing request to pem string.
         /// </summary>
         /// <param name="csr">Certificate signing request.</param>
         /// <returns></returns>
-        public static string CsrToPem(Pkcs10CertificationRequest csr)
+        public static string Csr2Pem(Pkcs10CertificationRequest csr)
         {
             using (StringWriter writer = new StringWriter())
             {
@@ -47,7 +62,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
         /// <returns></returns>
-        public static string KeyToPem(AsymmetricKeyParameter asymmetricKey)
+        public static string Key2Pem(AsymmetricKeyParameter asymmetricKey)
         {
             using (StringWriter writer = new StringWriter())
             {
@@ -64,7 +79,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string KeyToPem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)
+        public static string Key2Pem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)
         {
             if (string.IsNullOrEmpty(dekAlgorithmName))
             {
@@ -89,7 +104,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="pem">pem string.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static X509Certificate PemToCert(string pem)
+        public static X509Certificate Pem2Cert(string pem)
         {
             using (StringReader reader = new StringReader(pem))
             {
@@ -99,12 +114,27 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Convert pem string to certificate revocation list.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static X509Crl Pem2Crl(string pem)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader).ReadObject();
+                return (X509Crl)obj;
+            }
+        }
+
+        /// <summary>
         /// Convert pem string to certificate signing request.
         /// </summary>
         /// <param name="pem">pem string.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static Pkcs10CertificationRequest PemToCsr(string pem)
+        public static Pkcs10CertificationRequest Pem2Csr(string pem)
         {
             using (StringReader reader = new StringReader(pem))
             {
@@ -119,7 +149,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="pem">pem string.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter PemToKey(string pem)
+        public static AsymmetricKeyParameter Pem2Key(string pem)
         {
             using (StringReader reader = new StringReader(pem))
             {
@@ -135,11 +165,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="password"></param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter PemToKey(string pem, string password)
+        public static AsymmetricKeyParameter Pem2Key(string pem, string password)
         {
             if (string.IsNullOrEmpty(password))
             {
-                return PemToKey(pem);
+                return Pem2Key(pem);
             }
             else
             {
@@ -157,7 +187,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="pem">pem string.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static AsymmetricCipherKeyPair PemToKeyPair(string pem)
+        public static AsymmetricCipherKeyPair Pem2KeyPair(string pem)
         {
             using (StringReader reader = new StringReader(pem))
             {
@@ -172,11 +202,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="pem">Pem string.</param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static AsymmetricCipherKeyPair PemToKeyPair(string pem, string password)
+        public static AsymmetricCipherKeyPair Pem2KeyPair(string pem, string password)
         {
             if (string.IsNullOrEmpty(password))
             {
-                return PemToKeyPair(pem);
+                return Pem2KeyPair(pem);
             }
             else
             {
