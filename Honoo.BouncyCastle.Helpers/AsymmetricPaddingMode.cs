@@ -1,24 +1,24 @@
 ﻿namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// Asymmetric algorithm padding mode.
+    /// Asymmetric padding mode.
     /// </summary>
     public enum AsymmetricPaddingMode
     {
         /// <summary>
-        ///
+        /// PKCS1 padding mode.
         /// </summary>
-        NoPadding = 1,
+        PKCS1 = 0,
 
         /// <summary>
-        ///
-        /// </summary>
-        PKCS1,
-
-        /// <summary>
-        ///
+        /// OAEP padding mode.
         /// </summary>
         OAEP,
+
+        /// <summary>
+        /// NoPadding padding mode.
+        /// </summary>
+        NoPadding = 101,
 
         /// <summary>
         /// Only for RSA.

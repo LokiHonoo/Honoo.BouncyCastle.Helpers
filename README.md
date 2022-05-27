@@ -251,38 +251,34 @@ private static void Demo()
     _ = SignatureAlgorithmHelper.TryGetAlgorithm(caSignatureAlgorithmName, out ISignatureAlgorithm caSignatureAlgorithm);
     AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.GenerateKeyPair();
     //
-    Tuple<X509NameLabel, string>[] caDNEntitys = new Tuple<X509NameLabel, string>[]
+    X509NameEntity[] x509NameEntities = new X509NameEntity[]
     {
-        new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST Root CA")
+        new X509NameEntity(X509NameLabel.C,"CN"),
+        new X509NameEntity(X509NameLabel.CN,"TEST Root CA")
     };
-    X509Name caDN = X509Helper.GenerateX509Name(caDNEntitys);
-    Tuple<X509ExtensionLabel, bool, Asn1Encodable>[] caExtensionEntitys = new Tuple<X509ExtensionLabel, bool, Asn1Encodable>[]
+    X509Name caDN = X509Helper.GenerateX509Name(x509NameEntities);
+    X509ExtensionEntity[] x509ExtensionEntities = new X509ExtensionEntity[]
     {
-        new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
-        new Tuple<X509ExtensionLabel, bool, Asn1Encodable>(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
+        new X509ExtensionEntity(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
+        new X509ExtensionEntity(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
     };
-    X509Extensions caExtensions = X509Helper.GenerateX509Extensions(caExtensionEntitys);
+    X509Extensions caExtensions = X509Helper.GenerateX509Extensions(x509ExtensionEntities);
     X509Certificate caCert = X509Helper.GenerateIssuerCert(caSignatureAlgorithm,
-                                                            caKeyPair,
-                                                            caDN,
-                                                            caExtensions,
-                                                            DateTime.UtcNow.AddDays(-1),
-                                                            TimeSpan.FromDays(120));
-
-    _ = PemHelper.KeyToPem(caKeyPair.Private, PemHelper.DEKAlgorithmNames.RC2_64_CBC, "abc123");
-    _ = PemHelper.KeyToPem(caKeyPair.Public);
-    _ = PemHelper.CertToPem(caCert);
+                                                           caKeyPair,
+                                                           caDN,
+                                                           caExtensions,
+                                                           DateTime.UtcNow.AddDays(-1),
+                                                           TimeSpan.FromDays(120));
     //
     // User create csr and sand to CA.
     //
     AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.GenerateKeyPair();
-    Tuple<X509NameLabel, string>[] userDNEntitys = new Tuple<X509NameLabel, string>[]
+    X509NameEntity[] x509NameEntities2 = new X509NameEntity[]
     {
-        new Tuple<X509NameLabel, string>(X509NameLabel.C,"CN"),
-        new Tuple<X509NameLabel, string>(X509NameLabel.CN,"TEST User")
+        new X509NameEntity(X509NameLabel.C,"CN"),
+        new X509NameEntity(X509NameLabel.CN,"TEST User")
     };
-    X509Name userDN = X509Helper.GenerateX509Name(userDNEntitys);
+    X509Name userDN = X509Helper.GenerateX509Name(x509NameEntities2);
     X509Extensions userExtensions = null;
     Pkcs10CertificationRequest userCsr = X509Helper.GenerateCsr(SignatureAlgorithmHelper.GOST3411withECGOST3410, userKeyPair, userDN, userExtensions);
     //
@@ -290,13 +286,13 @@ private static void Demo()
     //
     X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDNExtracted, out X509Extensions userExtensionsExtracted);
     X509Certificate userCert = X509Helper.GenerateSubjectCert(userSignatureAlgorithmName,
-                                                                caKeyPair.Private,
-                                                                caCert,
-                                                                userPublicKey,
-                                                                userDNExtracted,
-                                                                userExtensionsExtracted,
-                                                                DateTime.UtcNow.AddDays(-1),
-                                                                TimeSpan.FromDays(90));
+                                                              caKeyPair.Private,
+                                                              caCert,
+                                                              userPublicKey,
+                                                              userDNExtracted,
+                                                              userExtensionsExtracted,
+                                                              DateTime.UtcNow.AddDays(-1),
+                                                              TimeSpan.FromDays(90));
     //
     //
     // Print
@@ -334,12 +330,14 @@ private static void Demo1()
     // Alice work.
     //
     IECDHTerminalA terminalA = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalA(256, 25);
+    // Send exchangeA to Bob.
     byte[] exchangeToBob = terminalA.ExchangeA;
     //
     // Bob work.
     //
     IECDHTerminalB terminalB = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalB(exchangeToBob);
     byte[] pmsB = terminalB.DeriveKeyMaterial();
+    // Send exchangeB to Alice.
     byte[] exchangeToAlice = terminalB.ExchangeB;
     //
     // Alice work.

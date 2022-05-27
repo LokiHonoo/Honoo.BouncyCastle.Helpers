@@ -106,7 +106,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate cipher. The cipher can be reused.
         /// </summary>
-        /// <param name="padding">Asymmetric algorithm padding mode.</param>
+        /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
@@ -126,7 +126,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate cipher. The cipher can be reused.
         /// </summary>
-        /// <param name="padding">Asymmetric algorithm padding mode.</param>
+        /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
@@ -148,11 +148,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="padding"></param>
         /// <returns></returns>
-        protected abstract IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding);
+        protected abstract IAsymmetricBlockCipher GenerateCipherCore(AsymmetricPaddingMode padding, OAEPMGF1PaddingMode mgfPadding1, OAEPMGF1PaddingMode mgfPadding2);
 
-        private IAsymmetricBlockCipher GenerateCipher(bool encryption, AsymmetricPaddingMode padding, AsymmetricKeyParameter asymmetricKey)
+        private IAsymmetricBlockCipher GenerateCipher(bool encryption,
+                                                      AsymmetricPaddingMode padding,
+                                                      OAEPMGF1PaddingMode mgfPadding1,
+                                                      OAEPMGF1PaddingMode mgfPadding2,
+                                                      AsymmetricKeyParameter asymmetricKey)
         {
-            IAsymmetricBlockCipher cipher = GenerateCipherCore(padding);
+            IAsymmetricBlockCipher cipher = GenerateCipherCore(padding, mgfPadding1, mgfPadding2);
             cipher.Init(encryption, asymmetricKey);
             return cipher;
         }

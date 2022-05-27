@@ -392,7 +392,12 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 case "NOPADDING": padding = SymmetricPaddingMode.NoPadding; return true;
                 case "PKCS7": case "PKCS7PADDING": case "PKCS5": case "PKCS5PADDING": padding = SymmetricPaddingMode.PKCS7; return true;
-                case "ZEROS": case "ZEROSPADDING": case "ZERO": case "ZEROPADDING": padding = SymmetricPaddingMode.Zeros; return true;
+                case "ZEROS":
+                case "ZEROSPADDING":
+                case "ZERO":
+                case "ZEROPADDING":
+                case "ZEROBYTE":
+                case "ZEROBYTEPADDING": padding = SymmetricPaddingMode.Zeros; return true;
                 case "X923":
                 case "X923PADDING":
                 case "X9.23":
