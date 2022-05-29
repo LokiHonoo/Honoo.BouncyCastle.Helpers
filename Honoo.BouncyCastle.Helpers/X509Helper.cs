@@ -5,6 +5,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Pkcs;
+using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509;
 using System;
 using System.Collections.Generic;
@@ -35,9 +36,10 @@ namespace Honoo.BouncyCastle.Helpers
             publicKey = csr.GetPublicKey();
             CertificationRequestInfo csrInfo = csr.GetCertificationRequestInfo();
             dn = csrInfo.Subject;
-            Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
+            extensions = null;
             if (csrInfo.Attributes != null)
             {
+                Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
                 foreach (AttributePkcs attribute in csrInfo.Attributes)
                 {
                     if (attribute.AttrType.Equals(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest))
@@ -52,8 +54,94 @@ namespace Honoo.BouncyCastle.Helpers
                         }
                     }
                 }
+                extensions = new X509Extensions(attributes);
             }
-            extensions = attributes.Count > 0 ? new X509Extensions(attributes) : null;
+        }
+
+        /// <summary>
+        /// Generate certificate revocation list.
+        /// </summary>
+        /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="dn">Distinct name.</param>
+        /// <param name="revokes">X509 certificate revoked entities.</param>
+        /// <param name="extensions">Extensions.</param>
+        /// <param name="thisUpdate"></param>
+        /// <param name="nextUpdate"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static X509Crl GenerateCrl(ISignatureAlgorithm signatureAlgorithm,
+                                          AsymmetricKeyParameter privateKey,
+                                          X509Name dn,
+                                          IList<X509CrlEntry> crlEntries,
+                                          X509Extensions extensions,
+                                          DateTime thisUpdate,
+                                          DateTime nextUpdate)
+        {
+            if (signatureAlgorithm is null)
+            {
+                throw new ArgumentNullException(nameof(signatureAlgorithm));
+            }
+            if (privateKey is null)
+            {
+                throw new ArgumentNullException(nameof(privateKey));
+            }
+            if (dn is null)
+            {
+                throw new ArgumentNullException(nameof(dn));
+            }
+            if (signatureAlgorithm.Oid is null)
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
+            }
+            else
+            {
+                return GenerateCrlPrivate(signatureAlgorithm.Oid.Id, privateKey, dn, crlEntries, extensions, thisUpdate, nextUpdate);
+            }
+        }
+
+        /// <summary>
+        /// Generate certificate revocation list.
+        /// </summary>
+        /// <param name="signatureAlgorithm">Signature algorithm mechanism or oid supported by x590.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="dn">Distinct name.</param>
+        /// <param name="revokes">X509 certificate revoked entities.</param>
+        /// <param name="extensions">Extensions.</param>
+        /// <param name="thisUpdate"></param>
+        /// <param name="nextUpdate"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static X509Crl GenerateCrl(string signatureAlgorithm,
+                                          AsymmetricKeyParameter privateKey,
+                                          X509Name dn,
+                                          IList<X509CrlEntry> crlEntries,
+                                          X509Extensions extensions,
+                                          DateTime thisUpdate,
+                                          DateTime nextUpdate)
+        {
+            if (string.IsNullOrWhiteSpace(signatureAlgorithm))
+            {
+                throw new ArgumentNullException(nameof(signatureAlgorithm));
+            }
+            if (privateKey is null)
+            {
+                throw new ArgumentNullException(nameof(privateKey));
+            }
+            if (dn is null)
+            {
+                throw new ArgumentNullException(nameof(dn));
+            }
+            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            {
+                return GenerateCrlPrivate(oid.Id, privateKey, dn, crlEntries, extensions, thisUpdate, nextUpdate);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported signature algorithm.", signatureAlgorithm);
+            }
         }
 
         /// <summary>
@@ -138,7 +226,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="expiration">The expiration times from the start time.</param>
+        /// <param name="expires">The expires time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(ISignatureAlgorithm signatureAlgorithm,
@@ -146,7 +234,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
-                                                         TimeSpan expiration)
+                                                         DateTime expires)
         {
             if (signatureAlgorithm is null)
             {
@@ -166,7 +254,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expiration);
+                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expires);
             }
         }
 
@@ -178,7 +266,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="expiration">The expiration times from the start time.</param>
+        /// <param name="expires">The expires time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(string signatureAlgorithm,
@@ -186,7 +274,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
-                                                         TimeSpan expiration)
+                                                         DateTime expires)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
@@ -202,7 +290,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expiration);
+                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, expires);
             }
             else
             {
@@ -264,7 +352,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="expiration">The expiration times from the start time.</param>
+        /// <param name="expires">The expires time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateSubjectCert(ISignatureAlgorithm signatureAlgorithm,
@@ -274,7 +362,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                           X509Name subjectDN,
                                                           X509Extensions subjectExtensions,
                                                           DateTime start,
-                                                          TimeSpan expiration)
+                                                          DateTime expires)
         {
             if (signatureAlgorithm is null)
             {
@@ -302,7 +390,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(start.Add(expiration));
+                issuerCert.CheckValidity(expires);
             }
             catch
             {
@@ -314,7 +402,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expiration);
+                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expires);
             }
         }
 
@@ -328,7 +416,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
         /// <param name="start">Start time.</param>
-        /// <param name="expiration">The expiration times from the start time.</param>
+        /// <param name="expires">The expires time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateSubjectCert(string signatureAlgorithm,
@@ -338,7 +426,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                           X509Name subjectDN,
                                                           X509Extensions subjectExtensions,
                                                           DateTime start,
-                                                          TimeSpan expiration)
+                                                          DateTime expires)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
@@ -366,7 +454,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(start.Add(expiration));
+                issuerCert.CheckValidity(expires);
             }
             catch
             {
@@ -374,7 +462,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expiration);
+                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, expires);
             }
             else
             {
@@ -387,7 +475,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="entities">X509 extension collection.</param>
         /// <returns></returns>
-        public static X509Extensions GenerateX509Extensions(IEnumerable<X509ExtensionEntity> entities)
+        public static X509Extensions GenerateX509Extensions(IList<X509ExtensionEntity> entities)
         {
             if (entities is null)
             {
@@ -395,12 +483,11 @@ namespace Honoo.BouncyCastle.Helpers
             }
             List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
             Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
-            IEnumerator<X509ExtensionEntity> enumerator = entities.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (X509ExtensionEntity entity in entities)
             {
-                DerObjectIdentifier oid = GetX509ExtensionOid(enumerator.Current.Label);
+                DerObjectIdentifier oid = GetX509ExtensionOid(entity.Label);
                 ordering.Add(oid);
-                attributes.Add(oid, new X509Extension(enumerator.Current.IsCritical, new DerOctetString(enumerator.Current.Value)));
+                attributes.Add(oid, new X509Extension(entity.IsCritical, new DerOctetString(entity.Value)));
             }
             return new X509Extensions(ordering, attributes);
         }
@@ -410,7 +497,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="entities">X509 name collection.</param>
         /// <returns></returns>
-        public static X509Name GenerateX509Name(IEnumerable<X509NameEntity> entities)
+        public static X509Name GenerateX509Name(IList<X509NameEntity> entities)
         {
             if (entities is null)
             {
@@ -418,12 +505,11 @@ namespace Honoo.BouncyCastle.Helpers
             }
             List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
             Dictionary<DerObjectIdentifier, string> attributes = new Dictionary<DerObjectIdentifier, string>();
-            IEnumerator<X509NameEntity> enumerator = entities.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (X509NameEntity entity in entities)
             {
-                DerObjectIdentifier oid = GetX509NameOid(enumerator.Current.Label);
+                DerObjectIdentifier oid = GetX509NameOid(entity.Label);
                 ordering.Add(oid);
-                attributes.Add(oid, enumerator.Current.Value);
+                attributes.Add(oid, entity.Value);
             }
             return new X509Name(ordering, attributes);
         }
@@ -435,7 +521,7 @@ namespace Honoo.BouncyCastle.Helpers
                                                     X509Name subjectDN,
                                                     X509Extensions subjectExtensions,
                                                     DateTime start,
-                                                    TimeSpan expiration)
+                                                    DateTime expires)
         {
             ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.SecureRandom);
             BigInteger sn = new BigInteger(128, Common.SecureRandom);
@@ -453,7 +539,58 @@ namespace Honoo.BouncyCastle.Helpers
                 }
             }
             generator.SetNotBefore(start);
-            generator.SetNotAfter(start.Add(expiration));
+            generator.SetNotAfter(expires);
+            return generator.Generate(signatureFactory);
+        }
+
+        private static X509Crl GenerateCrlPrivate(string signatureAlgorithmOid,
+                                                  AsymmetricKeyParameter privateKey,
+                                                  X509Name dn,
+                                                  IList<X509CrlEntry> crlEntries,
+                                                  X509Extensions extensions,
+                                                  DateTime thisUpdate,
+                                                  DateTime nextUpdate)
+        {
+            ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, privateKey, Common.SecureRandom);
+            X509V2CrlGenerator generator = new X509V2CrlGenerator();
+            generator.SetIssuerDN(dn);
+            if (crlEntries != null)
+            {
+                foreach (X509CrlEntry crlEntry in crlEntries)
+                {
+                    if (crlEntry.HasExtensions)
+                    {
+                        Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
+                        ISet oids = crlEntry.GetCriticalExtensionOids();
+                        foreach (DerObjectIdentifier oid in oids)
+                        {
+                            X509Extension ext = new X509Extension(true, crlEntry.GetExtensionValue(oid));
+                            attributes.Add(oid, ext);
+                        }
+                        oids = crlEntry.GetNonCriticalExtensionOids();
+                        foreach (DerObjectIdentifier oid in oids)
+                        {
+                            X509Extension ext = new X509Extension(false, crlEntry.GetExtensionValue(oid));
+                            attributes.Add(oid, ext);
+                        }
+                        generator.AddCrlEntry(crlEntry.SerialNumber, crlEntry.RevocationDate, new X509Extensions(attributes));
+                    }
+                    else
+                    {
+                        generator.AddCrlEntry(crlEntry.SerialNumber, crlEntry.RevocationDate, null);
+                    }
+                }
+            }
+            if (extensions != null)
+            {
+                foreach (DerObjectIdentifier oid in extensions.ExtensionOids)
+                {
+                    X509Extension extension = extensions.GetExtension(oid);
+                    generator.AddExtension(oid, extension.IsCritical, extension.GetParsedValue());
+                }
+            }
+            generator.SetThisUpdate(thisUpdate);
+            generator.SetNextUpdate(nextUpdate);
             return generator.Generate(signatureFactory);
         }
 

@@ -6,6 +6,7 @@ using Org.BouncyCastle.Asn1.GM;
 using Org.BouncyCastle.Asn1.Nist;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.TeleTrust;
+using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
@@ -20,7 +21,10 @@ namespace Test
     {
         internal static void Test()
         {
+           
+
             string a;
+          
             X509Crl crl = new X509CrlParser().ReadCrl(File.ReadAllBytes("aaa.crl"));
             using (StringWriter writer = new StringWriter())
             {
@@ -28,7 +32,7 @@ namespace Test
                 pemWriter.WriteObject(crl);
                 a = writer.ToString();
             }
-
+           
             using (StringReader reader = new StringReader(a))
             {
                 object obj = new PemReader(reader).ReadObject();

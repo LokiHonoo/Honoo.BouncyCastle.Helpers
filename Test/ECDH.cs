@@ -38,8 +38,8 @@ namespace Test
             //
             //
             //
-            Console.WriteLine(BitConverter.ToString(pmsA).Replace("-", ""));
-            Console.WriteLine(BitConverter.ToString(pmsB).Replace("-", ""));
+            Console.WriteLine(BitConverter.ToString(pmsA).Replace("-", "") + "  " + pmsA.Length + " bytes.");
+            Console.WriteLine(BitConverter.ToString(pmsB).Replace("-", "") + "  " + pmsB.Length + " bytes.");
         }
     }
 }

@@ -4,6 +4,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.X509;
 using System;
+using System.Collections.Generic;
 
 namespace Test
 {
@@ -47,7 +48,16 @@ namespace Test
                                                                    caDN,
                                                                    caExtensions,
                                                                    DateTime.UtcNow.AddDays(-1),
-                                                                   TimeSpan.FromDays(120));
+                                                                   DateTime.UtcNow.AddDays(120));
+            List<X509RevokedEntity> revokedEntities = new List<X509RevokedEntity>() { new X509RevokedEntity() };
+
+            X509Helper.GenerateCrl(caSignatureAlgorithm,
+                                   caKeyPair.Private,
+                                   caDN,
+                                   null,
+                                   null,
+                                   DateTime.UtcNow.AddDays(-1),
+                                   DateTime.UtcNow.AddDays(120));
             //
             // User create csr and sand to CA.
             //
@@ -71,7 +81,7 @@ namespace Test
                                                                       userDNExtracted,
                                                                       userExtensionsExtracted,
                                                                       DateTime.UtcNow.AddDays(-1),
-                                                                      TimeSpan.FromDays(90));
+                                                                      DateTime.UtcNow.AddDays(120));
             //
             //
             // Print
