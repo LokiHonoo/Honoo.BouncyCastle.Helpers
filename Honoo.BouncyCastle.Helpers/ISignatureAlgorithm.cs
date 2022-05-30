@@ -10,9 +10,9 @@ namespace Honoo.BouncyCastle.Helpers
     public interface ISignatureAlgorithm
     {
         /// <summary>
-        /// Gets signature algorithm mechanism.
+        /// Gets salgorithm name.
         /// </summary>
-        string Mechanism { get; }
+        string Name { get; }
 
         /// <summary>
         /// Gets signature algorithm oid. It's maybe 'null' if not supported.
@@ -61,7 +61,7 @@ namespace Honoo.BouncyCastle.Helpers
         byte[] Sign(AsymmetricKeyParameter privateKey, byte[] data, int offset, int length);
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         string ToString();

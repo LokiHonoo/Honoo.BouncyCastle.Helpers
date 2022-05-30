@@ -53,7 +53,7 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 //PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricKey);
                 //return info.GetEncoded();
-                throw new InvalidKeyException("Saving a private key is not supported.");
+                throw new InvalidKeyException("Storing private key is not supported for security reasons.");
             }
             else
             {

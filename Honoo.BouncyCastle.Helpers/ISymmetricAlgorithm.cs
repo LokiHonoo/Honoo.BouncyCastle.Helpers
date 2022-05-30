@@ -8,15 +8,15 @@
         /// <summary>
         /// Symmetric algorithm kind.
         /// </summary>
-        SymmetricAlgorithmKind AlgorithmKind { get; }
+        SymmetricAlgorithmKind Kind { get; }
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        string Mechanism { get; }
+        string Name { get; }
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         string ToString();

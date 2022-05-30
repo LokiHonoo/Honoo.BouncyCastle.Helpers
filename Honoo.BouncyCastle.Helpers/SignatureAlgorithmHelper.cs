@@ -343,24 +343,24 @@ namespace Honoo.BouncyCastle.Helpers
             bool ed = false;
             switch (model)
             {
-                case "CVC-ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
-                case "DSA": corresponding = asymmetricAlgorithm.Mechanism == "DSA"; break;
-                case "ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
-                case "ECGOST3410": case "ECGOST3410-2001": corresponding = asymmetricAlgorithm.Mechanism == "ECGOST3410"; break;
-                case "ECNR": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
-                case "GOST3410": case "GOST3410-94": corresponding = asymmetricAlgorithm.Mechanism == "GOST3410"; break;
-                case "PLAIN-ECDSA": corresponding = asymmetricAlgorithm.Mechanism == "ECDSA"; break;
-                case "RSA": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
-                case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
-                case "RSAANDMGF1": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
-                case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": corresponding = asymmetricAlgorithm.Mechanism == "RSA"; break;
-                case "SM2": corresponding = asymmetricAlgorithm.Mechanism == "SM2"; break;
+                case "CVC-ECDSA": corresponding = asymmetricAlgorithm.Name == "ECDSA"; break;
+                case "DSA": corresponding = asymmetricAlgorithm.Name == "DSA"; break;
+                case "ECDSA": corresponding = asymmetricAlgorithm.Name == "ECDSA"; break;
+                case "ECGOST3410": case "ECGOST3410-2001": corresponding = asymmetricAlgorithm.Name == "ECGOST3410"; break;
+                case "ECNR": corresponding = asymmetricAlgorithm.Name == "ECDSA"; break;
+                case "GOST3410": case "GOST3410-94": corresponding = asymmetricAlgorithm.Name == "GOST3410"; break;
+                case "PLAIN-ECDSA": corresponding = asymmetricAlgorithm.Name == "ECDSA"; break;
+                case "RSA": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "RSAANDMGF1": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "SM2": corresponding = asymmetricAlgorithm.Name == "SM2"; break;
 
-                case "ED25519": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
-                case "ED25519CTX": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
-                case "ED25519PH": corresponding = asymmetricAlgorithm.Mechanism == "Ed25519"; ed = true; break;
-                case "ED448": corresponding = asymmetricAlgorithm.Mechanism == "Ed448"; ed = true; break;
-                case "ED448PH": corresponding = asymmetricAlgorithm.Mechanism == "Ed448"; ed = true; break;
+                case "ED25519": corresponding = asymmetricAlgorithm.Name == "Ed25519"; ed = true; break;
+                case "ED25519CTX": corresponding = asymmetricAlgorithm.Name == "Ed25519"; ed = true; break;
+                case "ED25519PH": corresponding = asymmetricAlgorithm.Name == "Ed25519"; ed = true; break;
+                case "ED448": corresponding = asymmetricAlgorithm.Name == "Ed448"; ed = true; break;
+                case "ED448PH": corresponding = asymmetricAlgorithm.Name == "Ed448"; ed = true; break;
                 default: break;
             }
             if (corresponding)

@@ -92,7 +92,7 @@ namespace Test
                 {
                     _total++;
                     AsymmetricPaddingMode padding = (AsymmetricPaddingMode)paddingValue;
-                    string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Mechanism, padding.ToString());
+                    string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Name, padding.ToString());
                     try
                     {
                         AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();

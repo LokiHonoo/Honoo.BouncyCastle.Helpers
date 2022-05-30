@@ -12,13 +12,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         #region Properties
 
         private readonly IAsymmetricAlgorithm _asymmetricAlgorithm;
-        private readonly string _mechanism;
+        private readonly string _name;
         private readonly DerObjectIdentifier _oid;
 
         /// <summary>
-        /// Gets signature algorithm mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        public string Mechanism => _mechanism;
+        public string Name => _name;
 
         /// <summary>
         /// Gets signature algorithm oid. It's maybe 'null' if not supported.
@@ -32,13 +32,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <summary>
         /// Signature algorithm.
         /// </summary>
-        /// <param name="mechanism">Signature algorithm mechanism.</param>
+        /// <param name="name">Signature algorithm name.</param>
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
-        protected SignatureAlgorithm(string mechanism, IAsymmetricAlgorithm asymmetricAlgorithm)
+        protected SignatureAlgorithm(string name, IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            _mechanism = mechanism;
+            _name = name;
             _asymmetricAlgorithm = asymmetricAlgorithm;
-            _ = SignatureAlgorithmHelper.TryGetOid(mechanism, out DerObjectIdentifier oid);
+            _ = SignatureAlgorithmHelper.TryGetOid(name, out DerObjectIdentifier oid);
             _oid = oid;
         }
 
@@ -137,12 +137,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         }
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return _mechanism;
+            return _name;
         }
 
         /// <summary>

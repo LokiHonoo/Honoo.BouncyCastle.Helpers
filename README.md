@@ -267,11 +267,23 @@ private static void Demo()
     };
     X509Extensions caExtensions = X509Helper.GenerateX509Extensions(x509ExtensionEntities);
     X509Certificate caCert = X509Helper.GenerateIssuerCert(caSignatureAlgorithm,
-                                                           caKeyPair,
-                                                           caDN,
-                                                           caExtensions,
-                                                           DateTime.UtcNow.AddDays(-1),
-                                                           TimeSpan.FromDays(120));
+                                                            caKeyPair,
+                                                            caDN,
+                                                            caExtensions,
+                                                            DateTime.UtcNow.AddDays(-3),
+                                                            DateTime.UtcNow.AddDays(120));
+    X509RevocationEntity[] revocationEntities = new X509RevocationEntity[]
+    {
+        new X509RevocationEntity(new BigInteger("1234567890"), DateTime.UtcNow, null)
+    };
+
+    X509Crl crl = X509Helper.GenerateCrl(caSignatureAlgorithm,
+                                            caKeyPair.Private,
+                                            caCert,
+                                            revocationEntities,
+                                            null,
+                                            DateTime.UtcNow.AddDays(-2),
+                                            DateTime.UtcNow.AddDays(30));
     //
     // User create csr and sand to CA.
     //
@@ -289,13 +301,13 @@ private static void Demo()
     //
     X509Helper.ExtractCsr(userCsr, out AsymmetricKeyParameter userPublicKey, out X509Name userDNExtracted, out X509Extensions userExtensionsExtracted);
     X509Certificate userCert = X509Helper.GenerateSubjectCert(userSignatureAlgorithmName,
-                                                              caKeyPair.Private,
-                                                              caCert,
-                                                              userPublicKey,
-                                                              userDNExtracted,
-                                                              userExtensionsExtracted,
-                                                              DateTime.UtcNow.AddDays(-1),
-                                                              TimeSpan.FromDays(90));
+                                                                caKeyPair.Private,
+                                                                caCert,
+                                                                userPublicKey,
+                                                                userDNExtracted,
+                                                                userExtensionsExtracted,
+                                                                DateTime.UtcNow.AddDays(-1),
+                                                                DateTime.UtcNow.AddDays(90));
     //
     //
     // Print
@@ -311,6 +323,7 @@ private static void Demo()
     bool validated;
     try
     {
+        crl.Verify(caCert.GetPublicKey());
         userCert.Verify(caCert.GetPublicKey());
         validated = true;
     }
@@ -332,7 +345,7 @@ private static void Demo1()
     //
     // Alice work.
     //
-    IECDHTerminalA terminalA = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalA(256, 25);
+    IECDHTerminalA terminalA = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalA(256);
     // Send exchangeA to Bob.
     byte[] exchangeToBob = terminalA.ExchangeA;
     //

@@ -140,7 +140,7 @@ namespace Test
                 {
                     _total++;
                     IDigest digest = algorithm.GenerateDigest();
-                    XTest(algorithm.Mechanism, digest, test);
+                    XTest(algorithm.Name, digest, test);
                     _execute++;
                 }
             }
@@ -153,7 +153,7 @@ namespace Test
                 _execute++;
                 HashAlgorithmHelper.TryGetAlgorithm(name, out IHashAlgorithm algorithm);
                 IDigest digest = algorithm.GenerateDigest();
-                XTest(algorithm.Mechanism, digest, test);
+                XTest(algorithm.Name, digest, test);
             }
             Console.WriteLine();
         }
@@ -174,7 +174,7 @@ namespace Test
                     _total++;
                     ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
-                    XTest(algorithm.Mechanism, digest, test);
+                    XTest(algorithm.Name, digest, test);
                     _execute++;
                 }
             }
@@ -199,7 +199,7 @@ namespace Test
                     Utilities.Random.NextBytes(key);
                     ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
-                    XTest(algorithm.Mechanism, digest, test);
+                    XTest(algorithm.Name, digest, test);
                     _execute++;
                 }
             }
@@ -234,7 +234,7 @@ namespace Test
                         {
                             _total++;
                             MACPaddingMode padding = (MACPaddingMode)paddingValue;
-                            string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", algorithm.Mechanism, mode.ToString(), padding.ToString());
+                            string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", algorithm.Name, mode.ToString(), padding.ToString());
                             IMac digest = algorithm.GenerateDigest(mode, padding, parameters);
                             try
                             {

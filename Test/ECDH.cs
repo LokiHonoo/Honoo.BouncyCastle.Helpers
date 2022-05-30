@@ -21,7 +21,7 @@ namespace Test
             //
             // Alice work.
             //
-            IECDHTerminalA terminalA = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalA(256, 25);
+            IECDHTerminalA terminalA = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalA(256);
             // Send exchangeA to Bob.
             byte[] exchangeToBob = terminalA.ExchangeA;
             //

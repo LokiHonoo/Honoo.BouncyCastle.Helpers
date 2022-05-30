@@ -33,7 +33,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
         public DSA(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withDSA", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withDSA", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             {
                 return AsymmetricAlgorithmHelper.DSA;
             }
-            else if (asymmetricAlgorithm.Mechanism != "DSA")
+            else if (asymmetricAlgorithm.Name != "DSA")
             {
                 throw new CryptographicException("Requires DSA asymmetric algorithm.");
             }

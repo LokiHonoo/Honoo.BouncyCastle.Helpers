@@ -7,18 +7,18 @@
     {
         #region Properties
 
-        private readonly SymmetricAlgorithmKind _algorithmKind;
-        private readonly string _mechanism;
+        private readonly SymmetricAlgorithmKind _kind;
+        private readonly string _name;
 
         /// <summary>
         /// Symmetric algorithm kind.
         /// </summary>
-        public SymmetricAlgorithmKind AlgorithmKind => _algorithmKind;
+        public SymmetricAlgorithmKind Kind => _kind;
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        public string Mechanism => _mechanism;
+        public string Name => _name;
 
         #endregion Properties
 
@@ -27,23 +27,23 @@
         /// <summary>
         /// Symmetric algorithm.
         /// </summary>
-        /// <param name="mechanism">Symmetric algorithm mechanism.</param>
-        /// <param name="algorithmKind">Symmetric algorithm kind.</param>
-        protected SymmetricAlgorithm(string mechanism, SymmetricAlgorithmKind algorithmKind)
+        /// <param name="name">Symmetric algorithm name.</param>
+        /// <param name="kind">Symmetric algorithm kind.</param>
+        protected SymmetricAlgorithm(string name, SymmetricAlgorithmKind kind)
         {
-            _mechanism = mechanism;
-            _algorithmKind = algorithmKind;
+            _name = name;
+            _kind = kind;
         }
 
         #endregion Constructor
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return _mechanism;
+            return _name;
         }
     }
 }

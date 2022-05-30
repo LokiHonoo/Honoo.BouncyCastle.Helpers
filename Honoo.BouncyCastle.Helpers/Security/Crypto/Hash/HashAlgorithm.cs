@@ -13,7 +13,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         #region Properties
 
         private readonly int _hashSize;
-        private readonly string _mechanism;
+        private readonly string _name;
 
         /// <summary>
         /// Gets hash size bits.
@@ -21,9 +21,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public int HashSize => _hashSize;
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        public string Mechanism => _mechanism;
+        public string Name => _name;
 
         #endregion Properties
 
@@ -32,17 +32,17 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Hash algorithm.
         /// </summary>
-        /// <param name="mechanism">Hash algorithm mechanism.</param>
+        /// <param name="name">Hash algorithm name.</param>
         /// <param name="hashSizes">Hash sizes.</param>
         /// <param name="hashSize">Hash size.</param>
         /// <exception cref="CryptographicException"></exception>
-        protected HashAlgorithm(string mechanism, KeySizes[] hashSizes, int hashSize)
+        protected HashAlgorithm(string name, KeySizes[] hashSizes, int hashSize)
         {
             if (!DetectionUtilities.ValidSize(hashSizes, hashSize))
             {
                 throw new CryptographicException("Unsupported hash size.");
             }
-            _mechanism = mechanism;
+            _name = name;
             _hashSize = hashSize;
         }
 
@@ -87,12 +87,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public abstract IDigest GenerateDigest();
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return _mechanism;
+            return _name;
         }
     }
 }
