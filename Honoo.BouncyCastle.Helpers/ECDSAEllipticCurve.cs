@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Honoo.BouncyCastle.Helpers
+﻿namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
     /// ECDSA elliptic curve.

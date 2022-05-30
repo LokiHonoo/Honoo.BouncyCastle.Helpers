@@ -13,9 +13,9 @@ namespace Honoo.BouncyCastle.Helpers
         int HashSize { get; }
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        string Mechanism { get; }
+        string Name { get; }
 
         /// <summary>
         /// Generate a new digest and compute data hash.
@@ -40,7 +40,7 @@ namespace Honoo.BouncyCastle.Helpers
         IDigest GenerateDigest();
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         string ToString();

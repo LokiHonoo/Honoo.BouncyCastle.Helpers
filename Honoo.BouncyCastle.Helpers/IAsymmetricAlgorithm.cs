@@ -11,12 +11,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Asymmetric algorithm kind.
         /// </summary>
-        AsymmetricAlgorithmKind AlgorithmKind { get; }
+        AsymmetricAlgorithmKind Kind { get; }
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        string Mechanism { get; }
+        string Name { get; }
 
         /// <summary>
         /// Generate Key pair.
@@ -27,7 +27,7 @@ namespace Honoo.BouncyCastle.Helpers
         AsymmetricCipherKeyPair GenerateKeyPair();
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         string ToString();

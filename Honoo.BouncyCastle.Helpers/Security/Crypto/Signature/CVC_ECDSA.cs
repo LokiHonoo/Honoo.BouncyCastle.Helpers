@@ -33,7 +33,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
         public CVC_ECDSA(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withCVC-ECDSA", hashAlgorithm.Mechanism), EnsureAlgorithm(asymmetricAlgorithm))
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withCVC-ECDSA", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             {
                 return AsymmetricAlgorithmHelper.ECDSA;
             }
-            else if (asymmetricAlgorithm.Mechanism != "ECDSA")
+            else if (asymmetricAlgorithm.Name != "ECDSA")
             {
                 throw new CryptographicException("Requires ECDSA asymmetric algorithm.");
             }

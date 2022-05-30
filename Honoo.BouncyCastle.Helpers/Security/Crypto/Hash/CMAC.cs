@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         private readonly SymmetricBlockAlgorithm _blockAlgorithm;
         private readonly int _hashSize;
         private readonly int _macSize;
-        private readonly string _mechanism;
+        private readonly string _name;
 
         /// <summary>
         /// Gets block size bits.
@@ -43,9 +43,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public int MacSize => _macSize;
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        public string Mechanism => _mechanism;
+        public string Name => _name;
 
         internal ISymmetricBlockAlgorithm BlockAlgorithm => _blockAlgorithm;
 
@@ -80,7 +80,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             {
                 throw new CryptographicException("Legal mac size is between 8 and block size (8 bits increments).");
             }
-            _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/CMAC", blockAlgorithm.Mechanism);
+            _name = string.Format(CultureInfo.InvariantCulture, "{0}/CMAC", blockAlgorithm.Name);
             _blockAlgorithm = (SymmetricBlockAlgorithm)blockAlgorithm;
             _macSize = macSize;
             _hashSize = macSize;
@@ -165,12 +165,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return _mechanism;
+            return _name;
         }
     }
 }

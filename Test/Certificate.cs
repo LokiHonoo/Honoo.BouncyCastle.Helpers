@@ -1,10 +1,10 @@
 ﻿using Honoo.BouncyCastle.Helpers;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.X509;
 using System;
-using System.Collections.Generic;
 
 namespace Test
 {
@@ -47,17 +47,20 @@ namespace Test
                                                                    caKeyPair,
                                                                    caDN,
                                                                    caExtensions,
-                                                                   DateTime.UtcNow.AddDays(-1),
+                                                                   DateTime.UtcNow.AddDays(-3),
                                                                    DateTime.UtcNow.AddDays(120));
-            List<X509RevokedEntity> revokedEntities = new List<X509RevokedEntity>() { new X509RevokedEntity() };
+            X509RevocationEntity[] revocationEntities = new X509RevocationEntity[]
+            {
+                new X509RevocationEntity(new BigInteger("1234567890"),DateTime.UtcNow,null)
+            };
 
-            X509Helper.GenerateCrl(caSignatureAlgorithm,
-                                   caKeyPair.Private,
-                                   caDN,
-                                   null,
-                                   null,
-                                   DateTime.UtcNow.AddDays(-1),
-                                   DateTime.UtcNow.AddDays(120));
+            X509Crl crl = X509Helper.GenerateCrl(caSignatureAlgorithm,
+                                                 caKeyPair.Private,
+                                                 caCert,
+                                                 revocationEntities,
+                                                 null,
+                                                 DateTime.UtcNow.AddDays(-2),
+                                                 DateTime.UtcNow.AddDays(100));
             //
             // User create csr and sand to CA.
             //
@@ -81,7 +84,7 @@ namespace Test
                                                                       userDNExtracted,
                                                                       userExtensionsExtracted,
                                                                       DateTime.UtcNow.AddDays(-1),
-                                                                      DateTime.UtcNow.AddDays(120));
+                                                                      DateTime.UtcNow.AddDays(90));
             //
             //
             // Print
@@ -97,6 +100,7 @@ namespace Test
             bool validated;
             try
             {
+                crl.Verify(caCert.GetPublicKey());
                 userCert.Verify(caCert.GetPublicKey());
                 validated = true;
             }

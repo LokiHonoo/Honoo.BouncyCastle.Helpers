@@ -64,7 +64,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             {
                 return AsymmetricAlgorithmHelper.Ed25519;
             }
-            else if (asymmetricAlgorithm.Mechanism != "Ed25519")
+            else if (asymmetricAlgorithm.Name != "Ed25519")
             {
                 throw new CryptographicException("Requires Ed25519 asymmetric algorithm.");
             }

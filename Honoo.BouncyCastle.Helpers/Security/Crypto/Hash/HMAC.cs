@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         #region Properties
 
         private readonly IHashAlgorithm _hashAlgorithm;
-        private readonly string _mechanism;
+        private readonly string _name;
 
         /// <summary>
         /// Gets hash size bits.
@@ -22,9 +22,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public int HashSize => _hashAlgorithm.HashSize;
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        public string Mechanism => _mechanism;
+        public string Name => _name;
 
         #endregion Properties
 
@@ -36,7 +36,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         public HMAC(IHashAlgorithm hashAlgorithm)
         {
-            _mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/HMAC", hashAlgorithm.Mechanism);
+            _name = string.Format(CultureInfo.InvariantCulture, "{0}/HMAC", hashAlgorithm.Name);
             _hashAlgorithm = hashAlgorithm;
         }
 
@@ -116,12 +116,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return _mechanism;
+            return _name;
         }
     }
 }

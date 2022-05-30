@@ -30,9 +30,9 @@ namespace Honoo.BouncyCastle.Helpers
         int MacSize { get; }
 
         /// <summary>
-        /// Gets mechanism.
+        /// Gets algorithm name.
         /// </summary>
-        string Mechanism { get; }
+        string Name { get; }
 
         /// <summary>
         /// Generate a new digest and compute data hash.
@@ -89,7 +89,7 @@ namespace Honoo.BouncyCastle.Helpers
         ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength);
 
         /// <summary>
-        /// Return mechanism.
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         string ToString();

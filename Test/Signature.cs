@@ -85,7 +85,7 @@ namespace Test
         private static void XTest(ISignatureAlgorithm algorithm, ISigner signer, ISigner verifier, byte[] test)
         {
             string id = algorithm.Oid is null ? string.Empty : algorithm.Oid.Id;
-            Console.Write("{0}{1}{2} ", algorithm.Mechanism.PadRight(32), signer.AlgorithmName.PadRight(32), id.PadRight(32));
+            Console.Write("{0}{1}{2} ", algorithm.Name.PadRight(32), signer.AlgorithmName.PadRight(32), id.PadRight(32));
             try
             {
                 signer.BlockUpdate(test, 0, test.Length);

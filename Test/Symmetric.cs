@@ -138,7 +138,7 @@ namespace Test
                         {
                             _total++;
                             SymmetricPaddingMode padding = (SymmetricPaddingMode)paddingValue;
-                            string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", algorithm.Mechanism, mode.ToString(), padding.ToString());
+                            string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", algorithm.Name, mode.ToString(), padding.ToString());
 
                             if (algorithm.TryGetIVSizes(mode, padding, out KeySizes[] ivSizes))
                             {
@@ -208,7 +208,7 @@ namespace Test
                     ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
                     IBufferedCipher encryptor = algorithm.GenerateEncryptor(parameters);
                     IBufferedCipher decryptor = algorithm.GenerateDecryptor(parameters);
-                    XTest(algorithm.Mechanism, encryptor, decryptor, test);
+                    XTest(algorithm.Name, encryptor, decryptor, test);
                     _execute++;
                 }
             }

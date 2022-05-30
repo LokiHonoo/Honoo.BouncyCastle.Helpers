@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <param name="hashAlgorithm">Hash algorithm.</param>
         /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
         public RSAandX931(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSA/X9.31", hashAlgorithm.Mechanism), asymmetricAlgorithm)
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSA/X9.31", hashAlgorithm.Name), asymmetricAlgorithm)
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
@@ -79,7 +79,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             {
                 return (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA;
             }
-            else if (asymmetricAlgorithm.Mechanism != "RSA")
+            else if (asymmetricAlgorithm.Name != "RSA")
             {
                 throw new CryptographicException("Requires RSA asymmetric algorithm.");
             }
