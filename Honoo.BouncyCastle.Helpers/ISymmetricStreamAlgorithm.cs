@@ -67,27 +67,5 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         IBufferedCipher GenerateEncryptor(ICipherParameters parameters);
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key bytes.</param>
-        /// <param name="iv">IV bytes.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, byte[] iv);
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
-        /// <param name="keyOffset">The starting offset to read.</param>
-        /// <param name="keyLength">The length to read.</param>
-        /// <param name="iv">IV buffer bytes.</param>
-        /// <param name="ivOffset">The starting offset to read.</param>
-        /// <param name="ivLength">The length to read.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength);
     }
 }

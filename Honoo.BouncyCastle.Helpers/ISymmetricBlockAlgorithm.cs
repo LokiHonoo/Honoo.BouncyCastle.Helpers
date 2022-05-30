@@ -87,28 +87,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate parameters.
         /// </summary>
         /// <param name="key">Key bytes.</param>
-        /// <param name="iv">IV bytes.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, byte[] iv);
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
-        /// <param name="keyOffset">The starting offset to read.</param>
-        /// <param name="keyLength">The length to read.</param>
-        /// <param name="iv">IV buffer bytes.</param>
-        /// <param name="ivOffset">The starting offset to read.</param>
-        /// <param name="ivLength">The length to read.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength);
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key bytes.</param>
         /// <param name="nonce">Nonce bytes.</param>
         /// <param name="macSize">MAC size bits.</param>
         /// <param name="associatedText">Associated text bytes.</param>

@@ -146,9 +146,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="iv">IV bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public ICipherParameters GenerateParameters(byte[] key, byte[] iv)
+        public override ICipherParameters GenerateParameters(byte[] key, byte[] iv)
         {
-            return iv is null ? GenerateParameters(key, 0, key.Length, null, 0, 0) : GenerateParameters(key, 0, key.Length, iv, 0, iv.Length);
+            ICipherParameters parameters = new KeyParameter(key);
+            if (iv != null)
+            {
+                parameters = new ParametersWithIV(parameters, iv);
+            }
+            return parameters;
         }
 
         /// <summary>
@@ -162,7 +167,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="ivLength">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength)
+        public override ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength)
         {
             ICipherParameters parameters = new KeyParameter(key, keyOffset, keyLength);
             if (iv != null && ivLength > 0)
