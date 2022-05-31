@@ -568,6 +568,7 @@ namespace Honoo.BouncyCastle.Helpers
                     generator.AddExtension(oid, extension.IsCritical, extension.GetParsedValue());
                 }
             }
+
             generator.SetThisUpdate(thisUpdate);
             generator.SetNextUpdate(nextUpdate);
             return generator.Generate(signatureFactory);

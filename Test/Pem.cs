@@ -8,12 +8,12 @@ using System;
 
 namespace Test
 {
-    internal static class Certificate
+    internal static class Pem
     {
         internal static void Test()
         {
             Console.WriteLine();
-            Console.WriteLine("====  Certificate Test  ================================================================================================");
+            Console.WriteLine("====  Pem Test  ========================================================================================================");
             Console.WriteLine();
             //
             Demo();
@@ -51,19 +51,16 @@ namespace Test
                                                                    DateTime.UtcNow.AddDays(120));
             X509RevocationEntity[] revocationEntities = new X509RevocationEntity[]
             {
-                new X509RevocationEntity(new BigInteger("12345678901"), DateTime.UtcNow.AddDays(-2), null),
-                new X509RevocationEntity(new BigInteger("12345678902"), DateTime.UtcNow.AddDays(-2), null),
-                new X509RevocationEntity(new BigInteger("12345678903"), DateTime.UtcNow.AddDays(-2), null),
-                new X509RevocationEntity(new BigInteger("12345678904"), DateTime.UtcNow.AddDays(-2), null)
+                new X509RevocationEntity(new BigInteger("1234567890"), DateTime.UtcNow, null)
             };
 
-            X509Crl caCrl = X509Helper.GenerateCrl(caSignatureAlgorithm,
-                                                   caKeyPair.Private,
-                                                   caCert,
-                                                   revocationEntities,
-                                                   null,
-                                                   DateTime.UtcNow.AddDays(-2),
-                                                   DateTime.UtcNow.AddDays(30));
+            X509Crl crl = X509Helper.GenerateCrl(caSignatureAlgorithm,
+                                                 caKeyPair.Private,
+                                                 caCert,
+                                                 revocationEntities,
+                                                 null,
+                                                 DateTime.UtcNow.AddDays(-2),
+                                                 DateTime.UtcNow.AddDays(30));
             //
             // User create csr and sand to CA.
             //
@@ -94,8 +91,6 @@ namespace Test
             //
             Console.WriteLine("====  CA Cert  =====================================================================================");
             Console.WriteLine(caCert.ToString());
-            Console.WriteLine("====  CA Crl  =====================================================================================");
-            Console.WriteLine(caCrl.ToString());
             Console.WriteLine("====  User Cert  =================================================================================");
             Console.WriteLine(userCert.ToString());
             Console.WriteLine();
@@ -105,7 +100,7 @@ namespace Test
             bool validated;
             try
             {
-                caCrl.Verify(caCert.GetPublicKey());
+                crl.Verify(caCert.GetPublicKey());
                 userCert.Verify(caCert.GetPublicKey());
                 validated = true;
             }
