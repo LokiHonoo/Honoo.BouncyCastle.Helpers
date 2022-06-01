@@ -63,7 +63,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="issuerCert">The certificate of issuer.</param>
-        /// <param name="revocationEntries">X509 certificate revocation entities.</param>
+        /// <param name="revocations">Revocation certificates.</param>
         /// <param name="extensions">Extensions.</param>
         /// <param name="thisUpdate"></param>
         /// <param name="nextUpdate"></param>
@@ -73,7 +73,7 @@ namespace Honoo.BouncyCastle.Helpers
         public static X509Crl GenerateCrl(ISignatureAlgorithm signatureAlgorithm,
                                           AsymmetricKeyParameter privateKey,
                                           X509Certificate issuerCert,
-                                          IList<X509RevocationEntity> revocationEntries,
+                                          IList<X509RevocationEntity> revocations,
                                           X509Extensions extensions,
                                           DateTime thisUpdate,
                                           DateTime nextUpdate)
@@ -96,7 +96,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCrl(signatureAlgorithm.Oid.Id, privateKey, issuerCert.SubjectDN, revocationEntries, extensions, thisUpdate, nextUpdate);
+                return GenerateCrl(signatureAlgorithm.Oid.Id, privateKey, issuerCert.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="signatureAlgorithm">Signature algorithm name or oid supported by x590.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
         /// <param name="issuerCert">The certificate of issuer.</param>
-        /// <param name="revocationEntries">X509 certificate revocation entities.</param>
+        /// <param name="revocations">Revocation certificates.</param>
         /// <param name="extensions">Extensions.</param>
         /// <param name="thisUpdate"></param>
         /// <param name="nextUpdate"></param>
@@ -116,7 +116,7 @@ namespace Honoo.BouncyCastle.Helpers
         public static X509Crl GenerateCrl(string signatureAlgorithm,
                                           AsymmetricKeyParameter privateKey,
                                           X509Certificate issuerCert,
-                                          IList<X509RevocationEntity> revocationEntries,
+                                          IList<X509RevocationEntity> revocations,
                                           X509Extensions extensions,
                                           DateTime thisUpdate,
                                           DateTime nextUpdate)
@@ -135,7 +135,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCrl(oid.Id, privateKey, issuerCert.SubjectDN, revocationEntries, extensions, thisUpdate, nextUpdate);
+                return GenerateCrl(oid.Id, privateKey, issuerCert.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
             }
             else
             {
@@ -147,13 +147,13 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate certificate signing request.
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
-        /// <param name="keyPair">Asymmetric key pair.</param>
+        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
         /// <param name="dn">Distinct name.</param>
         /// <param name="extensions">Extensions.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static Pkcs10CertificationRequest GenerateCsr(ISignatureAlgorithm signatureAlgorithm,
-                                                             AsymmetricCipherKeyPair keyPair,
+                                                             AsymmetricCipherKeyPair asymmetricKeyPair,
                                                              X509Name dn,
                                                              X509Extensions extensions)
         {
@@ -161,9 +161,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (keyPair is null)
+            if (asymmetricKeyPair is null)
             {
-                throw new ArgumentNullException(nameof(keyPair));
+                throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
             if (dn is null)
             {
@@ -175,7 +175,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCsr(signatureAlgorithm.Oid.Id, keyPair, dn, extensions);
+                return GenerateCsr(signatureAlgorithm.Oid.Id, asymmetricKeyPair, dn, extensions);
             }
         }
 
@@ -183,13 +183,13 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate certificate signing request.
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm name or oid supported by x590.</param>
-        /// <param name="keyPair">Asymmetric key pair.</param>
+        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
         /// <param name="dn">Distinct name.</param>
         /// <param name="extensions">Extensions.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static Pkcs10CertificationRequest GenerateCsr(string signatureAlgorithm,
-                                                             AsymmetricCipherKeyPair keyPair,
+                                                             AsymmetricCipherKeyPair asymmetricKeyPair,
                                                              X509Name dn,
                                                              X509Extensions extensions)
         {
@@ -197,9 +197,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (keyPair is null)
+            if (asymmetricKeyPair is null)
             {
-                throw new ArgumentNullException(nameof(keyPair));
+                throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
             if (dn is null)
             {
@@ -207,9 +207,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, keyPair.Private, Common.SecureRandom);
+                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, asymmetricKeyPair.Private, Common.SecureRandom);
                 DerSet attribute = extensions is null ? null : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(extensions)));
-                return new Pkcs10CertificationRequest(signatureFactory, dn, keyPair.Public, attribute);
+                return new Pkcs10CertificationRequest(signatureFactory, dn, asymmetricKeyPair.Public, attribute);
             }
             else
             {
@@ -221,7 +221,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate issuer self signed certificate.
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
-        /// <param name="keyPair">The asymmetric key pair of issuer.</param>
+        /// <param name="asymmetricKeyPair">The asymmetric key pair of issuer.</param>
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">The start time.</param>
@@ -229,7 +229,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(ISignatureAlgorithm signatureAlgorithm,
-                                                         AsymmetricCipherKeyPair keyPair,
+                                                         AsymmetricCipherKeyPair asymmetricKeyPair,
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
@@ -239,9 +239,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (keyPair is null)
+            if (asymmetricKeyPair is null)
             {
-                throw new ArgumentNullException(nameof(keyPair));
+                throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
             if (dn is null)
             {
@@ -253,7 +253,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, end);
+                return GenerateCert(signatureAlgorithm.Oid.Id, asymmetricKeyPair.Private, dn, asymmetricKeyPair.Public, dn, extensions, start, end);
             }
         }
 
@@ -261,7 +261,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate issuer self signed certificate.
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm name or oid supported by x590.</param>
-        /// <param name="keyPair">The asymmetric key pair of issuer.</param>
+        /// <param name="asymmetricKeyPair">The asymmetric key pair of issuer.</param>
         /// <param name="dn">The distinct name of issuer.</param>
         /// <param name="extensions">Extensions of issuer.</param>
         /// <param name="start">The start time.</param>
@@ -269,7 +269,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         public static X509Certificate GenerateIssuerCert(string signatureAlgorithm,
-                                                         AsymmetricCipherKeyPair keyPair,
+                                                         AsymmetricCipherKeyPair asymmetricKeyPair,
                                                          X509Name dn,
                                                          X509Extensions extensions,
                                                          DateTime start,
@@ -279,9 +279,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (keyPair is null)
+            if (asymmetricKeyPair is null)
             {
-                throw new ArgumentNullException(nameof(keyPair));
+                throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
             if (dn is null)
             {
@@ -289,7 +289,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, keyPair.Private, dn, keyPair.Public, dn, extensions, start, end);
+                return GenerateCert(oid.Id, asymmetricKeyPair.Private, dn, asymmetricKeyPair.Public, dn, extensions, start, end);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <exception cref="Exception"/>
         public static Pkcs12Store GeneratePkcs12(AsymmetricKeyParameter privateKey,
                                                  string privateKeyAlias,
-                                                 Dictionary<string, X509Certificate> namedCerts,
+                                                 IDictionary<string, X509Certificate> namedCerts,
                                                  string password)
         {
             if (privateKey is null)
@@ -545,7 +545,7 @@ namespace Honoo.BouncyCastle.Helpers
         private static X509Crl GenerateCrl(string signatureAlgorithmOid,
                                            AsymmetricKeyParameter privateKey,
                                            X509Name dn,
-                                           IList<X509RevocationEntity> revocationEntries,
+                                           IList<X509RevocationEntity> revocations,
                                            X509Extensions extensions,
                                            DateTime thisUpdate,
                                            DateTime nextUpdate)
@@ -553,9 +553,9 @@ namespace Honoo.BouncyCastle.Helpers
             ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, privateKey, Common.SecureRandom);
             X509V2CrlGenerator generator = new X509V2CrlGenerator();
             generator.SetIssuerDN(dn);
-            if (revocationEntries != null)
+            if (revocations != null)
             {
-                foreach (X509RevocationEntity rvocationEntry in revocationEntries)
+                foreach (X509RevocationEntity rvocationEntry in revocations)
                 {
                     generator.AddCrlEntry(rvocationEntry.SerialNumber, rvocationEntry.RevocationDate, rvocationEntry.Extensions);
                 }

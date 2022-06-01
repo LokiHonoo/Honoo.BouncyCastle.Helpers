@@ -21,7 +21,7 @@ namespace Test
             Console.WriteLine("\r\n\r\n\r\n");
         }
 
-        private static void Demo()
+        internal static PemTestObject Demo()
         {
             string caSignatureAlgorithmName = "SHA512withECDSA";
             string userSignatureAlgorithmName = "SHA256withECDSA";
@@ -114,6 +114,13 @@ namespace Test
                 validated = false;
             }
             Console.WriteLine("Verify user cert - " + validated);
+
+            PemTestObject obj = new PemTestObject();
+            obj.KeyPair = caKeyPair;
+            obj.Cert = caCert;
+            obj.Crl = caCrl;
+            obj.Csr = userCsr;
+            return obj;
         }
     }
 }

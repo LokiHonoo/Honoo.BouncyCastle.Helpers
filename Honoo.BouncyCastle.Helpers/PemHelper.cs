@@ -73,27 +73,33 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert asymmetric key to pem string.
+        /// Convert asymmetric key pair to pem string.
         /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
         /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string Key2Pem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)
+        public static string KeyPair2Pem(AsymmetricCipherKeyPair asymmetricKeyPair, string dekAlgorithmName, string password)
         {
-            if (string.IsNullOrEmpty(dekAlgorithmName))
-            {
-                throw new ArgumentNullException(nameof(dekAlgorithmName));
-            }
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
             using (StringWriter writer = new StringWriter())
             {
                 PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(asymmetricKeyPair, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
+                return writer.ToString();
+            }
+        }
 
-                pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
+        /// <summary>
+        /// Convert asymmetric key pair to pem string.
+        /// </summary>
+        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
+        /// <returns></returns>
+        public static string KeyPair2Pem(AsymmetricCipherKeyPair asymmetricKeyPair)
+        {
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(asymmetricKeyPair);
                 return writer.ToString();
             }
         }
@@ -154,28 +160,12 @@ namespace Honoo.BouncyCastle.Helpers
             using (StringReader reader = new StringReader(pem))
             {
                 object obj = new PemReader(reader).ReadObject();
-                return (AsymmetricKeyParameter)obj;
-            }
-        }
-
-        /// <summary>
-        /// Convert pem string to asymmetric key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2Key(string pem, string password)
-        {
-            if (string.IsNullOrEmpty(password))
-            {
-                return Pem2Key(pem);
-            }
-            else
-            {
-                using (StringReader reader = new StringReader(pem))
+                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
                 {
-                    object obj = new PemReader(reader, new Password(password)).ReadObject();
+                    return ((AsymmetricCipherKeyPair)obj).Private;
+                }
+                else
+                {
                     return (AsymmetricKeyParameter)obj;
                 }
             }
@@ -204,17 +194,43 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricCipherKeyPair Pem2KeyPair(string pem, string password)
         {
-            if (string.IsNullOrEmpty(password))
+            using (StringReader reader = new StringReader(pem))
             {
-                return Pem2KeyPair(pem);
+                object obj = new PemReader(reader, new Password(password)).ReadObject();
+                return (AsymmetricCipherKeyPair)obj;
             }
-            else
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric private key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2PrivateKey(string pem, string password)
+        {
+            using (StringReader reader = new StringReader(pem))
             {
-                using (StringReader reader = new StringReader(pem))
-                {
-                    object obj = new PemReader(reader, new Password(password)).ReadObject();
-                    return (AsymmetricCipherKeyPair)obj;
-                }
+                object obj = new PemReader(reader, new Password(password)).ReadObject();
+                return ((AsymmetricCipherKeyPair)obj).Private;
+            }
+        }
+
+        /// <summary>
+        /// Convert asymmetric private key to pem string.
+        /// </summary>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static string PrivateKey2Pem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)
+        {
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
+                return writer.ToString();
             }
         }
 
