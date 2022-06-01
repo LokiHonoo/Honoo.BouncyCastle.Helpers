@@ -125,10 +125,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Convert raw bytes to asymmetric private key.
         /// </summary>
         /// <param name="raw">Raw bytes.</param>
-        /// <param name="pbeAlgorithmName">PBE algorithm name. Select from <see cref="PBEAlgorithmNames"/>.</param>
         /// <param name="password"></param>
-        /// <param name="salt"></param>
-        /// <param name="iterationCount"></param>
         /// <returns></returns>
         public static AsymmetricKeyParameter Raw2PrivateKey(byte[] raw, string password)
         {
