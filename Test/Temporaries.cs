@@ -1,7 +1,6 @@
-﻿using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.X509;
+﻿using Honoo.BouncyCastle.Helpers;
+using Org.BouncyCastle.Crypto;
 using System;
-using System.IO;
 
 namespace Test
 {
@@ -9,22 +8,18 @@ namespace Test
     {
         internal static void Test()
         {
-            string a;
-
-            X509Crl crl = new X509CrlParser().ReadCrl(File.ReadAllBytes("aaa.crl"));
-            using (StringWriter writer = new StringWriter())
-            {
-                PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(crl);
-                a = writer.ToString();
-            }
-
-            using (StringReader reader = new StringReader(a))
-            {
-                object obj = new PemReader(reader).ReadObject();
-                crl = (X509Crl)obj;
-            }
-
+            AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.RSA.GenerateKeyPair();
+            AsymmetricKeyParameter pri = keyPair.Private;
+            AsymmetricKeyParameter pub = AsymmetricAlgorithmHelper.GeneratePublicKey(pri);
+            Console.WriteLine(pub.Equals(keyPair.Public));
+            //
+            keyPair = AsymmetricAlgorithmHelper.DSA.GenerateKeyPair();
+            pri = keyPair.Private;
+            pub = AsymmetricAlgorithmHelper.GeneratePublicKey(pri);
+            Console.WriteLine(pub.Equals(keyPair.Public));
+            //
+            //
+            //
             Console.WriteLine("\r\n\r\n");
         }
     }

@@ -1,4 +1,13 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
+using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Asn1.Sec;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Asn1.X9;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math.EC.Multiplier;
+using Org.BouncyCastle.Pkcs;
 using System;
 
 namespace Honoo.BouncyCastle.Helpers
@@ -113,6 +122,72 @@ namespace Honoo.BouncyCastle.Helpers
                 case "RSA": algorithm = RSA; return true;
                 default: algorithm = null; return false;
             }
+        }
+
+        /// <summary>
+        /// Generate asymmetric public key from asymmetric private key.
+        /// </summary>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <returns></returns>
+        public static AsymmetricKeyParameter GeneratePublicKey(AsymmetricKeyParameter privateKey)
+        {
+            Type type = privateKey.GetType();
+            if (type == typeof(RsaPrivateCrtKeyParameters))
+            {
+                RsaPrivateCrtKeyParameters pri = (RsaPrivateCrtKeyParameters)privateKey;
+                return new RsaKeyParameters(false, pri.Modulus, pri.PublicExponent);
+            }
+           else if (type == typeof(DsaPrivateKeyParameters))
+            {
+                DsaPrivateKeyParameters pri = (DsaPrivateKeyParameters)privateKey;
+                return new DsaPublicKeyParameters(pri.X, pri.Parameters);
+            }
+            else
+            {
+
+            }
+
+
+            //PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
+            //Asn1Sequence seq = Asn1Sequence.GetInstance(info.GetDerEncoded());
+            //switch (info.PrivateKeyAlgorithm.Algorithm.Id)
+            //{
+            //    case "1"://RSA
+            //        var aaa = (RsaPrivateCrtKeyParameters)privateKey;
+            //        aaa.Modulus
+            //        RsaPrivateKeyStructure rsa = RsaPrivateKeyStructure.GetInstance(seq);
+            //        //RsaPrivateCrtKeyParameters pri = new RsaPrivateCrtKeyParameters(rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent, rsa.Prime1, rsa.Prime2, rsa.Exponent1, rsa.Exponent2, rsa.Coefficient);
+            //        return new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
+
+            //    case "2"://DSA
+            //        DerInteger p = (DerInteger)seq[1];
+            //        DerInteger q = (DerInteger)seq[2];
+            //        DerInteger g = (DerInteger)seq[3];
+            //        DerInteger y = (DerInteger)seq[4];
+            //        DerInteger x = (DerInteger)seq[5];
+            //        DsaParameters parameters = new DsaParameters(p.Value, q.Value, g.Value);
+            //        //var pri2 = new DsaPrivateKeyParameters(x.Value, parameters);
+            //        return new DsaPublicKeyParameters(y.Value, parameters);
+
+            //    case "3"://EC
+            //        ECPrivateKeyStructure pKey = ECPrivateKeyStructure.GetInstance(seq);
+            //        AlgorithmIdentifier algId = new AlgorithmIdentifier(X9ObjectIdentifiers.IdECPublicKey, pKey.GetParameters());
+            //        DerBitString pubKey = pKey.GetPublicKey();
+
+            //        ECDomainParameters ec = privKey.Parameters;
+            //        ECPoint q = new FixedPointCombMultiplier().Multiply(ec.G, privKey.D);
+
+            //        if (privKey.PublicKeyParamSet != null)
+            //        {
+            //            return new ECPublicKeyParameters(privKey.AlgorithmName, q, privKey.PublicKeyParamSet);
+            //        }
+
+            //        return new ECPublicKeyParameters(privKey.AlgorithmName, q, ec);
+
+            //    default: throw new ArgumentException("Unknown private key.");
+            //}
+
+            return null;
         }
 
         /// <summary>
