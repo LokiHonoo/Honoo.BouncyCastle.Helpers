@@ -36,7 +36,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// RSAandMGF1.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         public RSAandMGF1(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSAandMGF1", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
@@ -57,11 +57,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            if (asymmetricAlgorithm is null)
-            {
-                return (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA;
-            }
-            else if (asymmetricAlgorithm.Name != "RSA")
+            if (asymmetricAlgorithm.Name != "RSA")
             {
                 throw new CryptographicException("Requires RSA asymmetric algorithm.");
             }

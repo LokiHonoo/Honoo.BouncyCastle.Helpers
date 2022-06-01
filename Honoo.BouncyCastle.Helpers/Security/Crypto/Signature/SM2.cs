@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// SM2.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         public SM2(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withSM2", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
@@ -52,11 +52,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            if (asymmetricAlgorithm is null)
-            {
-                return AsymmetricAlgorithmHelper.SM2;
-            }
-            else if (asymmetricAlgorithm.Name != "SM2")
+            if (asymmetricAlgorithm.Name != "SM2")
             {
                 throw new CryptographicException("Requires SM2 asymmetric algorithm.");
             }

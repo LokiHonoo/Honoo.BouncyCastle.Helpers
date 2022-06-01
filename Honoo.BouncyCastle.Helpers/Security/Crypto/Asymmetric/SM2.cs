@@ -3,6 +3,8 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -24,16 +26,38 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// Generate key pair.
+        /// <para/>Uses EllipticCurve.Sm2P256v1 by default.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            X9ECParameters x9Parameters = GMNamedCurves.GetByOid(GMObjectIdentifiers.sm2p256v1);
+            return GenerateKeyPair(SM2EllipticCurve.Sm2P256v1);
+        }
+
+        /// <summary>
+        /// Generate key pair.
+        /// </summary>
+        /// <param name="ellipticCurve">Elliptic curve.</param>
+        /// <returns></returns>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
+        public AsymmetricCipherKeyPair GenerateKeyPair(SM2EllipticCurve ellipticCurve)
+        {
+            X9ECParameters x9Parameters = GenerateX9(ellipticCurve);
             ECDomainParameters domainParameters = new ECDomainParameters(x9Parameters);
             ECKeyGenerationParameters generationParameters = new ECKeyGenerationParameters(domainParameters, Common.SecureRandom);
             ECKeyPairGenerator generator = new ECKeyPairGenerator();
             generator.Init(generationParameters);
             return generator.GenerateKeyPair();
+        }
+
+        private static X9ECParameters GenerateX9(SM2EllipticCurve ellipticCurve)
+        {
+            switch (ellipticCurve)
+            {
+                case SM2EllipticCurve.Sm2P256v1: return GMNamedCurves.GetByOid(GMObjectIdentifiers.sm2p256v1);
+                case SM2EllipticCurve.WapiP192v1: return GMNamedCurves.GetByOid(GMObjectIdentifiers.wapip192v1);
+                default: throw new CryptographicException("Unsupported elliptic curve.");
+            }
         }
     }
 }

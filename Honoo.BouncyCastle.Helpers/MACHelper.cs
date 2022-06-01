@@ -259,7 +259,9 @@ namespace Honoo.BouncyCastle.Helpers
         {
             if (mechanism is null)
             {
-                throw new ArgumentNullException(nameof(mechanism));
+                mode = null;
+                return false;
+
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
@@ -280,7 +282,8 @@ namespace Honoo.BouncyCastle.Helpers
         {
             if (mechanism is null)
             {
-                throw new ArgumentNullException(nameof(mechanism));
+                padding = null;
+                return false;
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)

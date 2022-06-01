@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// GOST3410.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         public GOST3410(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withGOST3410", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
@@ -52,11 +52,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            if (asymmetricAlgorithm is null)
-            {
-                return AsymmetricAlgorithmHelper.GOST3410;
-            }
-            else if (asymmetricAlgorithm.Name != "GOST3410")
+            if (asymmetricAlgorithm.Name != "GOST3410")
             {
                 throw new CryptographicException("Requires GOST3410 asymmetric algorithm.");
             }

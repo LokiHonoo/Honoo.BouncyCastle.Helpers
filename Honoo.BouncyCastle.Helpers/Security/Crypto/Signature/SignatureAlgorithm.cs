@@ -37,7 +37,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         protected SignatureAlgorithm(string name, IAsymmetricAlgorithm asymmetricAlgorithm)
         {
             _name = name;
-            _asymmetricAlgorithm = asymmetricAlgorithm;
+            _asymmetricAlgorithm = asymmetricAlgorithm ?? throw new ArgumentNullException(nameof(asymmetricAlgorithm));
             _ = SignatureAlgorithmHelper.TryGetOid(name, out DerObjectIdentifier oid);
             _oid = oid;
         }

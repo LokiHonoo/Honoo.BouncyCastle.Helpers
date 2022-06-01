@@ -1,4 +1,5 @@
 ﻿using Org.BouncyCastle.Asn1.CryptoPro;
+using Org.BouncyCastle.Asn1.Rosstandart;
 using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
@@ -26,17 +27,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// Generate key pair.
-        /// <para/>Uses EllipticCurve.GostR3410x2001CryptoProA by default.
+        /// <para/>Uses EllipticCurve.GostR3410_2001_CryptoPro_A by default.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            return GenerateKeyPair(ECGOST3410EllipticCurve.GostR3410x2001CryptoProA);
+            return GenerateKeyPair(ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_A);
         }
 
         /// <summary>
         /// Generate key pair.
         /// </summary>
+        /// <param name="ellipticCurve">Elliptic curve.</param>
         /// <returns></returns>
         [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(ECGOST3410EllipticCurve ellipticCurve)
@@ -53,11 +55,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         {
             switch (ellipticCurve)
             {
-                case ECGOST3410EllipticCurve.GostR3410x2001CryptoProA: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProA);
-                case ECGOST3410EllipticCurve.GostR3410x2001CryptoProB: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProB);
-                case ECGOST3410EllipticCurve.GostR3410x2001CryptoProC: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProC);
-                case ECGOST3410EllipticCurve.GostR3410x2001CryptoProXchA: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchA);
-                case ECGOST3410EllipticCurve.GostR3410x2001CryptoProXchB: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchB);
+                case ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_A: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProA);
+                case ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_B: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProB);
+                case ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_C: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProC);
+                case ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_XchA: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchA);
+                case ECGOST3410EllipticCurve.GostR3410_2001_CryptoPro_XchB: return ECGost3410NamedCurves.GetByOidX9(CryptoProObjectIdentifiers.GostR3410x2001CryptoProXchB);
+                case ECGOST3410EllipticCurve.Tc26_Gost3410_12_256_ParamSetA: return ECGost3410NamedCurves.GetByOidX9(RosstandartObjectIdentifiers.id_tc26_gost_3410_12_256_paramSetA);
+                case ECGOST3410EllipticCurve.Tc26_Gost3410_12_512_ParamSetA: return ECGost3410NamedCurves.GetByOidX9(RosstandartObjectIdentifiers.id_tc26_gost_3410_12_512_paramSetA);
+                case ECGOST3410EllipticCurve.Tc26_Gost3410_12_512_ParamSetB: return ECGost3410NamedCurves.GetByOidX9(RosstandartObjectIdentifiers.id_tc26_gost_3410_12_512_paramSetB);
+                case ECGOST3410EllipticCurve.Tc26_Gost3410_12_512_ParamSetC: return ECGost3410NamedCurves.GetByOidX9(RosstandartObjectIdentifiers.id_tc26_gost_3410_12_512_paramSetC);
                 default: throw new CryptographicException("Unsupported elliptic curve.");
             }
         }

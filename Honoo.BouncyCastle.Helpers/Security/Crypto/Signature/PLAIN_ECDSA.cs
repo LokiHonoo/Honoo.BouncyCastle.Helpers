@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// PLAIN-ECDSA.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         public PLAIN_ECDSA(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
             : base(string.Format(CultureInfo.InvariantCulture, "{0}withPLAIN-ECDSA", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
         {
@@ -52,11 +52,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            if (asymmetricAlgorithm is null)
-            {
-                return AsymmetricAlgorithmHelper.ECDSA;
-            }
-            else if (asymmetricAlgorithm.Name != "ECDSA")
+            if (asymmetricAlgorithm.Name != "ECDSA")
             {
                 throw new CryptographicException("Requires ECDSA asymmetric algorithm.");
             }

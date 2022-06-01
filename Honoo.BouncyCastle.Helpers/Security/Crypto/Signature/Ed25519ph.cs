@@ -41,7 +41,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <para/>Uses context byte[0] by default.
         /// </summary>
         /// <param name="context">Context.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm. To provide function generate key pair, this argument is not required.</param>
+        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
         public Ed25519ph(byte[] context, IAsymmetricAlgorithm asymmetricAlgorithm) : base("Ed25519ph", EnsureAlgorithm(asymmetricAlgorithm))
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -60,11 +60,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
         {
-            if (asymmetricAlgorithm is null)
-            {
-                return AsymmetricAlgorithmHelper.Ed25519;
-            }
-            else if (asymmetricAlgorithm.Name != "Ed25519")
+            if (asymmetricAlgorithm.Name != "Ed25519")
             {
                 throw new CryptographicException("Requires Ed25519 asymmetric algorithm.");
             }
