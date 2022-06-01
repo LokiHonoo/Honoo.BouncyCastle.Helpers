@@ -4,7 +4,7 @@ using System;
 
 namespace Test
 {
-    internal class Temporaries
+    internal class Pri2Pub
     {
         internal static void Test()
         {

@@ -50,9 +50,7 @@ namespace Test
             Console.WriteLine(priKeyPem1);
             //
             Console.WriteLine(priKey2.Equals(priKey22));
-
-            var pubKey44 = AsymmetricAlgorithmHelper.GeneratePublicKey(priKey11);
-            Console.WriteLine(pubKey44.Equals(pubKey1));
+            Console.WriteLine(pubKey11.Equals(pubKey1));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Test
                 Console.WriteLine("  5. Certificate");
                 Console.WriteLine("  6. ECDH ");
                 Console.WriteLine("  7. Pem read/write");
-                Console.WriteLine("  8. ");
+                Console.WriteLine("  8. Generate public key from Private key");
                 Console.WriteLine("  9. ");
                 Console.WriteLine();
                 Console.WriteLine();
@@ -68,6 +68,11 @@ namespace Test
                         case '7':
                             Console.Clear();
                             Pem.Test();
+                            goto end;
+
+                        case '8':
+                            Console.Clear();
+                            Pri2Pub.Test();
                             goto end;
 
                         case 'Z':

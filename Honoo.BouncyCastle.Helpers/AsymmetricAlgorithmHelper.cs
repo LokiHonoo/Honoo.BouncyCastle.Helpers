@@ -1,14 +1,9 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1.Sec;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
+using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Math.EC.Multiplier;
-using Org.BouncyCastle.Pkcs;
-using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -73,6 +68,73 @@ namespace Honoo.BouncyCastle.Helpers
         public static IAsymmetricAlgorithm SM2 { get; } = new SM2();
 
         /// <summary>
+        /// Try generate asymmetric public key from asymmetric private key.
+        /// </summary>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="publicKey">Asymmetric public key.</param>
+        /// <returns></returns>
+        public static bool TryGeneratePublicKey(AsymmetricKeyParameter privateKey, out AsymmetricKeyParameter publicKey)
+        {
+            if (privateKey is null)
+            {
+                publicKey = null;
+                return false;
+            }
+            switch (privateKey)
+            {
+                case RsaPrivateCrtKeyParameters pri:
+                    {
+                        publicKey = new RsaKeyParameters(false, pri.Modulus, pri.PublicExponent);
+                        return true;
+                    }
+
+                case DsaPrivateKeyParameters pri:
+                    {
+                        BigInteger y = pri.Parameters.G.ModPow(pri.X, pri.Parameters.P);
+                        publicKey = new DsaPublicKeyParameters(y, pri.Parameters);
+                        return true;
+                    }
+
+                case ECPrivateKeyParameters pri:
+                    {
+                        ECPoint q = new FixedPointCombMultiplier().Multiply(pri.Parameters.G, pri.D);
+                        publicKey = new ECPublicKeyParameters(pri.AlgorithmName, q, pri.Parameters);
+                        return true;
+                    }
+
+                case ElGamalPrivateKeyParameters pri:
+                    {
+                        BigInteger y = pri.Parameters.G.ModPow(pri.X, pri.Parameters.P);
+                        publicKey = new ElGamalPublicKeyParameters(y, pri.Parameters);
+                        return true;
+                    }
+
+                case Gost3410PrivateKeyParameters pri:
+                    {
+                        BigInteger y = pri.Parameters.A.ModPow(pri.X, pri.Parameters.P);
+                        publicKey = new Gost3410PublicKeyParameters(y, pri.Parameters);
+                        return true;
+                    }
+
+                case Ed448PrivateKeyParameters pri:
+                    {
+                        publicKey = pri.GeneratePublicKey();
+                        return true;
+                    }
+
+                case Ed25519PrivateKeyParameters pri:
+                    {
+                        publicKey = pri.GeneratePublicKey();
+                        return true;
+                    }
+
+                default:
+                    publicKey = null;
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Try get asymmetric algorithm from mechanism.
         /// </summary>
         /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
@@ -125,72 +187,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Generate asymmetric public key from asymmetric private key.
-        /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <returns></returns>
-        public static AsymmetricKeyParameter GeneratePublicKey(AsymmetricKeyParameter privateKey)
-        {
-            Type type = privateKey.GetType();
-            if (type == typeof(RsaPrivateCrtKeyParameters))
-            {
-                RsaPrivateCrtKeyParameters pri = (RsaPrivateCrtKeyParameters)privateKey;
-                return new RsaKeyParameters(false, pri.Modulus, pri.PublicExponent);
-            }
-           else if (type == typeof(DsaPrivateKeyParameters))
-            {
-                DsaPrivateKeyParameters pri = (DsaPrivateKeyParameters)privateKey;
-                return new DsaPublicKeyParameters(pri.X, pri.Parameters);
-            }
-            else
-            {
-
-            }
-
-
-            //PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
-            //Asn1Sequence seq = Asn1Sequence.GetInstance(info.GetDerEncoded());
-            //switch (info.PrivateKeyAlgorithm.Algorithm.Id)
-            //{
-            //    case "1"://RSA
-            //        var aaa = (RsaPrivateCrtKeyParameters)privateKey;
-            //        aaa.Modulus
-            //        RsaPrivateKeyStructure rsa = RsaPrivateKeyStructure.GetInstance(seq);
-            //        //RsaPrivateCrtKeyParameters pri = new RsaPrivateCrtKeyParameters(rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent, rsa.Prime1, rsa.Prime2, rsa.Exponent1, rsa.Exponent2, rsa.Coefficient);
-            //        return new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
-
-            //    case "2"://DSA
-            //        DerInteger p = (DerInteger)seq[1];
-            //        DerInteger q = (DerInteger)seq[2];
-            //        DerInteger g = (DerInteger)seq[3];
-            //        DerInteger y = (DerInteger)seq[4];
-            //        DerInteger x = (DerInteger)seq[5];
-            //        DsaParameters parameters = new DsaParameters(p.Value, q.Value, g.Value);
-            //        //var pri2 = new DsaPrivateKeyParameters(x.Value, parameters);
-            //        return new DsaPublicKeyParameters(y.Value, parameters);
-
-            //    case "3"://EC
-            //        ECPrivateKeyStructure pKey = ECPrivateKeyStructure.GetInstance(seq);
-            //        AlgorithmIdentifier algId = new AlgorithmIdentifier(X9ObjectIdentifiers.IdECPublicKey, pKey.GetParameters());
-            //        DerBitString pubKey = pKey.GetPublicKey();
-
-            //        ECDomainParameters ec = privKey.Parameters;
-            //        ECPoint q = new FixedPointCombMultiplier().Multiply(ec.G, privKey.D);
-
-            //        if (privKey.PublicKeyParamSet != null)
-            //        {
-            //            return new ECPublicKeyParameters(privKey.AlgorithmName, q, privKey.PublicKeyParamSet);
-            //        }
-
-            //        return new ECPublicKeyParameters(privKey.AlgorithmName, q, ec);
-
-            //    default: throw new ArgumentException("Unknown private key.");
-            //}
-
-            return null;
-        }
-
-        /// <summary>
         /// Try get asymmetric algorithm padding mode from mechanism.
         /// </summary>
         /// <param name="mechanism">Asymmetric padding mode mechanism.</param>
@@ -200,7 +196,8 @@ namespace Honoo.BouncyCastle.Helpers
         {
             if (mechanism is null)
             {
-                throw new ArgumentNullException(nameof(mechanism));
+                padding = null;
+                return false;
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
