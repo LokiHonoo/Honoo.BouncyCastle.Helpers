@@ -82,49 +82,49 @@ namespace Honoo.BouncyCastle.Helpers
             }
             switch (privateKey)
             {
-                case RsaPrivateCrtKeyParameters pri:
+                case RsaPrivateCrtKeyParameters inputKey:
                     {
-                        publicKey = new RsaKeyParameters(false, pri.Modulus, pri.PublicExponent);
+                        publicKey = new RsaKeyParameters(false, inputKey.Modulus, inputKey.PublicExponent);
                         return true;
                     }
 
-                case DsaPrivateKeyParameters pri:
+                case DsaPrivateKeyParameters inputKey:
                     {
-                        BigInteger y = pri.Parameters.G.ModPow(pri.X, pri.Parameters.P);
-                        publicKey = new DsaPublicKeyParameters(y, pri.Parameters);
+                        BigInteger y = inputKey.Parameters.G.ModPow(inputKey.X, inputKey.Parameters.P);
+                        publicKey = new DsaPublicKeyParameters(y, inputKey.Parameters);
                         return true;
                     }
 
-                case ECPrivateKeyParameters pri:
+                case ECPrivateKeyParameters inputKey:
                     {
-                        ECPoint q = new FixedPointCombMultiplier().Multiply(pri.Parameters.G, pri.D);
-                        publicKey = new ECPublicKeyParameters(pri.AlgorithmName, q, pri.Parameters);
+                        ECPoint q = new FixedPointCombMultiplier().Multiply(inputKey.Parameters.G, inputKey.D);
+                        publicKey = new ECPublicKeyParameters(inputKey.AlgorithmName, q, inputKey.Parameters);
                         return true;
                     }
 
-                case ElGamalPrivateKeyParameters pri:
+                case ElGamalPrivateKeyParameters inputKey:
                     {
-                        BigInteger y = pri.Parameters.G.ModPow(pri.X, pri.Parameters.P);
-                        publicKey = new ElGamalPublicKeyParameters(y, pri.Parameters);
+                        BigInteger y = inputKey.Parameters.G.ModPow(inputKey.X, inputKey.Parameters.P);
+                        publicKey = new ElGamalPublicKeyParameters(y, inputKey.Parameters);
                         return true;
                     }
 
-                case Gost3410PrivateKeyParameters pri:
+                case Gost3410PrivateKeyParameters inputKey:
                     {
-                        BigInteger y = pri.Parameters.A.ModPow(pri.X, pri.Parameters.P);
-                        publicKey = new Gost3410PublicKeyParameters(y, pri.Parameters);
+                        BigInteger y = inputKey.Parameters.A.ModPow(inputKey.X, inputKey.Parameters.P);
+                        publicKey = new Gost3410PublicKeyParameters(y, inputKey.Parameters);
                         return true;
                     }
 
-                case Ed448PrivateKeyParameters pri:
+                case Ed448PrivateKeyParameters inputKey:
                     {
-                        publicKey = pri.GeneratePublicKey();
+                        publicKey = inputKey.GeneratePublicKey();
                         return true;
                     }
 
-                case Ed25519PrivateKeyParameters pri:
+                case Ed25519PrivateKeyParameters inputKey:
                     {
-                        publicKey = pri.GeneratePublicKey();
+                        publicKey = inputKey.GeneratePublicKey();
                         return true;
                     }
 

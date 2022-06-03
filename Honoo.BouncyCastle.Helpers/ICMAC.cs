@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// CMAC  interface.
+    /// CMAC interface.
     /// </summary>
     public interface ICMAC
     {

@@ -3,7 +3,7 @@
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// ECDiffieHellman terminal Bob.
+    /// ECDiffieHellman terminal Bob interface.
     /// </summary>
     public interface IECDHTerminalB
     {

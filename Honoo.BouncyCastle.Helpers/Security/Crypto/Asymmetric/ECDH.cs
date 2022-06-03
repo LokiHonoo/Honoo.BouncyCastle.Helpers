@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate Asymmetric key pair. Allways thoew <see cref="NotImplementedException"/>.
+        /// Generate Asymmetric key pair. Allways throw <see cref="NotImplementedException"/>.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>

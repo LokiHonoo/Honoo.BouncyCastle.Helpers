@@ -3,7 +3,7 @@
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// ECDiffieHellman terminal Alice.
+    /// ECDiffieHellman terminal Alice interface.
     /// </summary>
     public interface IECDHTerminalA
     {

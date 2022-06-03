@@ -5,7 +5,7 @@ using System;
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// Signature algorithm.
+    /// Signature algorithm interface.
     /// </summary>
     public interface ISignatureAlgorithm
     {
