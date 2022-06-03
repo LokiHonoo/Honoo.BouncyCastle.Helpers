@@ -33,14 +33,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// ECDiffieHellman terminal Alice.
         /// </summary>
-        /// <param name="keySize">Key size.
+        /// <param name="size">Size.
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>
-        public ECDHTerminalA(int keySize, int certainty)
+        public ECDHTerminalA(int size, int certainty)
         {
             DHParametersGenerator parametersGenerator = new DHParametersGenerator();
-            parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
+            parametersGenerator.Init(size, certainty, Common.SecureRandom);
             DHParameters parameters = parametersGenerator.GenerateParameters();
             ECKeyPairGenerator keyPairGenerator = new ECKeyPairGenerator("ECDH");
             DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);

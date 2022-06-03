@@ -34,7 +34,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         /// <param name="name">Hash algorithm name.</param>
         /// <param name="hashSizes">Hash sizes.</param>
-        /// <param name="hashSize">Hash size.</param>
+        /// <param name="hashSize">Hash size bits.</param>
         /// <exception cref="CryptographicException"></exception>
         protected HashAlgorithm(string name, KeySizes[] hashSizes, int hashSize)
         {

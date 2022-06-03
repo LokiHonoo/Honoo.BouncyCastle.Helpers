@@ -1,5 +1,4 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric;
-using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -352,7 +351,7 @@ namespace Honoo.BouncyCastle.Helpers
         {
             if (mechanism is null)
             {
-                mode = null; 
+                mode = null;
                 return false;
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
@@ -368,10 +367,29 @@ namespace Honoo.BouncyCastle.Helpers
                 case "GOFB": mode = SymmetricCipherMode.GOFB; return true;
                 case "OPENPGPCFB": mode = SymmetricCipherMode.OpenPGPCFB; return true;
                 case "SIC": mode = SymmetricCipherMode.SIC; return true;
-                case "CCM": mode = SymmetricCipherMode.CCM; return true;
-                case "EAX": mode = SymmetricCipherMode.EAX; return true;
-                case "GCM": mode = SymmetricCipherMode.GCM; return true;
-                case "OCB": mode = SymmetricCipherMode.OCB; return true;
+                default: mode = null; return false;
+            }
+        }
+
+        /// <summary>
+        /// Try get symmetric algorithm aead ciper mode from mechanism.
+        /// </summary>
+        /// <param name="mechanism">Symmetric algorithm aead cipher mode mechanism.</param>
+        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
+        /// <returns></returns>
+        public static bool TryGetCipherMode(string mechanism, out SymmetricAeadCipherMode? mode)
+        {
+            if (mechanism is null)
+            {
+                mode = null;
+                return false;
+            }
+            switch (mechanism)
+            {
+                case "CCM": mode = SymmetricAeadCipherMode.CCM; return true;
+                case "EAX": mode = SymmetricAeadCipherMode.EAX; return true;
+                case "GCM": mode = SymmetricAeadCipherMode.GCM; return true;
+                case "OCB": mode = SymmetricAeadCipherMode.OCB; return true;
                 default: mode = null; return false;
             }
         }
@@ -386,7 +404,7 @@ namespace Honoo.BouncyCastle.Helpers
         {
             if (mechanism is null)
             {
-                padding = null; 
+                padding = null;
                 return false;
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();

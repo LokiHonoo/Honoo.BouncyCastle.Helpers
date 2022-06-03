@@ -9,7 +9,7 @@ namespace Test
     internal class Temporaries
     {
         internal static void Test()
-        {
+        {SymmetricCipherMode2.
             X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
             foreach (var item in generator.SignatureAlgNames)
             {

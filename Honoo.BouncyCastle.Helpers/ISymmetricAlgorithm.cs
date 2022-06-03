@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using System;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -8,6 +9,11 @@ namespace Honoo.BouncyCastle.Helpers
     /// </summary>
     public interface ISymmetricAlgorithm
     {
+        /// <summary>
+        /// Gets legal key size bits.
+        /// </summary>
+        KeySizes[] KeySizes { get; }
+
         /// <summary>
         /// Symmetric algorithm kind.
         /// </summary>
@@ -45,5 +51,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <returns></returns>
         string ToString();
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        bool VerifyKeySize(int keySize);
     }
 }

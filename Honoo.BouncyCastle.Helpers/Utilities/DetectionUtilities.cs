@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers.Utilities
             {
                 if (available.SkipSize == 0)
                 {
-                    if (size == available.MinSize)
+                    if (size == available.MinSize && size == available.MaxSize)
                     {
                         return true;
                     }

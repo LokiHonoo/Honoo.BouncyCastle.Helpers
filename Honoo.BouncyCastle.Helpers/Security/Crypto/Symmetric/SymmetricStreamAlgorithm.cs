@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Honoo.BouncyCastle.Helpers.Utilities;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using System;
 using System.Security.Cryptography;
@@ -24,7 +25,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        public KeySizes[] KeySizes
+        public override KeySizes[] KeySizes
         { get { return (KeySizes[])_keySizes.Clone(); } }
 
         #endregion Properties
@@ -175,6 +176,26 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 parameters = new ParametersWithIV(parameters, ivBuffer, ivOffset, ivLength);
             }
             return parameters;
+        }
+
+        /// <summary>
+        /// Verify iv size.
+        /// </summary>
+        /// <param name="ivSize">IV size bits.</param>
+        /// <returns></returns>
+        public bool VerifyIVSize(int ivSize)
+        {
+            return DetectionUtilities.ValidSize(_ivSizes, ivSize);
+        }
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        public override bool VerifyKeySize(int keySize)
+        {
+            return DetectionUtilities.ValidSize(_keySizes, keySize);
         }
 
         /// <summary>

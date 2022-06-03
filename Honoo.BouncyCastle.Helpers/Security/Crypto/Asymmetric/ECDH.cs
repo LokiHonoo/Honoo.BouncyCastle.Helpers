@@ -44,7 +44,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// Generate ECDH terminal Alice.
         /// <para/>Uses certainty 20 by default.
         /// </summary>
-        /// <param name="keySize">Key size.
+        /// <param name="keySize">Key size bits.
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate ECDH terminal Alice.
         /// </summary>
-        /// <param name="keySize">Key size.
+        /// <param name="keySize">Key size bits.
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>

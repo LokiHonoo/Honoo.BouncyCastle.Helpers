@@ -40,7 +40,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate Asymmetric key pair.
         /// </summary>
-        /// <param name="keySize">Key size.</param>
+        /// <param name="keySize">Key size bits.</param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>

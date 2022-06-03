@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using System;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
@@ -12,6 +13,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         private readonly SymmetricAlgorithmKind _kind;
         private readonly string _name;
+
+        /// <summary>
+        /// Gets legal key size bits.
+        /// </summary>
+        public abstract KeySizes[] KeySizes { get; }
 
         /// <summary>
         /// Symmetric algorithm kind.
@@ -69,6 +75,23 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         public override string ToString()
         {
             return _name;
+        }
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        public abstract bool VerifyKeySize(int keySize);
+
+        public override bool Equals(object obj)
+        {
+            return _name.Equals(obj._name);
+        }
+
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
         }
     }
 }

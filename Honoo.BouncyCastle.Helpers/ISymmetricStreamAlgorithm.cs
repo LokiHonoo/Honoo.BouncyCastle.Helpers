@@ -15,11 +15,6 @@ namespace Honoo.BouncyCastle.Helpers
         KeySizes[] IVSizes { get; }
 
         /// <summary>
-        /// Gets legal key size bits.
-        /// </summary>
-        KeySizes[] KeySizes { get; }
-
-        /// <summary>
         /// Generate a new symmetric stream algorithm and decrypt data.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
@@ -67,5 +62,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         /// <exception cref="Exception"/>
         IBufferedCipher GenerateEncryptor(ICipherParameters parameters);
+
+        /// <summary>
+        /// Verify iv size.
+        /// </summary>
+        /// <param name="ivSize">IV size bits.</param>
+        /// <returns></returns>
+        bool VerifyIVSize(int ivSize);
     }
 }

@@ -59,16 +59,16 @@ namespace Test
             Utilities.Random.NextBytes(test);
             byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
-            byte[] nonce = new byte[104 / 8]; // SymmetricCipherMode.CCM legal
+            byte[] nonce = new byte[104 / 8]; // SymmetricAeadCipherMode.CCM legal
             Utilities.Random.NextBytes(nonce);
-            int macSize = 96; // SymmetricCipherMode.CCM legal
+            int macSize = 96; // SymmetricAeadCipherMode.CCM legal
             ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, nonce, macSize, null);
             // example 1
-            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters, enc1, 0, enc1.Length);
+            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricAeadCipherMode.GCM, parameters, test, 0, test.Length);
+            _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricAeadCipherMode.GCM, parameters, enc1, 0, enc1.Length);
             // example 2
-            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
-            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricCipherMode.CCM, SymmetricPaddingMode.NoPadding, parameters);
+            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricAeadCipherMode.GCM, parameters);
+            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricAeadCipherMode.GCM, parameters);
             byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
             _ = decryptor.DoFinal(enc2, 0, enc2.Length);
         }
@@ -120,7 +120,8 @@ namespace Test
 
         private static void Test1()
         {
-            Array modes = Enum.GetValues(typeof(SymmetricCipherMode));
+            Array modes1 = Enum.GetValues(typeof(SymmetricCipherMode));
+            Array modes2 = Enum.GetValues(typeof(SymmetricAeadCipherMode));
             Array paddings = Enum.GetValues(typeof(SymmetricPaddingMode));
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
@@ -131,7 +132,7 @@ namespace Test
             {
                 if (property.GetValue(type, null) is ISymmetricBlockAlgorithm algorithm)
                 {
-                    foreach (int modeValue in modes)
+                    foreach (int modeValue in modes1)
                     {
                         SymmetricCipherMode mode = (SymmetricCipherMode)modeValue;
                         foreach (int paddingValue in paddings)
@@ -157,11 +158,7 @@ namespace Test
                                 IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, padding, parameters);
                                 try
                                 {
-                                    if (mode == SymmetricCipherMode.GCM)
-                                    {
-                                        XTestGCM(mechanism, encryptor, decryptor, test);
-                                    }
-                                    else if (padding == SymmetricPaddingMode.NoPadding)
+                                    if (padding == SymmetricPaddingMode.NoPadding)
                                     {
                                         byte[] testMult = new byte[algorithm.BlockSize / 8 * 4];
                                         Utilities.Random.NextBytes(testMult);
@@ -177,6 +174,45 @@ namespace Test
                                 {
                                     Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
                                 }
+                            }
+                        }
+                    }
+                    foreach (int modeValue in modes2)
+                    {
+                        SymmetricAeadCipherMode mode = (SymmetricAeadCipherMode)modeValue;
+                        _total++;
+                        string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Name, mode.ToString());
+
+                        if (algorithm.TryGetIVSizes(mode, out KeySizes[] ivSizes))
+                        {
+                            int keySize = GetQualitySize(algorithm.KeySizes);
+                            byte[] key = new byte[keySize / 8];
+                            Utilities.Random.NextBytes(key);
+                            int ivSize = GetQualitySize(ivSizes);
+                            byte[] iv = ivSize == 0 ? null : new byte[ivSize / 8];
+                            if (iv != null)
+                            {
+                                Utilities.Random.NextBytes(iv);
+                            }
+                            ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
+
+                            IBufferedCipher encryptor = algorithm.GenerateEncryptor(mode, parameters);
+                            IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, parameters);
+                            try
+                            {
+                                if (mode == SymmetricAeadCipherMode.GCM)
+                                {
+                                    XTestGCM(mechanism, encryptor, decryptor, test);
+                                }
+                                else
+                                {
+                                    XTest(mechanism, encryptor, decryptor, test);
+                                }
+                                _execute++;
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
                             }
                         }
                     }
