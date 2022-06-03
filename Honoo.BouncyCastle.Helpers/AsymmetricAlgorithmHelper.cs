@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// ECGOST3410.
         /// </summary>
-        public static IAsymmetricAlgorithm ECGOST3410 { get; } = new ECDSA(EllipticCurve.GostR3410_2001_CryptoPro_A);
+        public static IAsymmetricAlgorithm ECGOST3410 { get; } = new ECGOST3410();
 
         /// <summary>
         /// Ed25519.

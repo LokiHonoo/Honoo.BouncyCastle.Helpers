@@ -16,6 +16,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         private readonly DerObjectIdentifier _oid;
 
         /// <summary>
+        /// Gets the correlate asymmetric algorithm.
+        /// </summary>
+        public IAsymmetricAlgorithm AsymmetricAlgorithm => _asymmetricAlgorithm;
+
+        /// <summary>
         /// Gets algorithm name.
         /// </summary>
         public string Name => _name;
@@ -43,16 +48,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         }
 
         #endregion Constructor
-
-        /// <summary>
-        /// Generate key pair by the corresponding asymmetric algorithm.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public AsymmetricCipherKeyPair GenerateKeyPair()
-        {
-            return _asymmetricAlgorithm.GenerateKeyPair();
-        }
 
         /// <summary>
         /// Generate signer. The signer can be reused.

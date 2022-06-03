@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// DSA.
     /// <para/>Legal key size 512-1024 bits (64 bits increments).
     /// </summary>
-    public sealed class DSA : AsymmetricAlgorithm
+    public sealed class DSA : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 

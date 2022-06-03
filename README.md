@@ -225,7 +225,7 @@ private static void Demo1()
 {
     byte[] test = new byte[83];
     Utilities.Random.NextBytes(test);
-    AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.GenerateKeyPair();
+    AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
     // example 1
     byte[] signature1 = SignatureAlgorithmHelper.SHA256withECDSA.Sign(keyPair.Private, test);
     bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
@@ -252,7 +252,7 @@ private static void Demo()
     // CA build self.
     //
     _ = SignatureAlgorithmHelper.TryGetAlgorithm(caSignatureAlgorithmName, out ISignatureAlgorithm caSignatureAlgorithm);
-    AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.GenerateKeyPair();
+    AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.AsymmetricAlgorithm.GenerateKeyPair();
     //
     X509NameEntity[] x509NameEntities = new X509NameEntity[]
     {
@@ -287,7 +287,7 @@ private static void Demo()
     //
     // User create csr and sand to CA.
     //
-    AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.GenerateKeyPair();
+    AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.AsymmetricAlgorithm.GenerateKeyPair();
     X509NameEntity[] x509NameEntities2 = new X509NameEntity[]
     {
         new X509NameEntity(X509NameLabel.C,"CN"),

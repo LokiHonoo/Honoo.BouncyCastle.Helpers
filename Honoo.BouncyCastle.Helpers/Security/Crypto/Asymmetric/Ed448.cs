@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// Ed448.
     /// <para/>Uses context byte[0] by default.
     /// </summary>
-    public sealed class Ed448 : AsymmetricAlgorithm
+    public sealed class Ed448 : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 

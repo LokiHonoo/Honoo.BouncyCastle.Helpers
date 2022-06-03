@@ -29,7 +29,7 @@ namespace Test
             // CA build self.
             //
             _ = SignatureAlgorithmHelper.TryGetAlgorithm(caSignatureAlgorithmName, out ISignatureAlgorithm caSignatureAlgorithm);
-            AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.GenerateKeyPair();
+            AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.AsymmetricAlgorithm.GenerateKeyPair();
             //
             X509NameEntity[] x509NameEntities = new X509NameEntity[]
             {
@@ -67,7 +67,7 @@ namespace Test
             //
             // User create csr and sand to CA.
             //
-            AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.GenerateKeyPair();
+            AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.AsymmetricAlgorithm.GenerateKeyPair();
             X509NameEntity[] x509NameEntities2 = new X509NameEntity[]
             {
                 new X509NameEntity(X509NameLabel.C,"CN"),

@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECGOST3410.
     /// </summary>
-    public sealed class ECGOST3410 : AsymmetricAlgorithm
+    public sealed class ECGOST3410 : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 

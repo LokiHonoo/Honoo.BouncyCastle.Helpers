@@ -7,7 +7,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// Ed25519.
     /// </summary>
-    public sealed class Ed25519 : AsymmetricAlgorithm
+    public sealed class Ed25519 : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 

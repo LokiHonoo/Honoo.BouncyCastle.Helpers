@@ -7,9 +7,36 @@
     {
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
+        // X962NamedCurves
+
+        Prime192v1 = 1,
+        Prime192v2,
+        Prime192v3,
+        Prime239v1,
+        Prime239v2,
+        Prime239v3,
+        Prime256v1,
+
+        C2Pnb163v1,
+        C2Pnb163v2,
+        C2Pnb163v3,
+        C2Pnb176w1,
+        C2Tnb191v1,
+        C2Tnb191v2,
+        C2Tnb191v3,
+        C2Pnb208w1,
+        C2Tnb239v1,
+        C2Tnb239v2,
+        C2Tnb239v3,
+        C2Pnb272w1,
+        C2Pnb304w1,
+        C2Tnb359v1,
+        C2Pnb368w1,
+        C2Tnb431r1,
+
         // SecNamedCurves
 
-        SecP112r1 = 1,
+        SecP112r1,
         SecP112r2,
         SecP128r1,
         SecP128r2,
@@ -44,31 +71,25 @@
         SecT571k1,
         SecT571r1,
 
-        // X962NamedCurves
+        // NistNamedCurves
 
-        Prime192v1,
-        Prime192v2,
-        Prime192v3,
-        Prime239v1,
-        Prime239v2,
-        Prime239v3,
-        Prime256v1,
-        C2Pnb163v1,
-        C2Pnb163v2,
-        C2Pnb163v3,
-        C2Pnb176w1,
-        C2Tnb191v1,
-        C2Tnb191v2,
-        C2Tnb191v3,
-        C2Pnb208w1,
-        C2Tnb239v1,
-        C2Tnb239v2,
-        C2Tnb239v3,
-        C2Pnb272w1,
-        C2Pnb304w1,
-        C2Tnb359v1,
-        C2Pnb368w1,
-        C2Tnb431r1,
+        NistP192,
+        NistP224,
+        NistP256,
+        NistP384,
+        NistP521,
+
+        NistB163,
+        NistB233,
+        NistB283,
+        NistB409,
+        NistB571,
+
+        NistK163,
+        NistK233,
+        NistK283,
+        NistK409,
+        NistK571,
 
         // TeleTrusTNamedCurves
 

@@ -1,6 +1,7 @@
 ﻿using Org.BouncyCastle.Asn1.Anssi;
 using Org.BouncyCastle.Asn1.CryptoPro;
 using Org.BouncyCastle.Asn1.GM;
+using Org.BouncyCastle.Asn1.Nist;
 using Org.BouncyCastle.Asn1.Rosstandart;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.TeleTrust;
@@ -16,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDSA.
     /// </summary>
-    public sealed class ECDSA : AsymmetricAlgorithm
+    public sealed class ECDSA : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 
@@ -31,12 +32,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// Generate key pair.
-        /// <para/>Uses EllipticCurve.SecP256r1 by default.
+        /// <para/>Uses EllipticCurve.Prime256v1 by default.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
-            return GenerateKeyPair(EllipticCurve.SecP256r1);
+            return GenerateKeyPair(EllipticCurve.Prime256v1);
         }
 
         /// <summary>
@@ -59,6 +60,30 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         {
             switch (ellipticCurve)
             {
+                case EllipticCurve.Prime192v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v1);
+                case EllipticCurve.Prime192v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v2);
+                case EllipticCurve.Prime192v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v3);
+                case EllipticCurve.Prime239v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v1);
+                case EllipticCurve.Prime239v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v2);
+                case EllipticCurve.Prime239v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v3);
+                case EllipticCurve.Prime256v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime256v1);
+                case EllipticCurve.C2Pnb163v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v1);
+                case EllipticCurve.C2Pnb163v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v2);
+                case EllipticCurve.C2Pnb163v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v3);
+                case EllipticCurve.C2Pnb176w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb176w1);
+                case EllipticCurve.C2Tnb191v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v1);
+                case EllipticCurve.C2Tnb191v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v2);
+                case EllipticCurve.C2Tnb191v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v3);
+                case EllipticCurve.C2Pnb208w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb208w1);
+                case EllipticCurve.C2Tnb239v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v1);
+                case EllipticCurve.C2Tnb239v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v2);
+                case EllipticCurve.C2Tnb239v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v3);
+                case EllipticCurve.C2Pnb272w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb272w1);
+                case EllipticCurve.C2Pnb304w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb304w1);
+                case EllipticCurve.C2Tnb359v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb359v1);
+                case EllipticCurve.C2Pnb368w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb368w1);
+                case EllipticCurve.C2Tnb431r1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb431r1);
+
                 case EllipticCurve.SecP112r1: return SecNamedCurves.GetByOid(SecObjectIdentifiers.SecP112r1);
                 case EllipticCurve.SecP112r2: return SecNamedCurves.GetByOid(SecObjectIdentifiers.SecP112r2);
                 case EllipticCurve.SecP128r1: return SecNamedCurves.GetByOid(SecObjectIdentifiers.SecP128r1);
@@ -93,29 +118,23 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                 case EllipticCurve.SecT571k1: return SecNamedCurves.GetByOid(SecObjectIdentifiers.SecT571k1);
                 case EllipticCurve.SecT571r1: return SecNamedCurves.GetByOid(SecObjectIdentifiers.SecT571r1);
 
-                case EllipticCurve.Prime192v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v1);
-                case EllipticCurve.Prime192v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v2);
-                case EllipticCurve.Prime192v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime192v3);
-                case EllipticCurve.Prime239v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v1);
-                case EllipticCurve.Prime239v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v2);
-                case EllipticCurve.Prime239v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime239v3);
-                case EllipticCurve.Prime256v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.Prime256v1);
-                case EllipticCurve.C2Pnb163v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v1);
-                case EllipticCurve.C2Pnb163v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v2);
-                case EllipticCurve.C2Pnb163v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb163v3);
-                case EllipticCurve.C2Pnb176w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb176w1);
-                case EllipticCurve.C2Tnb191v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v1);
-                case EllipticCurve.C2Tnb191v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v2);
-                case EllipticCurve.C2Tnb191v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb191v3);
-                case EllipticCurve.C2Pnb208w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb208w1);
-                case EllipticCurve.C2Tnb239v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v1);
-                case EllipticCurve.C2Tnb239v2: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v2);
-                case EllipticCurve.C2Tnb239v3: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb239v3);
-                case EllipticCurve.C2Pnb272w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb272w1);
-                case EllipticCurve.C2Pnb304w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb304w1);
-                case EllipticCurve.C2Tnb359v1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb359v1);
-                case EllipticCurve.C2Pnb368w1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Pnb368w1);
-                case EllipticCurve.C2Tnb431r1: return X962NamedCurves.GetByOid(X9ObjectIdentifiers.C2Tnb431r1);
+                case EllipticCurve.NistP192: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecP192r1);
+                case EllipticCurve.NistP224: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecP224r1);
+                case EllipticCurve.NistP256: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecP256r1);
+                case EllipticCurve.NistP384: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecP384r1);
+                case EllipticCurve.NistP521: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecP521r1);
+
+                case EllipticCurve.NistB163: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT163r2);
+                case EllipticCurve.NistB233: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT233r1);
+                case EllipticCurve.NistB283: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT283r1);
+                case EllipticCurve.NistB409: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT409r1);
+                case EllipticCurve.NistB571: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT571r1);
+
+                case EllipticCurve.NistK163: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT163k1);
+                case EllipticCurve.NistK233: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT233k1);
+                case EllipticCurve.NistK283: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT283k1);
+                case EllipticCurve.NistK409: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT409k1);
+                case EllipticCurve.NistK571: return NistNamedCurves.GetByOid(SecObjectIdentifiers.SecT571k1);
 
                 case EllipticCurve.BrainpoolP160R1: return TeleTrusTNamedCurves.GetByOid(TeleTrusTObjectIdentifiers.BrainpoolP160R1);
                 case EllipticCurve.BrainpoolP160T1: return TeleTrusTNamedCurves.GetByOid(TeleTrusTObjectIdentifiers.BrainpoolP160T1);

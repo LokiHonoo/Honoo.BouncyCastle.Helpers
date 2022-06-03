@@ -11,7 +11,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// SM2.
     /// </summary>
-    public sealed class SM2 : AsymmetricAlgorithm
+    public sealed class SM2 : AsymmetricSignatureAlgorithm
     {
         #region Constructor
 
