@@ -15,8 +15,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Derive key material.
         /// </summary>
+        /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] DeriveKeyMaterial();
+        byte[] DeriveKeyMaterial(bool unsigned);
     }
 }

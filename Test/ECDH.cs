@@ -28,13 +28,13 @@ namespace Test
             // Bob work.
             //
             IECDHTerminalB terminalB = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalB(exchangeToBob);
-            byte[] pmsB = terminalB.DeriveKeyMaterial();
+            byte[] pmsB = terminalB.DeriveKeyMaterial(true);
             // Send exchangeB to Alice.
             byte[] exchangeToAlice = terminalB.ExchangeB;
             //
             // Alice work.
             //
-            byte[] pmsA = terminalA.DeriveKeyMaterial(exchangeToAlice);
+            byte[] pmsA = terminalA.DeriveKeyMaterial(exchangeToAlice, true);
             //
             //
             //

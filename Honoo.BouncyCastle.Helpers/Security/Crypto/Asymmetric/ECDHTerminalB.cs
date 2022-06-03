@@ -78,11 +78,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Derive key material.
         /// </summary>
+        /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] DeriveKeyMaterial()
+        public byte[] DeriveKeyMaterial(bool unsigned)
         {
-            return _agreement.CalculateAgreement(_publicKeyA).ToByteArray();
+            BigInteger integer = _agreement.CalculateAgreement(_publicKeyA);
+            return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
         }
     }
 }

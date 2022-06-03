@@ -3,6 +3,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using System;
@@ -70,16 +71,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// Derive key material from the terminal Bob's exchange.
         /// </summary>
         /// <param name="exchangeB">The terminal Bob's exchange.</param>
+        /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] DeriveKeyMaterial(byte[] exchangeB)
+        public byte[] DeriveKeyMaterial(byte[] exchangeB, bool unsigned)
         {
             if (exchangeB is null)
             {
                 throw new ArgumentNullException(nameof(exchangeB));
             }
-            AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(exchangeB);
-            return _agreement.CalculateAgreement(publicKey).ToByteArray();
+            AsymmetricKeyParameter publicKeyB = PublicKeyFactory.CreateKey(exchangeB);
+            BigInteger integer = _agreement.CalculateAgreement(publicKeyB);
+            return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
         }
     }
 }

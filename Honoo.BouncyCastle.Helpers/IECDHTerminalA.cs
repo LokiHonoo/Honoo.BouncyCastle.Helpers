@@ -16,8 +16,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// Derive key material from the terminal Bob's exchange.
         /// </summary>
         /// <param name="exchangeB">The terminal Bob's exchange.</param>
+        /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] DeriveKeyMaterial(byte[] exchangeB);
+        byte[] DeriveKeyMaterial(byte[] exchangeB, bool unsigned);
     }
 }

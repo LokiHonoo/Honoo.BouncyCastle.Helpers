@@ -352,18 +352,18 @@ private static void Demo1()
     // Bob work.
     //
     IECDHTerminalB terminalB = AsymmetricAlgorithmHelper.ECDH.GenerateTerminalB(exchangeToBob);
-    byte[] pmsB = terminalB.DeriveKeyMaterial();
+    byte[] pmsB = terminalB.DeriveKeyMaterial(true);
     // Send exchangeB to Alice.
     byte[] exchangeToAlice = terminalB.ExchangeB;
     //
     // Alice work.
     //
-    byte[] pmsA = terminalA.DeriveKeyMaterial(exchangeToAlice);
+    byte[] pmsA = terminalA.DeriveKeyMaterial(exchangeToAlice, true);
     //
     //
     //
-    Console.WriteLine(BitConverter.ToString(pmsA).Replace("-", ""));
-    Console.WriteLine(BitConverter.ToString(pmsB).Replace("-", ""));
+    Console.WriteLine(BitConverter.ToString(pmsA).Replace("-", "") + "  " + pmsA.Length + " bytes.");
+    Console.WriteLine(BitConverter.ToString(pmsB).Replace("-", "") + "  " + pmsB.Length + " bytes.");
 }
 
 ```
