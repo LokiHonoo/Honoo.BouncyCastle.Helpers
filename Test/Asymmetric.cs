@@ -57,8 +57,20 @@ namespace Test
             Utilities.Random.NextBytes(test);
             AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithmHelper.RSA.GenerateKeyPair();
             // example 1
-            byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
-            _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
+            byte[] enc1 = AsymmetricAlgorithmHelper.RSA.Encrypt(AsymmetricPaddingMode.OAEP,
+                                                                HashAlgorithmHelper.Whirlpool,
+                                                                HashAlgorithmHelper.Whirlpool,
+                                                                keyPair.Public,
+                                                                test,
+                                                                0,
+                                                                test.Length);
+            _ = AsymmetricAlgorithmHelper.RSA.Decrypt(AsymmetricPaddingMode.OAEP,
+                                                      HashAlgorithmHelper.Whirlpool,
+                                                      HashAlgorithmHelper.Whirlpool,
+                                                      keyPair.Private,
+                                                      enc1,
+                                                      0,
+                                                      enc1.Length);
             // example 2
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithmHelper.RSA.GenerateEncryptor(AsymmetricPaddingMode.OAEP,
                                                                                                HashAlgorithmHelper.RIPEMD160,
@@ -78,11 +90,11 @@ namespace Test
         {
             Array paddings = Enum.GetValues(typeof(AsymmetricPaddingMode));
             //
-            List<IAsymmetricEncryptionAlgorithm> algorithms = new List<IAsymmetricEncryptionAlgorithm>();
-            AsymmetricAlgorithmHelper.TryGetAlgorithm("ElGamal", out IAsymmetricEncryptionAlgorithm encryption);
-            algorithms.Add(encryption);
-            AsymmetricAlgorithmHelper.TryGetAlgorithm("RSA", out encryption);
-            algorithms.Add(encryption);
+            List<IAsymmetricEncryptionAlgorithm> algorithms = new List<IAsymmetricEncryptionAlgorithm>
+            {
+                AsymmetricAlgorithmHelper.ElGamal,
+                AsymmetricAlgorithmHelper.RSA
+            };
             //
             byte[] test = new byte[5];
             Utilities.Random.NextBytes(test);

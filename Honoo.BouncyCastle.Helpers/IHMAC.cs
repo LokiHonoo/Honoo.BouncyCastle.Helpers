@@ -30,11 +30,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new digest and compute data hash.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] ComputeHash(ICipherParameters parameters, byte[] data, int offset, int length);
+        byte[] ComputeHash(ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate digest. The digest can be reused.
@@ -55,12 +55,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="key">Key buffer.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, int offset, int length);
+        ICipherParameters GenerateParameters(byte[] keyBuffer, int offset, int length);
 
         /// <summary>
         /// Return algorithm name.

@@ -3,7 +3,7 @@
     /// <summary>
     /// Asymmetric signature algorithm.
     /// </summary>
-    public abstract class AsymmetricSignatureAlgorithm : AsymmetricAlgorithm
+    public abstract class AsymmetricSignatureAlgorithm : AsymmetricAlgorithm, IAsymmetricSignatureAlgorithm
     {
         #region Constructor
 

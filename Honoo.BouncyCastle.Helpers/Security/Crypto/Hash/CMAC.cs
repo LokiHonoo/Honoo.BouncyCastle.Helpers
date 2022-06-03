@@ -104,25 +104,25 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// Generate a new digest and compute data hash.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] ComputeHash(ICipherParameters parameters, byte[] data, int offset, int length)
+        public byte[] ComputeHash(ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             IMac digest = GenerateDigest(parameters);
 
             byte[] hash = new byte[_hashSize / 8];
-            digest.BlockUpdate(data, offset, length);
+            digest.BlockUpdate(dataBuffer, offset, length);
             digest.DoFinal(hash, 0);
             return hash;
         }
@@ -154,14 +154,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public ICipherParameters GenerateParameters(byte[] key, int offset, int length)
+        public ICipherParameters GenerateParameters(byte[] keyBuffer, int offset, int length)
         {
-            return _blockAlgorithm.GenerateParameters(key, offset, length, null, 0, 0);
+            return _blockAlgorithm.GenerateParameters(keyBuffer, offset, length, null, 0, 0);
         }
 
         /// <summary>

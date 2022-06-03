@@ -30,15 +30,15 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="keyOffset">The starting offset to read.</param>
         /// <param name="keyLength">The length to read.</param>
-        /// <param name="iv">IV buffer bytes.</param>
+        /// <param name="ivBuffer">IV buffer bytes.</param>
         /// <param name="ivOffset">The starting offset to read.</param>
         /// <param name="ivLength">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength);
+        ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength);
 
         /// <summary>
         /// Return algorithm name.

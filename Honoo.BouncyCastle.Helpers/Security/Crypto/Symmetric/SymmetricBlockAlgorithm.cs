@@ -75,24 +75,24 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
+        public byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             IBufferedCipher decryptor = GenerateCipher(false, mode, padding, parameters);
-            return decryptor.DoFinal(data, offset, length);
+            return decryptor.DoFinal(dataBuffer, offset, length);
         }
 
         /// <summary>
@@ -115,23 +115,23 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
+        public byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             IBufferedCipher encryptor = GenerateCipher(true, mode, padding, parameters);
-            return encryptor.DoFinal(data, offset, length);
+            return encryptor.DoFinal(dataBuffer, offset, length);
         }
 
         /// <summary>
@@ -180,20 +180,20 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="keyOffset">The starting offset to read.</param>
         /// <param name="keyLength">The length to read.</param>
-        /// <param name="iv">IV buffer bytes.</param>
+        /// <param name="ivBuffer">IV buffer bytes.</param>
         /// <param name="ivOffset">The starting offset to read.</param>
         /// <param name="ivLength">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public override ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength)
+        public override ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength)
         {
-            ICipherParameters parameters = GenerateKeyParameter(key, keyOffset, keyLength);
-            if (iv != null && ivLength > 0)
+            ICipherParameters parameters = GenerateKeyParameter(keyBuffer, keyOffset, keyLength);
+            if (ivBuffer != null && ivLength > 0)
             {
-                parameters = new ParametersWithIV(parameters, iv, ivOffset, ivLength);
+                parameters = new ParametersWithIV(parameters, ivBuffer, ivOffset, ivLength);
             }
             return parameters;
         }
@@ -444,13 +444,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Generate KeyParameter.
         /// </summary>
-        /// <param name="key">Key.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="offset">Offset.</param>
         /// <param name="length">Length.</param>
         /// <returns></returns>
-        protected virtual KeyParameter GenerateKeyParameter(byte[] key, int offset, int length)
+        protected virtual KeyParameter GenerateKeyParameter(byte[] keyBuffer, int offset, int length)
         {
-            return new KeyParameter(key, offset, length);
+            return new KeyParameter(keyBuffer, offset, length);
         }
 
         private IBufferedCipher GenerateCipher(bool forEncryption, SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)

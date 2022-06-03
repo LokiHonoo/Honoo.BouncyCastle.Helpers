@@ -25,7 +25,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate Asymmetric key pair.
         /// <para/>Uses EllipticCurve.Sm2P256v1 by default.
         /// </summary>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate Asymmetric key pair.
         /// </summary>
         /// <param name="ellipticCurve">Elliptic curve.</param>
         /// <returns></returns>

@@ -108,22 +108,22 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="mode">MAC cipher mode.</param>
         /// <param name="padding">MAC padding mode.</param>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        public byte[] ComputeHash(MACCipherMode mode, MACPaddingMode padding, ICipherParameters parameters, byte[] data, int offset, int length)
+        public byte[] ComputeHash(MACCipherMode mode, MACPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             IMac digest = GenerateDigest(mode, padding, parameters);
-            digest.BlockUpdate(data, offset, length);
+            digest.BlockUpdate(dataBuffer, offset, length);
             byte[] hash = new byte[_hashSize];
             digest.DoFinal(hash, 0);
             return hash;
@@ -185,17 +185,17 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Generate parameters.
         /// </summary>
-        /// <param name="key">Key buffer bytes.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="keyOffset">The starting offset to read.</param>
         /// <param name="keyLength">The length to read.</param>
-        /// <param name="iv">IV buffer bytes.</param>
+        /// <param name="ivBuffer">IV buffer bytes.</param>
         /// <param name="ivOffset">The starting offset to read.</param>
         /// <param name="ivLength">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public ICipherParameters GenerateParameters(byte[] key, int keyOffset, int keyLength, byte[] iv, int ivOffset, int ivLength)
+        public ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength)
         {
-            return _blockAlgorithm.GenerateParameters(key, keyOffset, keyLength, iv, ivOffset, ivLength);
+            return _blockAlgorithm.GenerateParameters(keyBuffer, keyOffset, keyLength, ivBuffer, ivOffset, ivLength);
         }
 
         /// <summary>

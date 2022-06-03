@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate Asymmetric key pair.
         /// </summary>
         /// <returns></returns>
         public override AsymmetricCipherKeyPair GenerateKeyPair()

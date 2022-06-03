@@ -1,5 +1,8 @@
 ﻿using Honoo.BouncyCastle.Helpers;
+using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Operators;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -22,8 +25,14 @@ namespace Test
             Console.WriteLine();
             //
             Demo1();
+            Console.WriteLine();
+            Console.WriteLine();
             //
             Test1();
+            Console.WriteLine();
+            Console.WriteLine();
+            //
+            Test2();
             //
             Console.WriteLine("\r\n\r\n");
             Console.WriteLine("Total={0}  Ignore={1}  Diff={2}", _total, _total - _execute, _diff);
@@ -79,6 +88,71 @@ namespace Test
                 ISigner signer = algorithm.GenerateSigner(keyPair.Private);
                 ISigner verifier = algorithm.GenerateVerifier(keyPair.Public);
                 XTest(algorithm, signer, verifier, test);
+            }
+        }
+
+        private static void Test2()
+        {
+            List<string> hashs = new List<string>();
+            Type type = typeof(HashAlgorithmHelper);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.GetValue(type, null) is IHashAlgorithm algorithm)
+                {
+                    hashs.Add(algorithm.Name);
+                }
+            }
+            List<string> names = new List<string>();
+            string[] suffixs = new string[] { "CVC-ECDSA", "PLAIN-ECDSA", "DSA", "RSA", "ECDSA", "ECGOST3410", "ECNR", "GOST3410", "RSA/X9.31", "ISO9796-2", "RSAANDMGF1", "SM2" };
+            foreach (string suffix in suffixs)
+            {
+                foreach (string prefix in hashs)
+                {
+                    names.Add(prefix + "with" + suffix);
+                }
+            }
+            SecureRandom random = SecureRandom.GetInstance("MD5PRNG");
+            var key = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair().Private;
+            DefaultSignatureAlgorithmIdentifierFinder finder = new DefaultSignatureAlgorithmIdentifierFinder();
+
+            foreach (string name in names)
+            {
+                string tag1 = "----------------------- ";
+                string tag2 = "-----------------------";
+                string tag3 = "x";
+                string tag4 = "x";
+                bool oidy = false;
+                if (SignatureAlgorithmHelper.TryGetAlgorithm(name, out ISignatureAlgorithm algorithm))
+                {
+                    if (algorithm.Oid != null)
+                    {
+                        tag1 = algorithm.Oid.Id;
+                    }
+                }
+                try
+                {
+                    var identifier = finder.Find(name);
+                    tag2 = identifier.Algorithm.Id;
+                    oidy = true;
+                }
+                catch { }
+                try
+                {
+                    _ = new Asn1SignatureFactory(name, key, random);
+                    tag3 = "name ok.";
+                }
+                catch { }
+                if (oidy)
+                {
+                    try
+                    {
+                        _ = new Asn1SignatureFactory(tag2, key, random);
+                        tag4 = "oid ok.";
+                    }
+                    catch { }
+                }
+                Console.WriteLine("{0}{1}{2}{3}{4}", name.PadRight(38), tag1.PadRight(24), tag2.PadRight(24), tag3.PadRight(10), tag4);
             }
         }
 

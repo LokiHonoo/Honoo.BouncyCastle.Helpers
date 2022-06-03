@@ -1,5 +1,7 @@
 ﻿using Honoo.BouncyCastle.Helpers;
+using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.X509;
 using System;
 
 namespace Test
@@ -8,8 +10,12 @@ namespace Test
     {
         internal static void Test()
         {
-          System.Security.Cryptography.ECDsa eCDsa = System.Security.Cryptography.ECDsa.Create();
-            
+            X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
+            foreach (var item in generator.SignatureAlgNames)
+            {
+                Console.WriteLine(item);
+            }
+            ;
             //
             //
             //

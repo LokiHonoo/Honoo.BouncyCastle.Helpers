@@ -1,20 +1,13 @@
-﻿using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Agreement;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Math;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.X509;
+﻿using Org.BouncyCastle.Crypto;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// ECDiffieHellman.
     /// </summary>
-    public sealed class ECDH : AsymmetricAlgorithm, IECDH
+    public sealed class ECDH : AsymmetricAlgorithm
     {
         #region Constructor
 
@@ -28,10 +21,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate key pair. This method throws <see cref="NotImplementedException"/> in all cases.
+        /// Generate Asymmetric key pair. Allways thoew <see cref="NotImplementedException"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"/>
+        /// <exception cref="NotImplementedException"></exception>
         public override AsymmetricCipherKeyPair GenerateKeyPair()
         {
             throw new NotImplementedException();
@@ -68,31 +61,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public IECDHTerminalA GenerateTerminalA(int keySize, int certainty)
         {
-            DHParametersGenerator parametersGenerator = new DHParametersGenerator();
-            parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
-            DHParameters parameters = parametersGenerator.GenerateParameters();
-            ECKeyPairGenerator keyPairGenerator = new ECKeyPairGenerator("ECDH");
-            DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
-            keyPairGenerator.Init(generationParameters);
-            AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
-            ECDHBasicAgreement agreement = new ECDHBasicAgreement();
-            agreement.Init(keyPair.Private);
-            //
-            List<byte> exchange = new List<byte>();
-            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            byte[] publicKeyBytes = publicKeyInfo.GetEncoded();
-            exchange.AddRange(BitConverter.GetBytes(publicKeyBytes.Length));
-            exchange.AddRange(publicKeyBytes);
-            byte[] pBytes = parameters.P.ToByteArray();
-            exchange.AddRange(BitConverter.GetBytes(pBytes.Length));
-            exchange.AddRange(pBytes);
-            byte[] gBytes = parameters.G.ToByteArray();
-            exchange.AddRange(BitConverter.GetBytes(gBytes.Length));
-            exchange.AddRange(gBytes);
-            //
-            return new ECDHTerminalA(agreement, exchange.ToArray());
+            return new ECDHTerminalA(keySize, certainty);
         }
 
         /// <summary>
@@ -101,40 +73,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="exchangeA">Terminal Alice's exchange.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
+        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public IECDHTerminalB GenerateTerminalB(byte[] exchangeA)
         {
-            if (exchangeA is null)
-            {
-                throw new ArgumentNullException(nameof(exchangeA));
-            }
-            int index = 0;
-            int length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] publicKeyBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, publicKeyBytes, 0, length);
-            index += length;
-            length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] pBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, pBytes, 0, length);
-            index += length;
-            length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] gBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, gBytes, 0, length);
-            //
-            AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(publicKeyBytes);
-            DHParameters parameters = new DHParameters(new BigInteger(pBytes), new BigInteger(gBytes));
-            ECKeyPairGenerator generator = new ECKeyPairGenerator("ECDH");
-            DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
-            generator.Init(generationParameters);
-            AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
-            ECDHBasicAgreement agreement = new ECDHBasicAgreement();
-            agreement.Init(keyPair.Private);
-            //
-            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            //
-            return new ECDHTerminalB(agreement, publicKeyInfo.GetEncoded(), publicKey);
+            return new ECDHTerminalB(exchangeA);
         }
     }
 }

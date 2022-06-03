@@ -58,14 +58,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter privateKey, byte[] data, int offset, int length)
+        public byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter privateKey, byte[] dataBuffer, int offset, int length)
         {
-            return Decrypt(padding, null, null, privateKey, data, 0, data.Length);
+            return Decrypt(padding, null, null, privateKey, dataBuffer, offset, length);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
         /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                                IHashAlgorithm mgf1HashAlgorithm1,
                                IHashAlgorithm mgf1HashAlgorithm2,
                                AsymmetricKeyParameter privateKey,
-                               byte[] data,
+                               byte[] dataBuffer,
                                int offset,
                                int length)
         {
@@ -92,16 +92,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             if (!privateKey.IsPrivate)
             {
                 throw new CryptoException("Must be a asymmetric private key.");
             }
             IAsymmetricBlockCipher decryptor = GenerateDecryptor(padding, mgf1HashAlgorithm1, mgf1HashAlgorithm2, privateKey);
-            return decryptor.ProcessBlock(data, offset, length);
+            return decryptor.ProcessBlock(dataBuffer, offset, length);
         }
 
         /// <summary>
@@ -141,14 +141,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey, byte[] data, int offset, int length)
+        public byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey, byte[] dataBuffer, int offset, int length)
         {
-            return Encrypt(padding, null, null, publicKey, data, offset, length);
+            return Encrypt(padding, null, null, publicKey, dataBuffer, offset, length);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
         /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
@@ -167,7 +167,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                               IHashAlgorithm mgf1HashAlgorithm1,
                               IHashAlgorithm mgf1HashAlgorithm2,
                               AsymmetricKeyParameter publicKey,
-                              byte[] data,
+                              byte[] dataBuffer,
                               int offset,
                               int length)
         {
@@ -175,16 +175,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             if (publicKey.IsPrivate)
             {
                 throw new CryptoException("Must be a asymmetric public key.");
             }
             IAsymmetricBlockCipher encryptor = GenerateEncryptor(padding, mgf1HashAlgorithm1, mgf1HashAlgorithm2, publicKey);
-            return encryptor.ProcessBlock(data, offset, length);
+            return encryptor.ProcessBlock(dataBuffer, offset, length);
         }
 
         /// <summary>

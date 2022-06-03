@@ -31,11 +31,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new symmetric stream algorithm and decrypt data.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Decrypt(ICipherParameters parameters, byte[] data, int offset, int length);
+        byte[] Decrypt(ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate a new symmetric stream algorithm and encrypt data.
@@ -46,11 +46,11 @@ namespace Honoo.BouncyCastle.Helpers
         byte[] Encrypt(ICipherParameters parameters, byte[] data);
 
         /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Encrypt(ICipherParameters parameters, byte[] data, int offset, int length);
+        byte[] Encrypt(ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate cipher.

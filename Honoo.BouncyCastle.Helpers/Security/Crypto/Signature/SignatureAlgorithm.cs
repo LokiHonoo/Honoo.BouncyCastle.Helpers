@@ -107,27 +107,27 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// Generate a new signature algorithm and sign data.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] Sign(AsymmetricKeyParameter privateKey, byte[] data, int offset, int length)
+        public byte[] Sign(AsymmetricKeyParameter privateKey, byte[] dataBuffer, int offset, int length)
         {
             if (privateKey is null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             if (!privateKey.IsPrivate)
             {
                 throw new CryptoException("Must be a asymmetric private key.");
             }
             ISigner signer = GenerateSigner(privateKey);
-            signer.BlockUpdate(data, offset, length);
+            signer.BlockUpdate(dataBuffer, offset, length);
             return signer.GenerateSignature();
         }
 
@@ -156,22 +156,22 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// Generate a new signature algorithm and sign data.
         /// </summary>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <param name="signature">Signature buffer bytes.</param>
         /// <param name="signatureOffset">The starting offset to read.</param>
         /// <param name="signatureLength">The length to read.</param>
         /// <returns></returns>
-        public bool Verify(AsymmetricKeyParameter publicKey, byte[] data, int offset, int length, byte[] signature, int signatureOffset, int signatureLength)
+        public bool Verify(AsymmetricKeyParameter publicKey, byte[] dataBuffer, int offset, int length, byte[] signature, int signatureOffset, int signatureLength)
         {
             if (publicKey is null)
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             if (signature is null)
             {
@@ -182,7 +182,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
                 throw new CryptoException("Must be a asymmetric public key.");
             }
             ISigner verifier = GenerateVerifier(publicKey);
-            verifier.BlockUpdate(data, offset, length);
+            verifier.BlockUpdate(dataBuffer, offset, length);
             if (signatureOffset == 0 && signatureLength == signature.Length)
             {
                 return verifier.VerifySignature(signature);

@@ -29,7 +29,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate Asymmetric key pair.
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         /// <returns></returns>
@@ -39,7 +39,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        /// Generate key pair.
+        /// Generate Asymmetric key pair.
         /// </summary>
         /// <param name="keySize">Key size.</param>
         /// <param name="certainty">Certainty.</param>

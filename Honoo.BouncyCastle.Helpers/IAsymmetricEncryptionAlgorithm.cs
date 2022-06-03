@@ -39,12 +39,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter privateKey, byte[] data, int offset, int length);
+        byte[] Decrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter privateKey, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate a new asymmetric encryption algorithm and decrypt data.
@@ -97,12 +97,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="padding">Asymmetric padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey, byte[] data, int offset, int length);
+        byte[] Encrypt(AsymmetricPaddingMode padding, AsymmetricKeyParameter publicKey, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate a new asymmetric encryption algorithm and encrypt data.
@@ -111,7 +111,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mgf1HashAlgorithm1">Only for OAEP padding mode.</param>
         /// <param name="mgf1HashAlgorithm2">Only for OAEP padding mode.</param>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
@@ -120,7 +120,7 @@ namespace Honoo.BouncyCastle.Helpers
                        IHashAlgorithm mgf1HashAlgorithm1,
                        IHashAlgorithm mgf1HashAlgorithm2,
                        AsymmetricKeyParameter publicKey,
-                       byte[] data,
+                       byte[] dataBuffer,
                        int offset,
                        int length);
 

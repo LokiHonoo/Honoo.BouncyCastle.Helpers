@@ -19,11 +19,10 @@ namespace Honoo.BouncyCastle.Helpers
         string Name { get; }
 
         /// <summary>
-        /// Generate Key pair.
+        /// Generate Asymmetric key pair.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-
         AsymmetricCipherKeyPair GenerateKeyPair();
 
         /// <summary>

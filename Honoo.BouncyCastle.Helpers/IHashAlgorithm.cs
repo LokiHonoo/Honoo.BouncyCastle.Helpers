@@ -27,11 +27,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate a new digest and compute data hash.
         /// </summary>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] ComputeHash(byte[] data, int offset, int length);
+        byte[] ComputeHash(byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate digest. The digest can be reused.

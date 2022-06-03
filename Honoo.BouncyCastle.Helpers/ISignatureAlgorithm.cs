@@ -53,11 +53,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new signature algorithm and sign data.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Sign(AsymmetricKeyParameter privateKey, byte[] data, int offset, int length);
+        byte[] Sign(AsymmetricKeyParameter privateKey, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Return algorithm name.
@@ -78,13 +78,13 @@ namespace Honoo.BouncyCastle.Helpers
         /// Generate a new signature algorithm and sign data.
         /// </summary>
         /// <param name="publicKey">Asymmetric public key.</param>
-        /// <param name="data">Data.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <param name="signature">Signature.</param>
         /// <param name="signatureOffset">The starting offset to read.</param>
         /// <param name="signatureLength">The length to read.</param>
         /// <returns></returns>
-        bool Verify(AsymmetricKeyParameter publicKey, byte[] data, int offset, int length, byte[] signature, int signatureOffset, int signatureLength);
+        bool Verify(AsymmetricKeyParameter publicKey, byte[] dataBuffer, int offset, int length, byte[] signature, int signatureOffset, int signatureLength);
     }
 }

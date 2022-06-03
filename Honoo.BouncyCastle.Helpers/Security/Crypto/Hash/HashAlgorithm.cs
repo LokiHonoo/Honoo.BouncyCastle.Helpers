@@ -62,19 +62,19 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Generate a new digest and compute data hash.
         /// </summary>
-        /// <param name="data">Data buffer bytes.</param>
+        /// <param name="dataBuffer">Data buffer bytes.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] ComputeHash(byte[] data, int offset, int length)
+        public byte[] ComputeHash(byte[] dataBuffer, int offset, int length)
         {
-            if (data is null)
+            if (dataBuffer is null)
             {
-                throw new ArgumentNullException(nameof(data));
+                throw new ArgumentNullException(nameof(dataBuffer));
             }
             IDigest digest = GenerateDigest();
-            digest.BlockUpdate(data, offset, length);
+            digest.BlockUpdate(dataBuffer, offset, length);
             byte[] hash = new byte[_hashSize / 8];
             digest.DoFinal(hash, 0);
             return hash;

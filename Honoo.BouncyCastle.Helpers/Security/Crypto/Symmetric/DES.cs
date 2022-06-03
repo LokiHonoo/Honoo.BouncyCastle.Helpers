@@ -48,13 +48,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Generate KeyParameter.
         /// </summary>
-        /// <param name="key">Key.</param>
+        /// <param name="keyBuffer">Key buffer bytes.</param>
         /// <param name="offset">Offset.</param>
         /// <param name="length">Length.</param>
         /// <returns></returns>
-        protected override KeyParameter GenerateKeyParameter(byte[] key, int offset, int length)
+        protected override KeyParameter GenerateKeyParameter(byte[] keyBuffer, int offset, int length)
         {
-            return new DesParameters(key, offset, length);
+            return new DesParameters(keyBuffer, offset, length);
         }
     }
 }

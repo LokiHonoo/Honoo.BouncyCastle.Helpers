@@ -16,56 +16,56 @@ namespace Honoo.BouncyCastle.Helpers
         /// DSA.
         /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
-        public static IAsymmetricAlgorithm DSA { get; } = new DSA();
+        public static DSA DSA { get; } = new DSA();
 
         /// <summary>
         /// ECDH.
         /// </summary>
-        public static IECDH ECDH { get; } = new ECDH();
+        public static ECDH ECDH { get; } = new ECDH();
 
         /// <summary>
         /// ECDSA.
         /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
-        public static IAsymmetricAlgorithm ECDSA { get; } = new ECDSA();
+        public static ECDSA ECDSA { get; } = new ECDSA();
 
         /// <summary>
         /// ECGOST3410.
         /// </summary>
-        public static IAsymmetricAlgorithm ECGOST3410 { get; } = new ECGOST3410();
+        public static ECGOST3410 ECGOST3410 { get; } = new ECGOST3410();
 
         /// <summary>
         /// Ed25519.
         /// </summary>
-        public static IAsymmetricAlgorithm Ed25519 { get; } = new Ed25519();
+        public static Ed25519 Ed25519 { get; } = new Ed25519();
 
         /// <summary>
         /// Ed448.
         /// </summary>
-        public static IAsymmetricAlgorithm Ed448 { get; } = new Ed448();
+        public static Ed448 Ed448 { get; } = new Ed448();
 
         /// <summary>
         /// ElGamal.
         /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
         /// </summary>
-        public static IAsymmetricEncryptionAlgorithm ElGamal { get; } = new ElGamal();
+        public static ElGamal ElGamal { get; } = new ElGamal();
 
         /// <summary>
         /// GOST3410
         /// <para/>Legal key size 512, 1024 bits.
         /// </summary>
-        public static IAsymmetricAlgorithm GOST3410 { get; } = new GOST3410();
+        public static GOST3410 GOST3410 { get; } = new GOST3410();
 
         /// <summary>
         /// RSA.
         /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
         /// </summary>
-        public static IAsymmetricEncryptionAlgorithm RSA { get; } = new RSA();
+        public static RSA RSA { get; } = new RSA();
 
         /// <summary>
         /// SM2.
         /// </summary>
-        public static IAsymmetricAlgorithm SM2 { get; } = new SM2();
+        public static SM2 SM2 { get; } = new SM2();
 
         /// <summary>
         /// Try generate asymmetric public key from asymmetric private key.
@@ -160,28 +160,6 @@ namespace Honoo.BouncyCastle.Helpers
                 case "GOST3410": case "GOST3410-94": algorithm = GOST3410; return true;
                 case "RSA": algorithm = RSA; return true;
                 case "SM2": algorithm = SM2; return true;
-                default: algorithm = null; return false;
-            }
-        }
-
-        /// <summary>
-        /// Try get asymmetric algorithm from mechanism.
-        /// </summary>
-        /// <param name="mechanism">Asymmetric algorithm mechanism.</param>
-        /// <param name="algorithm">Asymmetric algorithm.</param>
-        /// <returns></returns>
-        public static bool TryGetAlgorithm(string mechanism, out IAsymmetricEncryptionAlgorithm algorithm)
-        {
-            if (string.IsNullOrWhiteSpace(mechanism))
-            {
-                algorithm = null;
-                return false;
-            }
-            mechanism = mechanism.ToUpperInvariant();
-            switch (mechanism)
-            {
-                case "ELGAMAL": algorithm = ElGamal; return true;
-                case "RSA": algorithm = RSA; return true;
                 default: algorithm = null; return false;
             }
         }
