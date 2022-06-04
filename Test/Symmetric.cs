@@ -64,11 +64,11 @@ namespace Test
             int macSize = 96; // SymmetricAeadCipherMode.CCM legal
             ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, nonce, macSize, null);
             // example 1
-            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricAeadCipherMode.GCM, parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricAeadCipherMode.GCM, parameters, enc1, 0, enc1.Length);
+            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(AeadCipherMode.GCM, parameters, test, 0, test.Length);
+            _ = SymmetricAlgorithmHelper.AES.Decrypt(AeadCipherMode.GCM, parameters, enc1, 0, enc1.Length);
             // example 2
-            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricAeadCipherMode.GCM, parameters);
-            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricAeadCipherMode.GCM, parameters);
+            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(AeadCipherMode.GCM, parameters);
+            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(AeadCipherMode.GCM, parameters);
             byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
             _ = decryptor.DoFinal(enc2, 0, enc2.Length);
         }
@@ -121,7 +121,7 @@ namespace Test
         private static void Test1()
         {
             Array modes1 = Enum.GetValues(typeof(SymmetricCipherMode));
-            Array modes2 = Enum.GetValues(typeof(SymmetricAeadCipherMode));
+            Array modes2 = Enum.GetValues(typeof(AeadCipherMode));
             Array paddings = Enum.GetValues(typeof(SymmetricPaddingMode));
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
@@ -179,7 +179,7 @@ namespace Test
                     }
                     foreach (int modeValue in modes2)
                     {
-                        SymmetricAeadCipherMode mode = (SymmetricAeadCipherMode)modeValue;
+                        AeadCipherMode mode = (AeadCipherMode)modeValue;
                         _total++;
                         string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Name, mode.ToString());
 
@@ -200,7 +200,7 @@ namespace Test
                             IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, parameters);
                             try
                             {
-                                if (mode == SymmetricAeadCipherMode.GCM)
+                                if (mode == AeadCipherMode.GCM)
                                 {
                                     XTestGCM(mechanism, encryptor, decryptor, test);
                                 }

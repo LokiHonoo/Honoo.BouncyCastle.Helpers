@@ -377,7 +377,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mechanism">Symmetric algorithm aead cipher mode mechanism.</param>
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <returns></returns>
-        public static bool TryGetCipherMode(string mechanism, out SymmetricAeadCipherMode? mode)
+        public static bool TryGetCipherMode(string mechanism, out AeadCipherMode? mode)
         {
             if (mechanism is null)
             {
@@ -386,10 +386,10 @@ namespace Honoo.BouncyCastle.Helpers
             }
             switch (mechanism)
             {
-                case "CCM": mode = SymmetricAeadCipherMode.CCM; return true;
-                case "EAX": mode = SymmetricAeadCipherMode.EAX; return true;
-                case "GCM": mode = SymmetricAeadCipherMode.GCM; return true;
-                case "OCB": mode = SymmetricAeadCipherMode.OCB; return true;
+                case "CCM": mode = AeadCipherMode.CCM; return true;
+                case "EAX": mode = AeadCipherMode.EAX; return true;
+                case "GCM": mode = AeadCipherMode.GCM; return true;
+                case "OCB": mode = AeadCipherMode.OCB; return true;
                 default: mode = null; return false;
             }
         }

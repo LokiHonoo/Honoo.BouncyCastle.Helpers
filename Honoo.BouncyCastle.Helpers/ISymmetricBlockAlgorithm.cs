@@ -43,7 +43,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">Parameters.</param>
         /// <param name="data">Data.</param>
         /// <returns></returns>
-        byte[] Decrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] data);
+        byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data);
 
         /// <summary>
         /// Generate a new Symmetric block algorithm and decrypt data.
@@ -54,7 +54,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Decrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
+        byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate a new Symmetric block algorithm and encrypt data.
@@ -85,7 +85,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">Parameters.</param>
         /// <param name="data">Data.</param>
         /// <returns></returns>
-        byte[] Encrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] data);
+        byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data);
 
         /// <summary>
         /// Generate a new Symmetric block algorithm and encrypt data.
@@ -96,7 +96,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        byte[] Encrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
+        byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length);
 
         /// <summary>
         /// Generate cipher. The cipher can be reused except GCM cipher mode.
@@ -115,7 +115,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        IBufferedCipher GenerateDecryptor(SymmetricAeadCipherMode mode, ICipherParameters parameters);
+        IBufferedCipher GenerateDecryptor(AeadCipherMode mode, ICipherParameters parameters);
 
         /// <summary>
         /// Generate cipher. The cipher can be reused except GCM cipher mode.
@@ -134,7 +134,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        IBufferedCipher GenerateEncryptor(SymmetricAeadCipherMode mode, ICipherParameters parameters);
+        IBufferedCipher GenerateEncryptor(AeadCipherMode mode, ICipherParameters parameters);
 
         /// <summary>
         /// Generate parameters.
@@ -162,7 +162,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="ivSizes">Legal iv size bits.</param>
         /// <returns></returns>
-        bool TryGetIVSizes(SymmetricAeadCipherMode mode, out KeySizes[] ivSizes);
+        bool TryGetIVSizes(AeadCipherMode mode, out KeySizes[] ivSizes);
 
         /// <summary>
         /// Try get legal mac sizes.
@@ -170,7 +170,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="macSizes">Legal mac size bits.</param>
         /// <returns></returns>
-        bool TryGetMacSizes(SymmetricAeadCipherMode mode, out KeySizes[] macSizes);
+        bool TryGetMacSizes(AeadCipherMode mode, out KeySizes[] macSizes);
 
         /// <summary>
         /// Try get legal nonce sizes.
@@ -178,7 +178,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="nonceSizes">Legal nonce size bits.</param>
         /// <returns></returns>
-        bool TryGetNonceSizes(SymmetricAeadCipherMode mode, out KeySizes[] nonceSizes);
+        bool TryGetNonceSizes(AeadCipherMode mode, out KeySizes[] nonceSizes);
 
         /// <summary>
         /// Verify iv size.
@@ -195,7 +195,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>
-        bool VerifyIVSize(SymmetricAeadCipherMode mode, int ivSize);
+        bool VerifyIVSize(AeadCipherMode mode, int ivSize);
 
         /// <summary>
         /// Verify mac size.
@@ -203,7 +203,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="macSize">Mac size bits.</param>
         /// <returns></returns>
-        bool VerifyMacSize(SymmetricAeadCipherMode mode, int macSize);
+        bool VerifyMacSize(AeadCipherMode mode, int macSize);
 
         /// <summary>
         /// Verify nonce size.
@@ -211,6 +211,6 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="nonceSizes">Nonce size bits.</param>
         /// <returns></returns>
-        bool VerifyNonceSize(SymmetricAeadCipherMode mode, int nonceSizes);
+        bool VerifyNonceSize(AeadCipherMode mode, int nonceSizes);
     }
 }

@@ -102,7 +102,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="parameters">Parameters.</param>
         /// <param name="data">Data.</param>
         /// <returns></returns>
-        public byte[] Decrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] data)
+        public byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data)
         {
             return Decrypt(mode, parameters, data, 0, data.Length);
         }
@@ -116,7 +116,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        public byte[] Decrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
+        public byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
@@ -177,7 +177,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="parameters">Parameters.</param>
         /// <param name="data">Data.</param>
         /// <returns></returns>
-        public byte[] Encrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] data)
+        public byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data)
         {
             return Encrypt(mode, parameters, data, 0, data.Length);
         }
@@ -191,7 +191,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
         /// <returns></returns>
-        public byte[] Encrypt(SymmetricAeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
+        public byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
             if (parameters is null)
             {
@@ -225,7 +225,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateDecryptor(SymmetricAeadCipherMode mode, ICipherParameters parameters)
+        public IBufferedCipher GenerateDecryptor(AeadCipherMode mode, ICipherParameters parameters)
         {
             return GenerateCipher(false, mode, parameters);
         }
@@ -250,7 +250,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="parameters">Parameters.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateEncryptor(SymmetricAeadCipherMode mode, ICipherParameters parameters)
+        public IBufferedCipher GenerateEncryptor(AeadCipherMode mode, ICipherParameters parameters)
         {
             return GenerateCipher(true, mode, parameters);
         }
@@ -390,11 +390,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="ivSizes">Legal iv size bits.</param>
         /// <returns></returns>
-        public bool TryGetIVSizes(SymmetricAeadCipherMode mode, out KeySizes[] ivSizes)
+        public bool TryGetIVSizes(AeadCipherMode mode, out KeySizes[] ivSizes)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM:
+                case AeadCipherMode.CCM:
                     if (_blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
@@ -402,7 +402,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.EAX:
+                case AeadCipherMode.EAX:
                     if (_blockSize == 64 || _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
@@ -410,7 +410,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.GCM:
+                case AeadCipherMode.GCM:
                     if (_blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
@@ -418,7 +418,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.OCB:
+                case AeadCipherMode.OCB:
                     if (_blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
@@ -438,11 +438,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="macSizes">Legal mac size bits.</param>
         /// <returns></returns>
-        public bool TryGetMacSizes(SymmetricAeadCipherMode mode, out KeySizes[] macSizes)
+        public bool TryGetMacSizes(AeadCipherMode mode, out KeySizes[] macSizes)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM:
+                case AeadCipherMode.CCM:
                     if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 16) };
@@ -450,7 +450,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.EAX:
+                case AeadCipherMode.EAX:
                     if (_blockSize == 64 || _blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) };
@@ -458,7 +458,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.GCM:
+                case AeadCipherMode.GCM:
                     if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 8) };
@@ -466,7 +466,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.OCB:
+                case AeadCipherMode.OCB:
                     if (_blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(64, 128, 8) };
@@ -486,11 +486,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="nonceSizes">Legal nonce size bits.</param>
         /// <returns></returns>
-        public bool TryGetNonceSizes(SymmetricAeadCipherMode mode, out KeySizes[] nonceSizes)
+        public bool TryGetNonceSizes(AeadCipherMode mode, out KeySizes[] nonceSizes)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM:
+                case AeadCipherMode.CCM:
                     if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
@@ -498,7 +498,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.EAX:
+                case AeadCipherMode.EAX:
                     if (_blockSize == 64 || _blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
@@ -506,7 +506,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.GCM:
+                case AeadCipherMode.GCM:
                     if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
@@ -514,7 +514,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                case SymmetricAeadCipherMode.OCB:
+                case AeadCipherMode.OCB:
                     if (_blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
@@ -571,14 +571,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>
-        public bool VerifyIVSize(SymmetricAeadCipherMode mode, int ivSize)
+        public bool VerifyIVSize(AeadCipherMode mode, int ivSize)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM: return _blockSize == 128 && ivSize >= 56 && ivSize <= 104 && ivSize % 8 == 0;
-                case SymmetricAeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
-                case SymmetricAeadCipherMode.GCM: return _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
-                case SymmetricAeadCipherMode.OCB: return _blockSize == 128 && ivSize >= 0 && ivSize <= 120 && ivSize % 8 == 0;
+                case AeadCipherMode.CCM: return _blockSize == 128 && ivSize >= 56 && ivSize <= 104 && ivSize % 8 == 0;
+                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
+                case AeadCipherMode.GCM: return _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
+                case AeadCipherMode.OCB: return _blockSize == 128 && ivSize >= 0 && ivSize <= 120 && ivSize % 8 == 0;
                 default: return false;
             }
         }
@@ -599,14 +599,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="macSize">Mac size bits.</param>
         /// <returns></returns>
-        public bool VerifyMacSize(SymmetricAeadCipherMode mode, int macSize)
+        public bool VerifyMacSize(AeadCipherMode mode, int macSize)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 16 == 0;
-                case SymmetricAeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && macSize >= 8 && macSize <= _blockSize && macSize % 8 == 0;
-                case SymmetricAeadCipherMode.GCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 8 == 0;
-                case SymmetricAeadCipherMode.OCB: return _blockSize == 128 && macSize >= 64 && macSize <= 128 && macSize % 8 == 0;
+                case AeadCipherMode.CCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 16 == 0;
+                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && macSize >= 8 && macSize <= _blockSize && macSize % 8 == 0;
+                case AeadCipherMode.GCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 8 == 0;
+                case AeadCipherMode.OCB: return _blockSize == 128 && macSize >= 64 && macSize <= 128 && macSize % 8 == 0;
                 default: return false;
             }
         }
@@ -617,14 +617,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
         /// <param name="nonceSizes">Nonce size bits.</param>
         /// <returns></returns>
-        public bool VerifyNonceSize(SymmetricAeadCipherMode mode, int nonceSizes)
+        public bool VerifyNonceSize(AeadCipherMode mode, int nonceSizes)
         {
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM: return _blockSize == 128 && nonceSizes >= 56 && nonceSizes <= 104 && nonceSizes % 8 == 0;
-                case SymmetricAeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case SymmetricAeadCipherMode.GCM: return _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case SymmetricAeadCipherMode.OCB: return _blockSize == 128 && nonceSizes >= 0 && nonceSizes <= 120 && nonceSizes % 8 == 0;
+                case AeadCipherMode.CCM: return _blockSize == 128 && nonceSizes >= 56 && nonceSizes <= 104 && nonceSizes % 8 == 0;
+                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
+                case AeadCipherMode.GCM: return _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
+                case AeadCipherMode.OCB: return _blockSize == 128 && nonceSizes >= 0 && nonceSizes <= 120 && nonceSizes % 8 == 0;
                 default: return false;
             }
         }
@@ -742,13 +742,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             return cipher;
         }
 
-        private IBufferedCipher GenerateCipher(bool forEncryption, SymmetricAeadCipherMode mode, ICipherParameters parameters)
+        private IBufferedCipher GenerateCipher(bool forEncryption, AeadCipherMode mode, ICipherParameters parameters)
         {
             IBlockCipher engine = GenerateEngine();
             IBufferedCipher cipher;
             switch (mode)
             {
-                case SymmetricAeadCipherMode.CCM:
+                case AeadCipherMode.CCM:
                     if (_blockSize == 128)
                     {
                         cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
@@ -756,7 +756,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     throw new CryptographicException("CCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
 
-                case SymmetricAeadCipherMode.EAX:
+                case AeadCipherMode.EAX:
                     if (_blockSize == 64 || _blockSize == 128)
                     {
                         cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
@@ -764,7 +764,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     throw new CryptographicException("EAX cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).");
 
-                case SymmetricAeadCipherMode.GCM:
+                case AeadCipherMode.GCM:
                     if (_blockSize == 128)
                     {
                         cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
@@ -772,7 +772,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     throw new CryptographicException("GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
 
-                case SymmetricAeadCipherMode.OCB:
+                case AeadCipherMode.OCB:
                     if (_blockSize == 128)
                     {
                         cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));

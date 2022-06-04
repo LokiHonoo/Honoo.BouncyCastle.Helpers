@@ -3,7 +3,7 @@
     /// <summary>
     /// Symmetric aead algorithm cipher mode.
     /// </summary>
-    public enum SymmetricAeadCipherMode
+    public enum AeadCipherMode
     {
         /// <summary>
         /// Nonce size 56-104 bits (8 bits increments). MAC size 32-128 bits (16 bits increments).
