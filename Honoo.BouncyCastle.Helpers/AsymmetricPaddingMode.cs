@@ -6,19 +6,19 @@
     public enum AsymmetricPaddingMode
     {
         /// <summary>
+        /// NoPadding padding mode.
+        /// </summary>
+        NoPadding = 1,
+
+        /// <summary>
         /// PKCS1 padding mode.
         /// </summary>
-        PKCS1 = 0,
+        PKCS1,
 
         /// <summary>
         /// OAEP padding mode.
         /// </summary>
         OAEP,
-
-        /// <summary>
-        /// NoPadding padding mode.
-        /// </summary>
-        NoPadding = 101,
 
         /// <summary>
         /// Only for RSA.

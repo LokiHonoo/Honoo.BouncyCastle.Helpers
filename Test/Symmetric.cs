@@ -241,7 +241,7 @@ namespace Test
         }
 
         /// <summary>
-        /// BUG: GCM cipher mode cannot be resue. The algorithm instance needs to be recreated every time.
+        /// Warning: GCM cipher mode cannot be auto reused. The cipher instance needs to be recreated every time. (BouncyCastle 1.9.0 has not been fixed).
         /// </summary>
         /// <param name="encryptor"></param>
         /// <param name="decryptor"></param>
@@ -250,7 +250,7 @@ namespace Test
         {
             byte[] enc1 = encryptor.DoFinal(test, 0, test.Length);
             byte[] dec1 = decryptor.DoFinal(enc1, 0, enc1.Length);
-            bool diff = !StructuralComparisons.StructuralEqualityComparer.Equals(dec1, test);
+            bool diff = !StructuralComparisons.StructuralEqualityComparer.Equals(test, dec1);
             Console.Write("{0}{1} src {2} bytes, enc {3} bytes, dec {4} bytes - ",
                 mechanism.PadRight(32),
                 encryptor.AlgorithmName.PadRight(32),

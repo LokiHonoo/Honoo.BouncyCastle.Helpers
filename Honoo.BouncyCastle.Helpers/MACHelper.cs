@@ -1,5 +1,4 @@
 ﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Hash;
-using System;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -261,7 +260,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 mode = null;
                 return false;
-
             }
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)

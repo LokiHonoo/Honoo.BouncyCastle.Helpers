@@ -180,9 +180,9 @@ namespace Honoo.BouncyCastle.Helpers
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
+                case "NOPADDING": padding = AsymmetricPaddingMode.NoPadding; return true;
                 case "PKCS1": case "PKCS1PADDING": padding = AsymmetricPaddingMode.PKCS1; return true;
                 case "OAEP": case "OAEPPADDING": padding = AsymmetricPaddingMode.OAEP; return true;
-                case "NOPADDING": padding = AsymmetricPaddingMode.NoPadding; return true;
                 case "ISO9796_1": case "ISO9796_1PADDING": case "ISO9796D1": case "ISO9796D1PADDING": padding = AsymmetricPaddingMode.ISO9796_1; return true;
                 default: padding = null; return false;
             }
