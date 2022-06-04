@@ -1,9 +1,11 @@
-﻿namespace Honoo.BouncyCastle.Helpers
+﻿using System;
+
+namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
     /// Symmetric algorithm cipher mode.
     /// </summary>
-    public class SymmetricCipherMode2
+    public sealed class SymmetricCipherMode2 : IEquatable<SymmetricCipherMode2>
     {
         #region Properties
 
@@ -78,5 +80,43 @@
         }
 
         #endregion Constructor
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SymmetricCipherMode2 other)
+        {
+            return _name.Equals(other._name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((SymmetricCipherMode2)obj);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
+
+        /// <summary>
+        /// Return symmetric algorithm cipher mode name.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return _name;
+        }
     }
 }

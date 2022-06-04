@@ -7,7 +7,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// <summary>
     /// Symmetric algorithm.
     /// </summary>
-    public abstract class SymmetricAlgorithm : ISymmetricAlgorithm
+    public abstract class SymmetricAlgorithm : IEquatable<SymmetricAlgorithm>, ISymmetricAlgorithm
     {
         #region Properties
 
@@ -47,6 +47,26 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         #endregion Constructor
 
         /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SymmetricAlgorithm other)
+        {
+            return _name.Equals(other._name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((SymmetricAlgorithm)obj);
+        }
+
+        /// <summary>
         /// Generate parameters.
         /// </summary>
         /// <param name="key">Key bytes.</param>
@@ -69,6 +89,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         public abstract ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
+
+        /// <summary>
         /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
@@ -83,15 +112,5 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="keySize">Key size bits.</param>
         /// <returns></returns>
         public abstract bool VerifyKeySize(int keySize);
-
-        public override bool Equals(object obj)
-        {
-            return _name.Equals(obj._name);
-        }
-
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
     }
 }

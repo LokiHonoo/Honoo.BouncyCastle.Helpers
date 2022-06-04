@@ -1,11 +1,12 @@
 ﻿using Org.BouncyCastle.Crypto;
+using System;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// Asymmetric algorithm.
     /// </summary>
-    public abstract class AsymmetricAlgorithm : IAsymmetricAlgorithm
+    public abstract class AsymmetricAlgorithm : IEquatable<AsymmetricAlgorithm>, IAsymmetricAlgorithm
     {
         #region Properties
 
@@ -40,10 +41,39 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Constructor
 
         /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(AsymmetricAlgorithm other)
+        {
+            return _name.Equals(other._name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((AsymmetricAlgorithm)obj);
+        }
+
+        /// <summary>
         /// Generate key pair by default settings.
         /// </summary>
         /// <returns></returns>
         public abstract AsymmetricCipherKeyPair GenerateKeyPair();
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
 
         /// <summary>
         /// Return algorithm name.

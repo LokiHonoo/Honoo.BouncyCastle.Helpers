@@ -7,7 +7,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
     /// <summary>
     /// Signature algorithm.
     /// </summary>
-    public abstract class SignatureAlgorithm : ISignatureAlgorithm
+    public abstract class SignatureAlgorithm : IEquatable<SignatureAlgorithm>, ISignatureAlgorithm
     {
         #region Properties
 
@@ -50,6 +50,26 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         #endregion Constructor
 
         /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SignatureAlgorithm other)
+        {
+            return _name.Equals(other._name);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((SignatureAlgorithm)obj);
+        }
+
+        /// <summary>
         /// Generate signer. The signer can be reused.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
@@ -89,6 +109,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             ISigner signer = GenerateSignerCore();
             signer.Init(false, publicKey);
             return signer;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
         }
 
         /// <summary>

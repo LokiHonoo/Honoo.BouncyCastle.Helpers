@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDiffieHellman terminal Alice.
     /// </summary>
-    public sealed class ECDHTerminalA : IECDHTerminalA
+    public sealed class ECDHTerminalA : IEquatable<ECDHTerminalA>, IECDHTerminalA
     {
         #region Properties
 
@@ -83,6 +83,35 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             AsymmetricKeyParameter publicKeyB = PublicKeyFactory.CreateKey(exchangeB);
             BigInteger integer = _agreement.CalculateAgreement(publicKeyB);
             return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ECDHTerminalA other)
+        {
+            return _agreement.Equals(other._agreement) & _exchangeA.Equals(other._exchangeA);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals((ECDHTerminalA)obj);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _agreement.GetHashCode() ^ _exchangeA.GetHashCode();
         }
     }
 }
