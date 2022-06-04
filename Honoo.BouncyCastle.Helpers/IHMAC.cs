@@ -67,5 +67,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <returns></returns>
         string ToString();
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        bool VerifyKeySize(int keySize);
     }
 }

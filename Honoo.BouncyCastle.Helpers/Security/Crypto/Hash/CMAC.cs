@@ -201,5 +201,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             return _name;
         }
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        public bool VerifyKeySize(int keySize)
+        {
+            return _blockAlgorithm.VerifyKeySize(keySize);
+        }
     }
 }

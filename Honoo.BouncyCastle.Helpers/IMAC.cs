@@ -101,5 +101,20 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="ivSizes">Legal iv size bits.</param>
         /// <returns></returns>
         bool TryGetIVSizes(MACCipherMode mode, out KeySizes[] ivSizes);
+
+        /// <summary>
+        /// Verify iv size.
+        /// </summary>
+        /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="ivSize">IV size bits.</param>
+        /// <returns></returns>
+        bool VerifyIVSize(MACCipherMode mode, int ivSize);
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        bool VerifyKeySize(int keySize);
     }
 }

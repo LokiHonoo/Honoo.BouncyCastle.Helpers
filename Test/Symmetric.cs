@@ -59,7 +59,7 @@ namespace Test
             Utilities.Random.NextBytes(test);
             byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
-            byte[] nonce = new byte[104 / 8]; // SymmetricAeadCipherMode.CCM legal
+            byte[] nonce = new byte[16 / 8]; // SymmetricAeadCipherMode.CCM legal
             Utilities.Random.NextBytes(nonce);
             int macSize = 96; // SymmetricAeadCipherMode.CCM legal
             ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, nonce, macSize, null);

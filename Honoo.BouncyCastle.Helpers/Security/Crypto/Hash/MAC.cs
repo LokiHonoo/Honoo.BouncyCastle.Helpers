@@ -253,5 +253,31 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             ivSizes = null;
             return false;
         }
+
+        /// <summary>
+        /// Verify iv size.
+        /// </summary>
+        /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="ivSize">IV size bits.</param>
+        /// <returns></returns>
+        public bool VerifyIVSize(MACCipherMode mode, int ivSize)
+        {
+            switch (mode)
+            {
+                case MACCipherMode.CBC: return ivSize == _blockAlgorithm.BlockSize;
+                case MACCipherMode.CFB: return ivSize >= 8 && ivSize <= _blockAlgorithm.BlockSize && ivSize % 8 == 0;
+                default: return false;
+            }
+        }
+
+        /// <summary>
+        /// Verify key size.
+        /// </summary>
+        /// <param name="keySize">Key size bits.</param>
+        /// <returns></returns>
+        public bool VerifyKeySize(int keySize)
+        {
+            return _blockAlgorithm.VerifyKeySize(keySize);
+        }
     }
 }
