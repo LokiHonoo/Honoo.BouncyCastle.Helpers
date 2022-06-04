@@ -96,42 +96,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Generate a new Symmetric block algorithm and decrypt data.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data.</param>
-        /// <returns></returns>
-        public byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data)
-        {
-            return Decrypt(mode, parameters, data, 0, data.Length);
-        }
-
-        /// <summary>
-        /// Generate a new Symmetric block algorithm and decrypt data.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <param name="dataBuffer">Data buffer.</param>
-        /// <param name="offset">The starting offset to read.</param>
-        /// <param name="length">The length to read.</param>
-        /// <returns></returns>
-        public byte[] Decrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
-        {
-            if (parameters is null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            if (dataBuffer is null)
-            {
-                throw new ArgumentNullException(nameof(dataBuffer));
-            }
-            IBufferedCipher decryptor = GenerateCipher(false, mode, parameters);
-            return decryptor.DoFinal(dataBuffer, offset, length);
-        }
-
-        /// <summary>
         /// Generate a new symmetric block algorithm and encrypt data.
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
@@ -171,41 +135,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Generate a new Symmetric block algorithm and encrypt data.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <param name="data">Data.</param>
-        /// <returns></returns>
-        public byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] data)
-        {
-            return Encrypt(mode, parameters, data, 0, data.Length);
-        }
-
-        /// <summary>
-        /// Generate a new Symmetric block algorithm and encrypt data.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <param name="dataBuffer">Data buffer.</param>
-        /// <param name="offset">The starting offset to read.</param>
-        /// <param name="length">The length to read.</param>
-        /// <returns></returns>
-        public byte[] Encrypt(AeadCipherMode mode, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
-        {
-            if (parameters is null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
-            if (dataBuffer is null)
-            {
-                throw new ArgumentNullException(nameof(dataBuffer));
-            }
-            IBufferedCipher encryptor = GenerateCipher(true, mode, parameters);
-            return encryptor.DoFinal(dataBuffer, offset, length);
-        }
-
-        /// <summary>
         /// Generate cipher. The cipher can be reused except GCM cipher mode.
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
@@ -221,18 +150,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Generate cipher. The cipher can be reused except GCM cipher mode.
         /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateDecryptor(AeadCipherMode mode, ICipherParameters parameters)
-        {
-            return GenerateCipher(false, mode, parameters);
-        }
-
-        /// <summary>
-        /// Generate cipher. The cipher can be reused except GCM cipher mode.
-        /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="parameters">Parameters.</param>
@@ -241,18 +158,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         public IBufferedCipher GenerateEncryptor(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
         {
             return GenerateCipher(true, mode, padding, parameters);
-        }
-
-        /// <summary>
-        /// Generate cipher. The cipher can be reused except GCM cipher mode.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="parameters">Parameters.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public IBufferedCipher GenerateEncryptor(AeadCipherMode mode, ICipherParameters parameters)
-        {
-            return GenerateCipher(true, mode, parameters);
         }
 
         /// <summary>
@@ -378,48 +283,32 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     break;
 
-                default: break;
-            }
-            ivSizes = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Try get legal sizes.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="ivSizes">Legal iv size bits.</param>
-        /// <returns></returns>
-        public bool TryGetIVSizes(AeadCipherMode mode, out KeySizes[] ivSizes)
-        {
-            switch (mode)
-            {
-                case AeadCipherMode.CCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.CCM:
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.EAX:
-                    if (_blockSize == 64 || _blockSize == 128)
+                case SymmetricCipherMode.EAX:
+                    if (!pad && (_blockSize == 64 || _blockSize == 128))
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.GCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.GCM:
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.OCB:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.OCB:
+                    if (!pad && _blockSize == 128)
                     {
                         ivSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
                         return true;
@@ -435,39 +324,40 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Try get legal mac sizes.
         /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="macSizes">Legal mac size bits.</param>
         /// <returns></returns>
-        public bool TryGetMacSizes(AeadCipherMode mode, out KeySizes[] macSizes)
+        public bool TryGetMacSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] macSizes)
         {
             switch (mode)
             {
-                case AeadCipherMode.CCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.CCM:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 16) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.EAX:
-                    if (_blockSize == 64 || _blockSize == 128)
+                case SymmetricCipherMode.EAX:
+                    if (padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128))
                     {
                         macSizes = new KeySizes[] { new KeySizes(8, _blockSize, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.GCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.GCM:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(32, 128, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.OCB:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.OCB:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         macSizes = new KeySizes[] { new KeySizes(64, 128, 8) };
                         return true;
@@ -483,39 +373,40 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Try get legal nonce sizes.
         /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="nonceSizes">Legal nonce size bits.</param>
         /// <returns></returns>
-        public bool TryGetNonceSizes(AeadCipherMode mode, out KeySizes[] nonceSizes)
+        public bool TryGetNonceSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] nonceSizes)
         {
             switch (mode)
             {
-                case AeadCipherMode.CCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.CCM:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.EAX:
-                    if (_blockSize == 64 || _blockSize == 128)
+                case SymmetricCipherMode.EAX:
+                    if (padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128))
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.GCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.GCM:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
                         return true;
                     }
                     break;
 
-                case AeadCipherMode.OCB:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.OCB:
+                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
                     {
                         nonceSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
                         return true;
@@ -561,24 +452,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.GOFB: return _blockSize == 64 && ivSize == _blockSize;
                 case SymmetricCipherMode.OpenPGPCFB: return ivSize >= 8 && ivSize <= _blockSize && ivSize % 8 == 0;
                 case SymmetricCipherMode.SIC: return _blockSize >= 128 && ivSize >= Math.Max(_blockSize / 2, _blockSize - 64) && ivSize <= _blockSize && ivSize % 8 == 0;
-                default: return false;
-            }
-        }
 
-        /// <summary>
-        /// Verify iv size.
-        /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <param name="ivSize">IV size bits.</param>
-        /// <returns></returns>
-        public bool VerifyIVSize(AeadCipherMode mode, int ivSize)
-        {
-            switch (mode)
-            {
-                case AeadCipherMode.CCM: return _blockSize == 128 && ivSize >= 56 && ivSize <= 104 && ivSize % 8 == 0;
-                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
-                case AeadCipherMode.GCM: return _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
-                case AeadCipherMode.OCB: return _blockSize == 128 && ivSize >= 0 && ivSize <= 120 && ivSize % 8 == 0;
+                case SymmetricCipherMode.CCM: return !pad && _blockSize == 128 && ivSize >= 56 && ivSize <= 104 && ivSize % 8 == 0;
+                case SymmetricCipherMode.EAX: return !pad && (_blockSize == 64 || _blockSize == 128) && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
+                case SymmetricCipherMode.GCM: return !pad && _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
+                case SymmetricCipherMode.OCB: return !pad && _blockSize == 128 && ivSize >= 0 && ivSize <= 120 && ivSize % 8 == 0;
                 default: return false;
             }
         }
@@ -596,17 +474,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Verify mac size.
         /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="macSize">Mac size bits.</param>
         /// <returns></returns>
-        public bool VerifyMacSize(AeadCipherMode mode, int macSize)
+        public bool VerifyMacSize(SymmetricCipherMode mode, SymmetricPaddingMode padding, int macSize)
         {
             switch (mode)
             {
-                case AeadCipherMode.CCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 16 == 0;
-                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && macSize >= 8 && macSize <= _blockSize && macSize % 8 == 0;
-                case AeadCipherMode.GCM: return _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 8 == 0;
-                case AeadCipherMode.OCB: return _blockSize == 128 && macSize >= 64 && macSize <= 128 && macSize % 8 == 0;
+                case SymmetricCipherMode.CCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 16 == 0;
+                case SymmetricCipherMode.EAX: return padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128) && macSize >= 8 && macSize <= _blockSize && macSize % 8 == 0;
+                case SymmetricCipherMode.GCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && macSize >= 32 && macSize <= 128 && macSize % 8 == 0;
+                case SymmetricCipherMode.OCB: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && macSize >= 64 && macSize <= 128 && macSize % 8 == 0;
                 default: return false;
             }
         }
@@ -614,17 +493,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Verify nonce size.
         /// </summary>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
+        /// <param name="mode">Symmetric algorithm cipher mode.</param>
+        /// <param name="padding">Symmetric algorithm padding mode.</param>
         /// <param name="nonceSizes">Nonce size bits.</param>
         /// <returns></returns>
-        public bool VerifyNonceSize(AeadCipherMode mode, int nonceSizes)
+        public bool VerifyNonceSize(SymmetricCipherMode mode, SymmetricPaddingMode padding, int nonceSizes)
         {
             switch (mode)
             {
-                case AeadCipherMode.CCM: return _blockSize == 128 && nonceSizes >= 56 && nonceSizes <= 104 && nonceSizes % 8 == 0;
-                case AeadCipherMode.EAX: return _blockSize == 64 || _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case AeadCipherMode.GCM: return _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case AeadCipherMode.OCB: return _blockSize == 128 && nonceSizes >= 0 && nonceSizes <= 120 && nonceSizes % 8 == 0;
+                case SymmetricCipherMode.CCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 56 && nonceSizes <= 104 && nonceSizes % 8 == 0;
+                case SymmetricCipherMode.EAX: return padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128) && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
+                case SymmetricCipherMode.GCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
+                case SymmetricCipherMode.OCB: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 0 && nonceSizes <= 120 && nonceSizes % 8 == 0;
                 default: return false;
             }
         }
@@ -736,49 +616,53 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     }
                     throw new CryptographicException("SIC cipher mode uses with a block size of at least 128 bits algorithm (e.g. AES).");
 
-                default: throw new CryptographicException("Unsupported cipher mode.");
-            }
-            cipher.Init(forEncryption, parameters);
-            return cipher;
-        }
-
-        private IBufferedCipher GenerateCipher(bool forEncryption, AeadCipherMode mode, ICipherParameters parameters)
-        {
-            IBlockCipher engine = GenerateEngine();
-            IBufferedCipher cipher;
-            switch (mode)
-            {
-                case AeadCipherMode.CCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.CCM:
+                    if (pad is null)
                     {
-                        cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
-                        break;
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new CcmBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("CCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
                     }
-                    throw new CryptographicException("CCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    throw new CryptographicException("CCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
-                case AeadCipherMode.EAX:
-                    if (_blockSize == 64 || _blockSize == 128)
+                case SymmetricCipherMode.EAX:
+                    if (pad is null)
                     {
-                        cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
-                        break;
+                        if (_blockSize == 64 || _blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new EaxBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("EAX cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).");
                     }
-                    throw new CryptographicException("EAX cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).");
+                    throw new CryptographicException("EAX cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
-                case AeadCipherMode.GCM:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.GCM:
+                    if (pad is null)
                     {
-                        cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
-                        break;
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new GcmBlockCipher(engine));
+                            break;
+                        }
+                        throw new CryptographicException("GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
                     }
-                    throw new CryptographicException("GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    throw new CryptographicException("GCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
-                case AeadCipherMode.OCB:
-                    if (_blockSize == 128)
+                case SymmetricCipherMode.OCB:
+                    if (pad is null)
                     {
-                        cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));
-                        break;
+                        if (_blockSize == 128)
+                        {
+                            cipher = new BufferedAeadBlockCipher(new OcbBlockCipher(engine, GenerateEngine()));
+                            break;
+                        }
+                        throw new CryptographicException("OCB cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
                     }
-                    throw new CryptographicException("OCB cipher mode uses with a block size of 128 bits algorithm (e.g. AES).");
+                    throw new CryptographicException("OCB cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 default: throw new CryptographicException("Unsupported cipher mode.");
             }

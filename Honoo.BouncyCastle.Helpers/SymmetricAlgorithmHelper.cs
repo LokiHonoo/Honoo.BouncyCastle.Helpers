@@ -367,29 +367,11 @@ namespace Honoo.BouncyCastle.Helpers
                 case "GOFB": mode = SymmetricCipherMode.GOFB; return true;
                 case "OPENPGPCFB": mode = SymmetricCipherMode.OpenPGPCFB; return true;
                 case "SIC": mode = SymmetricCipherMode.SIC; return true;
-                default: mode = null; return false;
-            }
-        }
 
-        /// <summary>
-        /// Try get symmetric algorithm aead ciper mode from mechanism.
-        /// </summary>
-        /// <param name="mechanism">Symmetric algorithm aead cipher mode mechanism.</param>
-        /// <param name="mode">Symmetric algorithm aead cipher mode.</param>
-        /// <returns></returns>
-        public static bool TryGetCipherMode(string mechanism, out AeadCipherMode? mode)
-        {
-            if (mechanism is null)
-            {
-                mode = null;
-                return false;
-            }
-            switch (mechanism)
-            {
-                case "CCM": mode = AeadCipherMode.CCM; return true;
-                case "EAX": mode = AeadCipherMode.EAX; return true;
-                case "GCM": mode = AeadCipherMode.GCM; return true;
-                case "OCB": mode = AeadCipherMode.OCB; return true;
+                case "CCM": mode = SymmetricCipherMode.CCM; return true;
+                case "EAX": mode = SymmetricCipherMode.EAX; return true;
+                case "GCM": mode = SymmetricCipherMode.GCM; return true;
+                case "OCB": mode = SymmetricCipherMode.OCB; return true;
                 default: mode = null; return false;
             }
         }

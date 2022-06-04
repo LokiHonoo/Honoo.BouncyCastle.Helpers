@@ -64,11 +64,11 @@ namespace Test
             int macSize = 96; // SymmetricAeadCipherMode.CCM legal
             ICipherParameters parameters = SymmetricAlgorithmHelper.AES.GenerateParameters(key, nonce, macSize, null);
             // example 1
-            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(AeadCipherMode.GCM, parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithmHelper.AES.Decrypt(AeadCipherMode.GCM, parameters, enc1, 0, enc1.Length);
+            byte[] enc1 = SymmetricAlgorithmHelper.AES.Encrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, test, 0, test.Length);
+            _ = SymmetricAlgorithmHelper.AES.Decrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, enc1, 0, enc1.Length);
             // example 2
-            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(AeadCipherMode.GCM, parameters);
-            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(AeadCipherMode.GCM, parameters);
+            IBufferedCipher encryptor = SymmetricAlgorithmHelper.AES.GenerateEncryptor(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters);
+            IBufferedCipher decryptor = SymmetricAlgorithmHelper.AES.GenerateDecryptor(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters);
             byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
             _ = decryptor.DoFinal(enc2, 0, enc2.Length);
         }
@@ -121,7 +121,6 @@ namespace Test
         private static void Test1()
         {
             Array modes1 = Enum.GetValues(typeof(SymmetricCipherMode));
-            Array modes2 = Enum.GetValues(typeof(AeadCipherMode));
             Array paddings = Enum.GetValues(typeof(SymmetricPaddingMode));
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
@@ -158,7 +157,11 @@ namespace Test
                                 IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, padding, parameters);
                                 try
                                 {
-                                    if (padding == SymmetricPaddingMode.NoPadding)
+                                    if (mode == SymmetricCipherMode.GCM)
+                                    {
+                                        XTestGCM(mechanism, encryptor, decryptor, test);
+                                    }
+                                    else if (padding == SymmetricPaddingMode.NoPadding)
                                     {
                                         byte[] testMult = new byte[algorithm.BlockSize / 8 * 4];
                                         Utilities.Random.NextBytes(testMult);
@@ -174,45 +177,6 @@ namespace Test
                                 {
                                     Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
                                 }
-                            }
-                        }
-                    }
-                    foreach (int modeValue in modes2)
-                    {
-                        AeadCipherMode mode = (AeadCipherMode)modeValue;
-                        _total++;
-                        string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Name, mode.ToString());
-
-                        if (algorithm.TryGetIVSizes(mode, out KeySizes[] ivSizes))
-                        {
-                            int keySize = GetQualitySize(algorithm.KeySizes);
-                            byte[] key = new byte[keySize / 8];
-                            Utilities.Random.NextBytes(key);
-                            int ivSize = GetQualitySize(ivSizes);
-                            byte[] iv = ivSize == 0 ? null : new byte[ivSize / 8];
-                            if (iv != null)
-                            {
-                                Utilities.Random.NextBytes(iv);
-                            }
-                            ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
-
-                            IBufferedCipher encryptor = algorithm.GenerateEncryptor(mode, parameters);
-                            IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, parameters);
-                            try
-                            {
-                                if (mode == AeadCipherMode.GCM)
-                                {
-                                    XTestGCM(mechanism, encryptor, decryptor, test);
-                                }
-                                else
-                                {
-                                    XTest(mechanism, encryptor, decryptor, test);
-                                }
-                                _execute++;
-                            }
-                            catch (Exception)
-                            {
-                                Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
                             }
                         }
                     }
