@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers
     public interface ISymmetricStreamAlgorithm : ISymmetricAlgorithm
     {
         /// <summary>
-        /// Gets legal iv size bits.
+        /// Gets legal IV size bits.
         /// </summary>
         KeySizes[] IVSizes { get; }
 
@@ -64,7 +64,7 @@ namespace Honoo.BouncyCastle.Helpers
         IBufferedCipher GenerateEncryptor(ICipherParameters parameters);
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>

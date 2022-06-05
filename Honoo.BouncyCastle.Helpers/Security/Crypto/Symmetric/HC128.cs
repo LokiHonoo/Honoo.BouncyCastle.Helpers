@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// HC128.
-    /// <para/>Legal key size 128 bits. Legal iv size 0-128 bits (8 bits increments).
+    /// <para/>Legal key size 128 bits. Legal IV size 0-128 bits (8 bits increments).
     /// </summary>
     public sealed class HC128 : SymmetricStreamAlgorithm
     {
@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// HC128.
-        /// <para/>Legal key size 128 bits. Legal iv size 0-128 bits (8 bits increments).
+        /// <para/>Legal key size 128 bits. Legal IV size 0-128 bits (8 bits increments).
         /// </summary>
         public HC128() : base("HC128", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {

@@ -95,15 +95,15 @@ namespace Honoo.BouncyCastle.Helpers
         string ToString();
 
         /// <summary>
-        /// Try get legal iv sizes.
+        /// Try get legal IV sizes.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
-        /// <param name="ivSizes">Legal iv size bits.</param>
+        /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
         bool TryGetIVSizes(MACCipherMode mode, out KeySizes[] ivSizes);
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
         /// <param name="ivSize">IV size bits.</param>

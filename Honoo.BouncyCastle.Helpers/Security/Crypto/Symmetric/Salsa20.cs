@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// Salsa20.
-    /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+    /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
     /// <para/>Uses rounds 20 by default.
     /// </summary>
     public sealed class Salsa20 : SymmetricStreamAlgorithm
@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// Salsa20.
-        /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         public Salsa20() : this(20)
@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// Salsa20.
-        /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         /// <param name="rounds">Rounds. Must be an even number.</param>

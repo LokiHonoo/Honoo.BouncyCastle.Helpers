@@ -218,7 +218,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
-        /// <param name="ivSizes">Legal iv size bits.</param>
+        /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
         public bool TryGetIVSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] ivSizes)
         {
@@ -420,7 +420,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>

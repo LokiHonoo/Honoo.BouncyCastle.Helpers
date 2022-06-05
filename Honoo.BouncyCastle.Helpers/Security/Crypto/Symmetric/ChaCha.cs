@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// ChaCha.
-    /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+    /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
     /// <para/>Uses rounds 20 by default.
     /// </summary>
     public sealed class ChaCha : SymmetricStreamAlgorithm
@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// ChaCha.
-        /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         public ChaCha() : this(20)
@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// ChaCha.
-        /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         /// <param name="rounds">Rounds. Must be an even number.</param>

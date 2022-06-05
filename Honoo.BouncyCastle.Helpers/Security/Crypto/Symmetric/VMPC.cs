@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// VMPC.
-    /// <para/>Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
+    /// <para/>Legal key size 256 bits. Legal IV size 8-6144 bits (8 bits increments).
     /// </summary>
     public sealed class VMPC : SymmetricStreamAlgorithm
     {
@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// VMPC.
-        /// <para/>Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
+        /// <para/>Legal key size 256 bits. Legal IV size 8-6144 bits (8 bits increments).
         /// </summary>
         public VMPC() : base("VMPC", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {

@@ -180,24 +180,24 @@ namespace Honoo.BouncyCastle.Helpers
         #region Stream algorithms
 
         /// <summary>
-        /// Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         public static ISymmetricStreamAlgorithm ChaCha { get; } = new ChaCha();
 
         /// <summary>
         /// ChaCha7539, ChaCha20.
-        /// <para/>Legal key size 256 bits. Legal iv size 96 bits.
+        /// <para/>Legal key size 256 bits. Legal IV size 96 bits.
         /// </summary>
         public static ISymmetricStreamAlgorithm ChaCha7539 { get; } = new ChaCha7539();
 
         /// <summary>
-        /// Legal key size 128 bits. Legal iv size 0-128 bits (8 bits increments).
+        /// Legal key size 128 bits. Legal IV size 0-128 bits (8 bits increments).
         /// </summary>
         public static ISymmetricStreamAlgorithm HC128 { get; } = new HC128();
 
         /// <summary>
-        /// Legal key size 128, 256 bits. Legal iv size 128-256 bits (8 bits increments).
+        /// Legal key size 128, 256 bits. Legal IV size 128-256 bits (8 bits increments).
         /// </summary>
         public static ISymmetricStreamAlgorithm HC256 { get; } = new HC256();
 
@@ -214,23 +214,23 @@ namespace Honoo.BouncyCastle.Helpers
 
         /// <summary>
         /// Salsa20.
-        /// <para/>Legal key size 128, 256 bits. Legal iv size 64 bits.
+        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         public static ISymmetricStreamAlgorithm Salsa20 { get; } = new Salsa20();
 
         /// <summary>
-        /// Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
+        /// Legal key size 256 bits. Legal IV size 8-6144 bits (8 bits increments).
         /// </summary>
         public static ISymmetricStreamAlgorithm VMPC { get; } = new VMPC();
 
         /// <summary>
-        /// Legal key size 256 bits. Legal iv size 8-6144 bits (8 bits increments).
+        /// Legal key size 256 bits. Legal IV size 8-6144 bits (8 bits increments).
         /// </summary>
         public static ISymmetricStreamAlgorithm VMPC_KSA3 { get; } = new VMPC_KSA3();
 
         /// <summary>
-        /// Legal key size 256 bits. Legal iv size 192 bits.
+        /// Legal key size 256 bits. Legal IV size 192 bits.
         /// </summary>
         public static ISymmetricStreamAlgorithm XSalsa20 { get; } = new XSalsa20();
 

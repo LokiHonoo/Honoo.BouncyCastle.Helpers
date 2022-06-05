@@ -237,10 +237,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Try get legal iv sizes.
+        /// Try get legal IV sizes.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
-        /// <param name="ivSizes">Legal iv size bits.</param>
+        /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
         public bool TryGetIVSizes(MACCipherMode mode, out KeySizes[] ivSizes)
         {
@@ -255,7 +255,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
         /// <param name="ivSize">IV size bits.</param>

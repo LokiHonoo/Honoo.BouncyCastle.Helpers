@@ -17,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         private readonly KeySizes[] _keySizes;
 
         /// <summary>
-        /// Gets legal iv size bits.
+        /// Gets legal IV size bits.
         /// </summary>
         public KeySizes[] IVSizes
         { get { return (KeySizes[])_ivSizes.Clone(); } }
@@ -179,7 +179,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>

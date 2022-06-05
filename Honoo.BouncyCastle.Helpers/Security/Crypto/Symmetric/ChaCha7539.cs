@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// ChaCha7539, ChaCha20.
-    /// <para/>Legal key size 256 bits. Legal iv size 96 bits.
+    /// <para/>Legal key size 256 bits. Legal IV size 96 bits.
     /// </summary>
     public sealed class ChaCha7539 : SymmetricStreamAlgorithm
     {
@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// ChaCha7539, ChaCha20.
-        /// <para/>Legal key size 256 bits. Legal iv size 96 bits.
+        /// <para/>Legal key size 256 bits. Legal IV size 96 bits.
         /// </summary>
         public ChaCha7539() : base("ChaCha7539", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {

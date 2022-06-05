@@ -6,7 +6,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     /// <summary>
     /// XSalsa20.
-    /// <para/>Legal key size 256 bits. Legal iv size 192 bits.
+    /// <para/>Legal key size 256 bits. Legal IV size 192 bits.
     /// </summary>
     public sealed class XSalsa20 : SymmetricStreamAlgorithm
     {
@@ -21,7 +21,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         /// <summary>
         /// XSalsa20.
-        /// <para/>Legal key size 256 bits. Legal iv size 192 bits.
+        /// <para/>Legal key size 256 bits. Legal IV size 192 bits.
         /// </summary>
         public XSalsa20() : base("XSalsa20", SymmetricAlgorithmKind.Stream, _keySizes, _ivSizes)
         {

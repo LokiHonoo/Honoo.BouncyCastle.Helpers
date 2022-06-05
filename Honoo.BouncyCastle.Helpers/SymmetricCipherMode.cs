@@ -32,7 +32,7 @@
         CTS,
 
         /// <summary>
-        /// The minimum IV size is the larger of (block size / 2) and (block size - 64) bits. The maximum iv size is is same as block size. 8 bits increments.
+        /// The minimum IV size is the larger of (block size / 2) and (block size - 64) bits. The maximum IV size is is same as block size. 8 bits increments.
         /// </summary>
         CTR = 101,
 
@@ -54,7 +54,7 @@
         OpenPGPCFB,
 
         /// <summary>
-        /// The minimum IV size is the larger of (block size / 2) and (block size - 64) bits. The maximum iv size is is same as block size. 8 bits increments.
+        /// The minimum IV size is the larger of (block size / 2) and (block size - 64) bits. The maximum IV size is is same as block size. 8 bits increments.
         /// <para/>SIC cipher mode uses with a block size of 128 bits algorithm (e.g. AES).
         /// </summary>
         SIC,
@@ -75,7 +75,7 @@
 
         /// <summary>
         /// Nonce/IV size is more than or equal to 8 bits (8 bits increments). MAC size 32-128 bits (8 bits increments).
-        /// <para/>GCM cipher mode uses with a block size of 64 or 128 bits algorithm (e.g. DESede, AES).
+        /// <para/>GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).
         /// <para/>GCM cipher mode can only select <see cref="SymmetricPaddingMode.NoPadding" /> padding mode.
         /// <para/>Warning: GCM cipher mode cannot be auto reused. The cipher instance needs to be recreated every time. (BouncyCastle 1.9.0 has not been fixed).
         /// </summary>

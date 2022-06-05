@@ -90,11 +90,11 @@ namespace Honoo.BouncyCastle.Helpers
         ICipherParameters GenerateParameters(byte[] key, byte[] nonce, int macSize, byte[] associatedText);
 
         /// <summary>
-        /// Try get legal iv sizes.
+        /// Try get legal IV sizes.
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
-        /// <param name="ivSizes">Legal iv size bits.</param>
+        /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
         bool TryGetIVSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] ivSizes);
 
@@ -117,7 +117,7 @@ namespace Honoo.BouncyCastle.Helpers
         bool TryGetNonceSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] nonceSizes);
 
         /// <summary>
-        /// Verify iv size.
+        /// Verify IV size.
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
