@@ -9,11 +9,11 @@ namespace Honoo.BouncyCastle.Helpers
     public enum AsymmetricAlgorithmKind
     {
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-        Neither = 1,
-        Signature = 2,
-        Encryption = 4,
-        Both = Signature | Encryption
 
+        Signature = 1,
+        Encryption = 2,
+        Both = Signature | Encryption,
+        KeyExchange = 4,
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
     }
 }

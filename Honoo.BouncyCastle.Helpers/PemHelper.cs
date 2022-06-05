@@ -58,21 +58,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert asymmetric key to pem string.
-        /// </summary>
-        /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
-        /// <returns></returns>
-        public static string Key2Pem(AsymmetricKeyParameter asymmetricKey)
-        {
-            using (StringWriter writer = new StringWriter())
-            {
-                PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(asymmetricKey);
-                return writer.ToString();
-            }
-        }
-
-        /// <summary>
         /// Convert asymmetric key pair to pem string.
         /// </summary>
         /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
@@ -150,28 +135,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert pem string to asymmetric key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2Key(string pem)
-        {
-            using (StringReader reader = new StringReader(pem))
-            {
-                object obj = new PemReader(reader).ReadObject();
-                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
-                {
-                    return ((AsymmetricCipherKeyPair)obj).Private;
-                }
-                else
-                {
-                    return (AsymmetricKeyParameter)obj;
-                }
-            }
-        }
-
-        /// <summary>
         /// Convert pem string to asymmetric key pair.
         /// </summary>
         /// <param name="pem">pem string.</param>
@@ -205,6 +168,33 @@ namespace Honoo.BouncyCastle.Helpers
         /// Convert pem string to asymmetric private key.
         /// </summary>
         /// <param name="pem">pem string.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2PrivateKey(string pem)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader).ReadObject();
+                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
+                {
+                    return (AsymmetricKeyParameter)obj;
+                }
+                else
+                {
+                    AsymmetricKeyParameter privateKey = (AsymmetricKeyParameter)obj;
+                    if (privateKey.IsPrivate)
+                    {
+                        return (AsymmetricKeyParameter)obj;
+                    }
+                    throw new CryptoException("Must be a asymmetric public key pem string.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric private key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
         /// <param name="password"></param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
@@ -215,6 +205,52 @@ namespace Honoo.BouncyCastle.Helpers
                 object obj = new PemReader(reader, new Password(password)).ReadObject();
                 return ((AsymmetricCipherKeyPair)obj).Private;
             }
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric public key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2PublicKey(string pem)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader).ReadObject();
+                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
+                {
+                    throw new CryptoException("Must be a asymmetric public key pem string.");
+                }
+                else
+                {
+                    AsymmetricKeyParameter publicKey = (AsymmetricKeyParameter)obj;
+                    if (publicKey.IsPrivate)
+                    {
+                        throw new CryptoException("Must be a asymmetric public key pem string.");
+                    }
+                    return (AsymmetricKeyParameter)obj;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convert private key to pem string.
+        /// </summary>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <returns></returns>
+        public static string PrivateKey2Pem(AsymmetricKeyParameter privateKey)
+        {
+            if (privateKey.IsPrivate)
+            {
+                using (StringWriter writer = new StringWriter())
+                {
+                    PemWriter pemWriter = new PemWriter(writer);
+                    pemWriter.WriteObject(privateKey);
+                    return writer.ToString();
+                }
+            }
+            throw new CryptoException("Must be a asymmetric private key.");
         }
 
         /// <summary>
@@ -230,6 +266,25 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 PemWriter pemWriter = new PemWriter(writer);
                 pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
+                return writer.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Convert public key to pem string.
+        /// </summary>
+        /// <param name="publicKey">Asymmetric public key.</param>
+        /// <returns></returns>
+        public static string PublicKey2Pem(AsymmetricKeyParameter publicKey)
+        {
+            if (publicKey.IsPrivate)
+            {
+                throw new CryptoException("Must be a asymmetric public key.");
+            }
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(publicKey);
                 return writer.ToString();
             }
         }

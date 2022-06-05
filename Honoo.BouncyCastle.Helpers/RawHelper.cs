@@ -44,21 +44,20 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert asymmetric public key to raw bytes.
+        /// Convert asymmetric private key to raw bytes.
         /// </summary>
-        /// <param name="asymmetricKey">Asymmetric public key or private key.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
         /// <returns></returns>
-        public static byte[] Key2Raw(AsymmetricKeyParameter asymmetricKey)
+        public static byte[] PrivateKey2Raw(AsymmetricKeyParameter privateKey)
         {
-            if (asymmetricKey.IsPrivate)
+            if (privateKey.IsPrivate)
             {
-                PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricKey);
+                PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
                 return info.GetEncoded();
             }
             else
             {
-                SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(asymmetricKey);
-                return info.GetEncoded();
+                throw new CryptoException("Must be a asymmetric private key.");
             }
         }
 
@@ -74,6 +73,24 @@ namespace Honoo.BouncyCastle.Helpers
         public static byte[] PrivateKey2Raw(AsymmetricKeyParameter privateKey, string pbeAlgorithmName, string password, byte[] salt, int iterationCount)
         {
             return PrivateKeyFactory.EncryptKey(pbeAlgorithmName, password.ToCharArray(), salt, iterationCount, privateKey);
+        }
+
+        /// <summary>
+        /// Convert asymmetric public key to raw bytes.
+        /// </summary>
+        /// <param name="publicKey">Asymmetric public key.</param>
+        /// <returns></returns>
+        public static byte[] PublicKey2Raw(AsymmetricKeyParameter publicKey)
+        {
+            if (publicKey.IsPrivate)
+            {
+                throw new CryptoException("Must be a asymmetric public key.");
+            }
+            else
+            {
+                SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
+                return info.GetEncoded();
+            }
         }
 
         /// <summary>
@@ -110,15 +127,14 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert raw bytes to asymmetric key.
+        /// Convert raw bytes to asymmetric private key.
         /// </summary>
         /// <param name="raw">Raw bytes.</param>
-        /// <param name="isPrivate">Indicates that raw is a private key data.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Raw2Key(byte[] raw, bool isPrivate)
+        public static AsymmetricKeyParameter Raw2PrivateKey(byte[] raw)
         {
-            return isPrivate ? PrivateKeyFactory.CreateKey(raw) : PublicKeyFactory.CreateKey(raw);
+            return PrivateKeyFactory.CreateKey(raw);
         }
 
         /// <summary>
@@ -130,6 +146,17 @@ namespace Honoo.BouncyCastle.Helpers
         public static AsymmetricKeyParameter Raw2PrivateKey(byte[] raw, string password)
         {
             return PrivateKeyFactory.DecryptKey(password.ToCharArray(), raw);
+        }
+
+        /// <summary>
+        /// Convert raw bytes to asymmetric public key.
+        /// </summary>
+        /// <param name="raw">Raw bytes.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Raw2PublicKey(byte[] raw)
+        {
+            return PublicKeyFactory.CreateKey(raw);
         }
 
         /// <summary>
