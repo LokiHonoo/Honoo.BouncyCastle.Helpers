@@ -5,6 +5,7 @@ using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using System;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -44,53 +45,60 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert asymmetric private key to raw bytes.
+        /// Convert asymmetric key to raw bytes.
         /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="asymmetricKey">Asymmetric private key or public key.</param>
         /// <returns></returns>
-        public static byte[] PrivateKey2Raw(AsymmetricKeyParameter privateKey)
+        public static byte[] Key2Raw(AsymmetricKeyParameter asymmetricKey)
         {
-            if (privateKey.IsPrivate)
+            if (asymmetricKey.IsPrivate)
             {
-                PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
+                PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(asymmetricKey);
                 return info.GetEncoded();
             }
             else
             {
-                throw new CryptoException("Must be a asymmetric private key.");
+                SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(asymmetricKey);
+                return info.GetEncoded();
             }
         }
 
         /// <summary>
-        /// Convert asymmetric public key to raw bytes.
+        /// Convert asymmetric private key to raw bytes.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="pbeAlgorithmName">PBE algorithm name. Select from <see cref="PBEAlgorithmNames"/>.</param>
+        /// <param name="pbeAlgorithmName">PBE algorithm name.</param>
         /// <param name="password"></param>
         /// <param name="salt"></param>
         /// <param name="iterationCount"></param>
         /// <returns></returns>
-        public static byte[] PrivateKey2Raw(AsymmetricKeyParameter privateKey, string pbeAlgorithmName, string password, byte[] salt, int iterationCount)
+        public static byte[] Key2Raw(AsymmetricKeyParameter privateKey, PBEAlgorithmName pbeAlgorithmName, string password, byte[] salt, int iterationCount)
         {
-            return PrivateKeyFactory.EncryptKey(pbeAlgorithmName, password.ToCharArray(), salt, iterationCount, privateKey);
-        }
-
-        /// <summary>
-        /// Convert asymmetric public key to raw bytes.
-        /// </summary>
-        /// <param name="publicKey">Asymmetric public key.</param>
-        /// <returns></returns>
-        public static byte[] PublicKey2Raw(AsymmetricKeyParameter publicKey)
-        {
-            if (publicKey.IsPrivate)
+            string algorithmName;
+            switch (pbeAlgorithmName)
             {
-                throw new CryptoException("Must be a asymmetric public key.");
+                case PBEAlgorithmName.PBEwithHmacRipeMD128: algorithmName = "PBEwithHmacRipeMD128"; break;
+                case PBEAlgorithmName.PBEwithHmacRipeMD160: algorithmName = "PBEwithHmacRipeMD160"; break;
+                case PBEAlgorithmName.PBEwithHmacRipeMD256: algorithmName = "PBEwithHmacRipeMD256"; break;
+                case PBEAlgorithmName.PBEwithHmacSHA_1: algorithmName = "PBEwithHmacSHA-1"; break;
+                case PBEAlgorithmName.PBEwithHmacSHA_224: algorithmName = "PBEwithHmacSHA-224"; break;
+                case PBEAlgorithmName.PBEwithHmacSHA_256: algorithmName = "PBEwithHmacSHA-256"; break;
+                case PBEAlgorithmName.PBEwithMD2andDES_CBC: algorithmName = "PBEwithMD2andDES-CBC"; break;
+                case PBEAlgorithmName.PBEwithMD2andRC2_CBC: algorithmName = "PBEwithMD2andRC2-CBC"; break;
+                case PBEAlgorithmName.PBEwithMD5andDES_CBC: algorithmName = "PBEwithMD5andDES-CBC"; break;
+                case PBEAlgorithmName.PBEwithMD5andRC2_CBC: algorithmName = "PBEwithMD5andRC2-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and128bitRC2_CBC: algorithmName = "PBEwithSHA-1and128bitRC2-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and128bitRC4: algorithmName = "PBEwithSHA-1and128bitRC4"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and2_keyDESEDE_CBC: algorithmName = "PBEwithSHA-1and2-keyDESEDE-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and3_keyDESEDE_CBC: algorithmName = "PBEwithSHA-1and3-keyDESEDE-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and40bitRC2_CBC: algorithmName = "PBEwithSHA-1and40bitRC2-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1and40bitRC4: algorithmName = "PBEwithSHA-1and40bitRC4"; break;
+                case PBEAlgorithmName.PBEwithSHA_1andDES_CBC: algorithmName = "PBEwithSHA-1andDES-CBC"; break;
+                case PBEAlgorithmName.PBEwithSHA_1andRC2_CBC: algorithmName = "PBEwithSHA-1andRC2-CBC"; break;
+                case PBEAlgorithmName.Pkcs5scheme2: algorithmName = "Pkcs5scheme2"; break;
+                default: throw new CryptographicException("Unsupported PBE algorithm.");
             }
-            else
-            {
-                SubjectPublicKeyInfo info = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey);
-                return info.GetEncoded();
-            }
+            return PrivateKeyFactory.EncryptKey(algorithmName, password.ToCharArray(), salt, iterationCount, privateKey);
         }
 
         /// <summary>
@@ -127,14 +135,21 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert raw bytes to asymmetric private key.
+        /// Convert raw bytes to asymmetric key.
         /// </summary>
         /// <param name="raw">Raw bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Raw2PrivateKey(byte[] raw)
+        public static AsymmetricKeyParameter Raw2Key(byte[] raw)
         {
-            return PrivateKeyFactory.CreateKey(raw);
+            try
+            {
+                return PublicKeyFactory.CreateKey(raw);
+            }
+            catch
+            {
+                return PrivateKeyFactory.CreateKey(raw);
+            }
         }
 
         /// <summary>
@@ -143,48 +158,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="raw">Raw bytes.</param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static AsymmetricKeyParameter Raw2PrivateKey(byte[] raw, string password)
+        public static AsymmetricKeyParameter Raw2Key(byte[] raw, string password)
         {
             return PrivateKeyFactory.DecryptKey(password.ToCharArray(), raw);
-        }
-
-        /// <summary>
-        /// Convert raw bytes to asymmetric public key.
-        /// </summary>
-        /// <param name="raw">Raw bytes.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Raw2PublicKey(byte[] raw)
-        {
-            return PublicKeyFactory.CreateKey(raw);
-        }
-
-        /// <summary>
-        /// PBE algorithm names.
-        /// </summary>
-        public static class PBEAlgorithmNames
-        {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-            public const string PBEwithHmacRipeMD128 = "PBEwithHmacRipeMD128";
-            public const string PBEwithHmacRipeMD160 = "PBEwithHmacRipeMD160";
-            public const string PBEwithHmacRipeMD256 = "PBEwithHmacRipeMD256";
-            public const string PBEwithHmacSHA_1 = "PBEwithHmacSHA-1";
-            public const string PBEwithHmacSHA_224 = "PBEwithHmacSHA-224";
-            public const string PBEwithHmacSHA_256 = "PBEwithHmacSHA-256";
-            public const string PBEwithMD2andDES_CBC = "PBEwithMD2andDES-CBC";
-            public const string PBEwithMD2andRC2_CBC = "PBEwithMD2andRC2-CBC";
-            public const string PBEwithMD5andDES_CBC = "PBEwithMD5andDES-CBC";
-            public const string PBEwithMD5andRC2_CBC = "PBEwithMD5andRC2-CBC";
-            public const string PBEwithSHA_1and128bitRC2_CBC = "PBEwithSHA-1and128bitRC2-CBC";
-            public const string PBEwithSHA_1and128bitRC4 = "PBEwithSHA-1and128bitRC4";
-            public const string PBEwithSHA_1and2_keyDESEDE_CBC = "PBEwithSHA-1and2-keyDESEDE-CBC";
-            public const string PBEwithSHA_1and3_keyDESEDE_CBC = "PBEwithSHA-1and3-keyDESEDE-CBC";
-            public const string PBEwithSHA_1and40bitRC2_CBC = "PBEwithSHA-1and40bitRC2-CBC";
-            public const string PBEwithSHA_1and40bitRC4 = "PBEwithSHA-1and40bitRC4";
-            public const string PBEwithSHA_1andDES_CBC = "PBEwithSHA-1andDES-CBC";
-            public const string PBEwithSHA_1andRC2_CBC = "PBEwithSHA-1andRC2-CBC";
-            public const string Pkcs5scheme2 = "Pkcs5scheme2";
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
         }
     }
 }

@@ -4,6 +4,7 @@ using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.X509;
 using System;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -58,18 +59,100 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert asymmetric key pair to pem string.
+        /// Convert asymmetric private key to pem string.
         /// </summary>
-        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
-        /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="dekAlgorithmName">DEK algorithm name.</param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string KeyPair2Pem(AsymmetricCipherKeyPair asymmetricKeyPair, string dekAlgorithmName, string password)
+        public static string Key2Pem(AsymmetricKeyParameter privateKey, DEKAlgorithmName dekAlgorithmName, string password)
+        {
+            string algorithmName;
+            switch (dekAlgorithmName)
+            {
+                case DEKAlgorithmName.AES_128_CBC: algorithmName = "AES-128-CBC"; break;
+                case DEKAlgorithmName.AES_128_ECB: algorithmName = "AES-128-ECB"; break;
+                case DEKAlgorithmName.AES_192_CBC: algorithmName = "AES-192-CBC"; break;
+                case DEKAlgorithmName.AES_192_ECB: algorithmName = "AES-192-ECB"; break;
+                case DEKAlgorithmName.AES_256_CBC: algorithmName = "AES-256-CBC"; break;
+                case DEKAlgorithmName.AES_256_ECB: algorithmName = "AES-256-ECB"; break;
+                case DEKAlgorithmName.BLOWFISH_CBC: algorithmName = "BLOWFISH-CBC"; break;
+                case DEKAlgorithmName.BLOWFISH_ECB: algorithmName = "BLOWFISH-ECB"; break;
+                case DEKAlgorithmName.DES_CBC: algorithmName = "DES-CBC"; break;
+                case DEKAlgorithmName.DES_ECB: algorithmName = "DES-ECB"; break;
+                case DEKAlgorithmName.DES_EDE_CBC: algorithmName = "DES-EDE-CBC"; break;
+                case DEKAlgorithmName.DES_EDE_ECB: algorithmName = "DES-EDE-ECB"; break;
+                case DEKAlgorithmName.DES_EDE3_CBC: algorithmName = "DES-EDE3-CBC"; break;
+                case DEKAlgorithmName.DES_EDE3_ECB: algorithmName = "DES-EDE3-ECB"; break;
+                case DEKAlgorithmName.RC2_40_CBC: algorithmName = "RC2-40-CBC"; break;
+                case DEKAlgorithmName.RC2_40_ECB: algorithmName = "RC2-40-ECB"; break;
+                case DEKAlgorithmName.RC2_64_CBC: algorithmName = "RC2-64-CBC"; break;
+                case DEKAlgorithmName.RC2_64_ECB: algorithmName = "RC2-64-ECB"; break;
+                case DEKAlgorithmName.RC2_CBC: algorithmName = "RC2-CBC"; break;
+                case DEKAlgorithmName.RC2_ECB: algorithmName = "RC2-ECB"; break;
+                default: throw new CryptographicException("Unsupported DEK algorithm.");
+            }
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(privateKey, algorithmName, password.ToCharArray(), Common.SecureRandom);
+                return writer.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Convert asymmetric key to pem string.
+        /// </summary>
+        /// <param name="asymmetricKey">Asymmetric private key or public key.</param>
+        /// <returns></returns>
+        public static string Key2Pem(AsymmetricKeyParameter asymmetricKey)
         {
             using (StringWriter writer = new StringWriter())
             {
                 PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(asymmetricKeyPair, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
+                pemWriter.WriteObject(asymmetricKey);
+                return writer.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Convert asymmetric key pair to pem string.
+        /// </summary>
+        /// <param name="asymmetricKeyPair">Asymmetric key pair.</param>
+        /// <param name="dekAlgorithmName">DEK algorithm name.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static string KeyPair2Pem(AsymmetricCipherKeyPair asymmetricKeyPair, DEKAlgorithmName dekAlgorithmName, string password)
+        {
+            string algorithmName;
+            switch (dekAlgorithmName)
+            {
+                case DEKAlgorithmName.AES_128_CBC: algorithmName = "AES-128-CBC"; break;
+                case DEKAlgorithmName.AES_128_ECB: algorithmName = "AES-128-ECB"; break;
+                case DEKAlgorithmName.AES_192_CBC: algorithmName = "AES-192-CBC"; break;
+                case DEKAlgorithmName.AES_192_ECB: algorithmName = "AES-192-ECB"; break;
+                case DEKAlgorithmName.AES_256_CBC: algorithmName = "AES-256-CBC"; break;
+                case DEKAlgorithmName.AES_256_ECB: algorithmName = "AES-256-ECB"; break;
+                case DEKAlgorithmName.BLOWFISH_CBC: algorithmName = "BLOWFISH-CBC"; break;
+                case DEKAlgorithmName.BLOWFISH_ECB: algorithmName = "BLOWFISH-ECB"; break;
+                case DEKAlgorithmName.DES_CBC: algorithmName = "DES-CBC"; break;
+                case DEKAlgorithmName.DES_ECB: algorithmName = "DES-ECB"; break;
+                case DEKAlgorithmName.DES_EDE_CBC: algorithmName = "DES-EDE-CBC"; break;
+                case DEKAlgorithmName.DES_EDE_ECB: algorithmName = "DES-EDE-ECB"; break;
+                case DEKAlgorithmName.DES_EDE3_CBC: algorithmName = "DES-EDE3-CBC"; break;
+                case DEKAlgorithmName.DES_EDE3_ECB: algorithmName = "DES-EDE3-ECB"; break;
+                case DEKAlgorithmName.RC2_40_CBC: algorithmName = "RC2-40-CBC"; break;
+                case DEKAlgorithmName.RC2_40_ECB: algorithmName = "RC2-40-ECB"; break;
+                case DEKAlgorithmName.RC2_64_CBC: algorithmName = "RC2-64-CBC"; break;
+                case DEKAlgorithmName.RC2_64_ECB: algorithmName = "RC2-64-ECB"; break;
+                case DEKAlgorithmName.RC2_CBC: algorithmName = "RC2-CBC"; break;
+                case DEKAlgorithmName.RC2_ECB: algorithmName = "RC2-ECB"; break;
+                default: throw new CryptographicException("Unsupported DEK algorithm.");
+            }
+            using (StringWriter writer = new StringWriter())
+            {
+                PemWriter pemWriter = new PemWriter(writer);
+                pemWriter.WriteObject(asymmetricKeyPair, algorithmName, password.ToCharArray(), Common.SecureRandom);
                 return writer.ToString();
             }
         }
@@ -135,6 +218,44 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Convert pem string to asymmetric private key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2Key(string pem, string password)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader, new Password(password)).ReadObject();
+                return ((AsymmetricCipherKeyPair)obj).Private;
+            }
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2Key(string pem)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader).ReadObject();
+                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
+                {
+                    return ((AsymmetricCipherKeyPair)obj).Private;
+                }
+                else
+                {
+                    return (AsymmetricKeyParameter)obj;
+                }
+            }
+        }
+
+        /// <summary>
         /// Convert pem string to asymmetric key pair.
         /// </summary>
         /// <param name="pem">pem string.</param>
@@ -162,162 +283,6 @@ namespace Honoo.BouncyCastle.Helpers
                 object obj = new PemReader(reader, new Password(password)).ReadObject();
                 return (AsymmetricCipherKeyPair)obj;
             }
-        }
-
-        /// <summary>
-        /// Convert pem string to asymmetric private key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2PrivateKey(string pem)
-        {
-            using (StringReader reader = new StringReader(pem))
-            {
-                object obj = new PemReader(reader).ReadObject();
-                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
-                {
-                    return (AsymmetricKeyParameter)obj;
-                }
-                else
-                {
-                    AsymmetricKeyParameter privateKey = (AsymmetricKeyParameter)obj;
-                    if (privateKey.IsPrivate)
-                    {
-                        return (AsymmetricKeyParameter)obj;
-                    }
-                    throw new CryptoException("Must be a asymmetric public key pem string.");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convert pem string to asymmetric private key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2PrivateKey(string pem, string password)
-        {
-            using (StringReader reader = new StringReader(pem))
-            {
-                object obj = new PemReader(reader, new Password(password)).ReadObject();
-                return ((AsymmetricCipherKeyPair)obj).Private;
-            }
-        }
-
-        /// <summary>
-        /// Convert pem string to asymmetric public key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2PublicKey(string pem)
-        {
-            using (StringReader reader = new StringReader(pem))
-            {
-                object obj = new PemReader(reader).ReadObject();
-                if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
-                {
-                    throw new CryptoException("Must be a asymmetric public key pem string.");
-                }
-                else
-                {
-                    AsymmetricKeyParameter publicKey = (AsymmetricKeyParameter)obj;
-                    if (publicKey.IsPrivate)
-                    {
-                        throw new CryptoException("Must be a asymmetric public key pem string.");
-                    }
-                    return (AsymmetricKeyParameter)obj;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convert private key to pem string.
-        /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <returns></returns>
-        public static string PrivateKey2Pem(AsymmetricKeyParameter privateKey)
-        {
-            if (privateKey.IsPrivate)
-            {
-                using (StringWriter writer = new StringWriter())
-                {
-                    PemWriter pemWriter = new PemWriter(writer);
-                    pemWriter.WriteObject(privateKey);
-                    return writer.ToString();
-                }
-            }
-            throw new CryptoException("Must be a asymmetric private key.");
-        }
-
-        /// <summary>
-        /// Convert asymmetric private key to pem string.
-        /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="dekAlgorithmName">DEK algorithm name. Select from <see cref="DEKAlgorithmNames"/>.</param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public static string PrivateKey2Pem(AsymmetricKeyParameter privateKey, string dekAlgorithmName, string password)
-        {
-            using (StringWriter writer = new StringWriter())
-            {
-                PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(privateKey, dekAlgorithmName, password.ToCharArray(), Common.SecureRandom);
-                return writer.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Convert public key to pem string.
-        /// </summary>
-        /// <param name="publicKey">Asymmetric public key.</param>
-        /// <returns></returns>
-        public static string PublicKey2Pem(AsymmetricKeyParameter publicKey)
-        {
-            if (publicKey.IsPrivate)
-            {
-                throw new CryptoException("Must be a asymmetric public key.");
-            }
-            using (StringWriter writer = new StringWriter())
-            {
-                PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(publicKey);
-                return writer.ToString();
-            }
-        }
-
-        /// <summary>
-        /// DEK algorithm names.
-        /// </summary>
-        public static class DEKAlgorithmNames
-        {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-
-            public const string AES_128_CBC = "AES-128-CBC";
-            public const string AES_128_ECB = "AES-128-ECB";
-            public const string AES_192_CBC = "AES-192-CBC";
-            public const string AES_192_ECB = "AES-192-ECB";
-            public const string AES_256_CBC = "AES-256-CBC";
-            public const string AES_256_ECB = "AES-256-ECB";
-            public const string BLOWFISH_CBC = "BLOWFISH-CBC";
-            public const string BLOWFISH_ECB = "BLOWFISH-ECB";
-            public const string DES_CBC = "DES-CBC";
-            public const string DES_ECB = "DES-ECB";
-            public const string DES_EDE_CBC = "DES-EDE-CBC";
-            public const string DES_EDE_ECB = "DES-EDE-ECB";
-            public const string DES_EDE3_CBC = "DES-EDE3-CBC";
-            public const string DES_EDE3_ECB = "DES-EDE3-ECB";
-            public const string RC2_40_CBC = "RC2-40-CBC";
-            public const string RC2_40_ECB = "RC2-40-ECB";
-            public const string RC2_64_CBC = "RC2-64-CBC";
-            public const string RC2_64_ECB = "RC2-64-ECB";
-            public const string RC2_CBC = "RC2-CBC";
-            public const string RC2_ECB = "RC2-ECB";
-
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
         }
 
         internal sealed class Password : IPasswordFinder
