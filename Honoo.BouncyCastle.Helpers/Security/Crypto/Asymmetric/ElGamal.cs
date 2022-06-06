@@ -11,7 +11,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// ElGamal.
-    /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
+    /// <para/>Legal key size is more than or equal to 8 bits (8 bits increments).
     /// </summary>
     public sealed class ElGamal : AsymmetricEncryptionAlgorithm
     {
@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// ElGamal.
-        /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 8 bits (8 bits increments).
         /// </summary>
         public ElGamal() : base("ElGamal", AsymmetricAlgorithmKind.Encryption)
         {

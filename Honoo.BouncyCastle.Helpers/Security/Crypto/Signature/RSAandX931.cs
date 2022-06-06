@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
     /// <summary>
     /// RSA/X9.31.
-    /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+    /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
     /// <para/>Uses key size 2048 bits, certainty 25 by default.
     /// <para/>Legal signature hash Algorithm:
     /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,
@@ -30,7 +30,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         /// <summary>
         /// RSA/X9.31.
-        /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// <para/>Legal signature hash Algorithm:
         /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,
@@ -45,7 +45,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         /// <summary>
         /// RSA/X9.31.
-        /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// <para/>Legal signature hash Algorithm:
         /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,

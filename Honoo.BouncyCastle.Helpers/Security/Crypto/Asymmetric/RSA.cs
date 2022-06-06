@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// RSA.
-    /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+    /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
     /// </summary>
     public sealed class RSA : AsymmetricEncryptionAlgorithm
     {
@@ -20,7 +20,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// RSA.
-        /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// </summary>
         public RSA() : base("RSA", AsymmetricAlgorithmKind.Both)
         {

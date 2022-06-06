@@ -25,7 +25,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         /// <summary>
         /// ECDSA.
-        /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
         public static ECDSA ECDSA { get; } = new ECDSA();
 
@@ -46,7 +45,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         /// <summary>
         /// ElGamal.
-        /// <para/>Legal key size is more than or equal to 256 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 8 bits (8 bits increments).
         /// </summary>
         public static ElGamal ElGamal { get; } = new ElGamal();
 
@@ -58,7 +57,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         /// <summary>
         /// RSA.
-        /// <para/>Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// </summary>
         public static RSA RSA { get; } = new RSA();
 

@@ -132,91 +132,91 @@ namespace Honoo.BouncyCastle.Helpers
         #region RSA
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm MD2withRSA { get; } = new RSA(HashAlgorithmHelper.MD2);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm MD5withRSA { get; } = new RSA(HashAlgorithmHelper.MD5);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm PSSwithRSA { get; } = new RSAandMGF1(HashAlgorithmHelper.SHA1);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm RIPEMD128withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD128);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm RIPEMD160withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD160);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm RIPEMD256withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD256);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA1withRSA { get; } = new RSA(HashAlgorithmHelper.SHA1);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA224withRSA { get; } = new RSA(HashAlgorithmHelper.SHA224);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA256withRSA { get; } = new RSA(HashAlgorithmHelper.SHA256);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA3_224withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_224);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA3_256withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_256);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA3_384withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_384);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA3_512withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_512);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA384withRSA { get; } = new RSA(HashAlgorithmHelper.SHA384);
 
         /// <summary>
-        /// Legal key size is more than or equal to 512 bits (64 bits increments).
+        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
         /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// </summary>
         public static ISignatureAlgorithm SHA512withRSA { get; } = new RSA(HashAlgorithmHelper.SHA512);
