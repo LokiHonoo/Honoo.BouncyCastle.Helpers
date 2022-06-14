@@ -38,19 +38,19 @@ namespace Test
             var crl = PemHelper.Pem2Crl(crlPem);
             var csr = PemHelper.Pem2Csr(csrPem);
             //
-            byte[] priKeyRaw1 = RawHelper.Key2Raw(obj.KeyPair.Private);
-            byte[] priKeyRaw2 = RawHelper.Key2Raw(obj.KeyPair.Private, PBEAlgorithmName.PBEwithSHA_1andDES_CBC, "12345", new byte[] { 1, 1, 1 }, 12);
-            byte[] pubKeyRaw1 = RawHelper.Key2Raw(obj.KeyPair.Public);
-            //
-            var priKey11 = RawHelper.Raw2Key(priKeyRaw1);
-            var priKey22 = RawHelper.Raw2Key(priKeyRaw2, "12345");
-            var pubKey11 = RawHelper.Raw2Key(pubKeyRaw1);
+            //byte[] priKeyRaw1 = RawHelper.Key2Raw(obj.KeyPair.Private);
+            //byte[] priKeyRaw2 = RawHelper.Key2Raw(obj.KeyPair.Private, PBEAlgorithmName.PBEwithSHA_1andDES_CBC, "12345", new byte[] { 1, 1, 1 }, 12);
+            //byte[] pubKeyRaw1 = RawHelper.Key2Raw(obj.KeyPair.Public);
+            ////
+            //var priKey11 = RawHelper.Raw2Key(priKeyRaw1);
+            //var priKey22 = RawHelper.Raw2Key(priKeyRaw2, "12345");
+            //var pubKey11 = RawHelper.Raw2Key(pubKeyRaw1);
             //
             Console.WriteLine(keyPairPem1);
             Console.WriteLine(priKeyPem1);
             //
-            Console.WriteLine(priKey2.Equals(priKey22));
-            Console.WriteLine(pubKey11.Equals(pubKey1));
+            //Console.WriteLine(priKey2.Equals(priKey22));
+            //Console.WriteLine(pubKey11.Equals(pubKey1));
         }
     }
 }
