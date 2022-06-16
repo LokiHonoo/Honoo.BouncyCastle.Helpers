@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net40;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net40;net60</TargetFrameworks>
     <Company>Loki Honoo</Company>
     <Authors>Loki Honoo</Authors>
     <Product>Honoo.BouncyCastle.Helpers</Product>

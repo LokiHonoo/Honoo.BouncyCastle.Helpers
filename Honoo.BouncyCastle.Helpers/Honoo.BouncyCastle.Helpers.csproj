@@ -16,7 +16,7 @@
     <PackageTags>Honoo BouncyCastle</PackageTags>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
-    <Version>1.1.11</Version>
+    <Version>1.1.12</Version>
     <AssemblyVersion></AssemblyVersion>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
