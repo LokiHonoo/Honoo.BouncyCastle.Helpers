@@ -539,12 +539,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             switch (padding)
             {
                 case SymmetricPaddingMode.NoPadding: pad = null; break;
-                case SymmetricPaddingMode.PKCS7: pad = Common.PKCS7Padding; break;
-                case SymmetricPaddingMode.Zeros: pad = Common.ZEROBYTEPadding; break;
-                case SymmetricPaddingMode.X923: pad = Common.X923Padding; break;
-                case SymmetricPaddingMode.ISO10126: pad = Common.ISO10126d2Padding; break;
-                case SymmetricPaddingMode.ISO7816_4: pad = Common.ISO7816d4Padding; break;
-                case SymmetricPaddingMode.TBC: pad = Common.TBCPadding; break;
+                case SymmetricPaddingMode.PKCS7: pad = SymmetricPadding.PKCS7Padding; break;
+                case SymmetricPaddingMode.Zeros: pad = SymmetricPadding.ZEROBYTEPadding; break;
+                case SymmetricPaddingMode.X923: pad = SymmetricPadding.X923Padding; break;
+                case SymmetricPaddingMode.ISO10126: pad = SymmetricPadding.ISO10126d2Padding; break;
+                case SymmetricPaddingMode.ISO7816_4: pad = SymmetricPadding.ISO7816d4Padding; break;
+                case SymmetricPaddingMode.TBC: pad = SymmetricPadding.TBCPadding; break;
                 default: throw new CryptographicException("Unsupported padding mode.");
             }
             IBlockCipher engine = GenerateEngine();

@@ -163,11 +163,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             switch (padding)
             {
                 case MACPaddingMode.NoPadding: pad = null; break;
-                case MACPaddingMode.PKCS7: pad = Common.PKCS7Padding; break;
-                case MACPaddingMode.Zeros: pad = Common.ZEROBYTEPadding; break;
-                case MACPaddingMode.X923: pad = Common.X923Padding; break;
-                case MACPaddingMode.ISO7816_4: pad = Common.ISO7816d4Padding; break;
-                case MACPaddingMode.TBC: pad = Common.TBCPadding; break;
+                case MACPaddingMode.PKCS7: pad = SymmetricPadding.PKCS7Padding; break;
+                case MACPaddingMode.Zeros: pad = SymmetricPadding.ZEROBYTEPadding; break;
+                case MACPaddingMode.X923: pad = SymmetricPadding.X923Padding; break;
+                case MACPaddingMode.ISO7816_4: pad = SymmetricPadding.ISO7816d4Padding; break;
+                case MACPaddingMode.TBC: pad = SymmetricPadding.TBCPadding; break;
                 default: throw new CryptographicException("Unsupported padding mode.");
             }
             IMac digest;
