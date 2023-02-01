@@ -213,8 +213,7 @@ namespace Honoo.BouncyCastle.Helpers
         public static ISymmetricStreamAlgorithm RC4 { get; } = new RC4();
 
         /// <summary>
-        /// Salsa20.
-        /// <para/>Legal key size 128, 256 bits. Legal IV size 64 bits.
+        /// Legal key size 128, 256 bits. Legal IV size 64 bits.
         /// <para/>Uses rounds 20 by default.
         /// </summary>
         public static ISymmetricStreamAlgorithm Salsa20 { get; } = new Salsa20();

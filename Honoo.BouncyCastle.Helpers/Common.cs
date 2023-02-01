@@ -4,6 +4,6 @@ namespace Honoo.BouncyCastle.Helpers
 {
     internal static class Common
     {
-        internal static SecureRandom SecureRandom { get; } = SecureRandom.GetInstance("SHA1PRNG");
+        internal static SecureRandom SecureRandom { get; } = new SecureRandom();
     }
 }
