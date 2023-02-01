@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// CVC-ECDSA.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public CVC_ECDSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithmHelper.ECDSA)
+        public CVC_ECDSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.ECDSA)
         {
         }
 

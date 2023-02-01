@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// DSA.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public DSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithmHelper.DSA)
+        public DSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.DSA)
         {
         }
 

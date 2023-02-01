@@ -67,7 +67,7 @@ namespace Test
             //
             // User create csr and sand to CA.
             //
-            AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithmHelper.GOST3411withECGOST3410.AsymmetricAlgorithm.GenerateKeyPair();
+            AsymmetricCipherKeyPair userKeyPair = SignatureAlgorithms.GOST3411withECGOST3410.AsymmetricAlgorithm.GenerateKeyPair();
             X509NameEntity[] x509NameEntities2 = new X509NameEntity[]
             {
                 new X509NameEntity(X509NameLabel.C,"CN"),
@@ -75,7 +75,7 @@ namespace Test
             };
             X509Name userDN = X509Helper.GenerateX509Name(x509NameEntities2);
             X509Extensions userExtensions = null;
-            Pkcs10CertificationRequest userCsr = X509Helper.GenerateCsr(SignatureAlgorithmHelper.GOST3411withECGOST3410, userKeyPair, userDN, userExtensions);
+            Pkcs10CertificationRequest userCsr = X509Helper.GenerateCsr(SignatureAlgorithms.GOST3411withECGOST3410, userKeyPair, userDN, userExtensions);
             //
             // CA extract csr and create user cert.
             //
@@ -92,11 +92,11 @@ namespace Test
             //
             // Print
             //
-            Console.WriteLine("====  CA Cert  =====================================================================================");
+            Console.WriteLine("====  CA Cert  ===========================");
             Console.WriteLine(caCert.ToString());
-            Console.WriteLine("====  CA Crl  =====================================================================================");
+            Console.WriteLine("====  CA Crl  ============================");
             Console.WriteLine(caCrl.ToString());
-            Console.WriteLine("====  User Cert  =================================================================================");
+            Console.WriteLine("====  User Cert  =========================");
             Console.WriteLine(userCert.ToString());
             Console.WriteLine();
             //

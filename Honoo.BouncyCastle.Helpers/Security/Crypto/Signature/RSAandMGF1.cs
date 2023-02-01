@@ -28,7 +28,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// RSAandMGF1.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public RSAandMGF1(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA)
+        public RSAandMGF1(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithms.RSA)
         {
         }
 

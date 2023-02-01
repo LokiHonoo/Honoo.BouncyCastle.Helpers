@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <see cref="RIPEMD128"/>,<see cref="RIPEMD160"/>,<see cref="RIPEMD256"/>.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public RSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA)
+        public RSA(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithms.RSA)
         {
         }
 

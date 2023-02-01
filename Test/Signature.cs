@@ -42,13 +42,13 @@ namespace Test
         {
             byte[] test = new byte[83];
             Utilities.Random.NextBytes(test);
-            AsymmetricCipherKeyPair keyPair = SignatureAlgorithmHelper.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
+            AsymmetricCipherKeyPair keyPair = SignatureAlgorithms.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
             // example 1
-            byte[] signature1 = SignatureAlgorithmHelper.SHA256withECDSA.Sign(keyPair.Private, test);
-            bool same1 = SignatureAlgorithmHelper.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
+            byte[] signature1 = SignatureAlgorithms.SHA256withECDSA.Sign(keyPair.Private, test);
+            bool same1 = SignatureAlgorithms.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
             // example 2
-            ISigner signer = SignatureAlgorithmHelper.SHA256withECDSA.GenerateSigner(keyPair.Private);
-            ISigner verifier = SignatureAlgorithmHelper.SHA256withECDSA.GenerateVerifier(keyPair.Public);
+            ISigner signer = SignatureAlgorithms.SHA256withECDSA.GenerateSigner(keyPair.Private);
+            ISigner verifier = SignatureAlgorithms.SHA256withECDSA.GenerateVerifier(keyPair.Public);
             signer.BlockUpdate(test, 0, test.Length);
             byte[] signature2 = signer.GenerateSignature();
             verifier.BlockUpdate(test, 0, test.Length);
@@ -60,7 +60,7 @@ namespace Test
             byte[] test = new byte[83];
             Utilities.Random.NextBytes(test);
             //
-            Type type = typeof(SignatureAlgorithmHelper);
+            Type type = typeof(SignatureAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
@@ -94,7 +94,7 @@ namespace Test
         private static void Test2()
         {
             List<string> hashs = new List<string>();
-            Type type = typeof(HashAlgorithmHelper);
+            Type type = typeof(HashAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
@@ -113,7 +113,7 @@ namespace Test
                 }
             }
             SecureRandom random = SecureRandom.GetInstance("MD5PRNG");
-            var key = AsymmetricAlgorithmHelper.ECDSA.GenerateKeyPair().Private;
+            var key = AsymmetricAlgorithms.ECDSA.GenerateKeyPair().Private;
             DefaultSignatureAlgorithmIdentifierFinder finder = new DefaultSignatureAlgorithmIdentifierFinder();
 
             foreach (string name in names)

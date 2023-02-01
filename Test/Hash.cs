@@ -43,10 +43,10 @@ namespace Test
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
             // example 1
-            byte[] hash1 = HashAlgorithmHelper.SHA3_256.ComputeHash(test);
+            byte[] hash1 = HashAlgorithms.SHA3_256.ComputeHash(test);
             // example 2
-            IDigest digest = HashAlgorithmHelper.SHA3_256.GenerateDigest();
-            byte[] hash2 = new byte[HashAlgorithmHelper.SHA3_256.HashSize / 8];
+            IDigest digest = HashAlgorithms.SHA3_256.GenerateDigest();
+            byte[] hash2 = new byte[HashAlgorithms.SHA3_256.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash2, 0);
         }
@@ -57,12 +57,12 @@ namespace Test
             Utilities.Random.NextBytes(test);
             byte[] key = new byte[72]; // Any value
             Utilities.Random.NextBytes(key);
-            ICipherParameters parameters = HMACHelper.SHA3_256_HMAC.GenerateParameters(key);
+            ICipherParameters parameters = HMACAlgorithms.SHA3_256_HMAC.GenerateParameters(key);
             // example 1
-            byte[] hash1 = HMACHelper.SHA3_256_HMAC.ComputeHash(parameters, test);
+            byte[] hash1 = HMACAlgorithms.SHA3_256_HMAC.ComputeHash(parameters, test);
             // example 2
-            IMac digest = HMACHelper.SHA3_256_HMAC.GenerateDigest(parameters);
-            byte[] hash2 = new byte[HMACHelper.SHA3_256_HMAC.HashSize / 8];
+            IMac digest = HMACAlgorithms.SHA3_256_HMAC.GenerateDigest(parameters);
+            byte[] hash2 = new byte[HMACAlgorithms.SHA3_256_HMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash2, 0);
         }
@@ -73,12 +73,12 @@ namespace Test
             Utilities.Random.NextBytes(test);
             byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
-            ICipherParameters parameters = CMACHelper.AES_CMAC.GenerateParameters(key);
+            ICipherParameters parameters = CMACAlgorithms.AES_CMAC.GenerateParameters(key);
             // example 1
-            byte[] hash1 = CMACHelper.AES_CMAC.ComputeHash(parameters, test);
+            byte[] hash1 = CMACAlgorithms.AES_CMAC.ComputeHash(parameters, test);
             // example 2
-            IMac digest = CMACHelper.AES_CMAC.GenerateDigest(parameters);
-            byte[] hash = new byte[CMACHelper.AES_CMAC.HashSize / 8];
+            IMac digest = CMACAlgorithms.AES_CMAC.GenerateDigest(parameters);
+            byte[] hash = new byte[CMACAlgorithms.AES_CMAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash, 0);
         }
@@ -91,12 +91,12 @@ namespace Test
             Utilities.Random.NextBytes(key);
             byte[] iv = new byte[128 / 8]; // AES IV size
             Utilities.Random.NextBytes(iv);
-            ICipherParameters parameters = MACHelper.AES_MAC.GenerateParameters(key, iv);
+            ICipherParameters parameters = MACAlgorithms.AES_MAC.GenerateParameters(key, iv);
             // example 1
-            byte[] hash1 = MACHelper.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, test);
+            byte[] hash1 = MACAlgorithms.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, test);
             // example 2
-            IMac digest = MACHelper.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
-            byte[] hash = new byte[MACHelper.AES_MAC.HashSize / 8];
+            IMac digest = MACAlgorithms.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
+            byte[] hash = new byte[MACAlgorithms.AES_MAC.HashSize / 8];
             digest.BlockUpdate(test, 0, test.Length);
             digest.DoFinal(hash, 0);
         }
@@ -132,7 +132,7 @@ namespace Test
             byte[] test = new byte[123];
             Utilities.Random.NextBytes(test);
             //
-            Type type = typeof(HashAlgorithmHelper);
+            Type type = typeof(HashAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {

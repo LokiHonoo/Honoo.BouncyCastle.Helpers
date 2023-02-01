@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// GOST3410.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public GOST3410(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithmHelper.GOST3410)
+        public GOST3410(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.GOST3410)
         {
         }
 

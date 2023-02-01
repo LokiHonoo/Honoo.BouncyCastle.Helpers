@@ -4,7 +4,6 @@ using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.X509;
 using System;
 using System.IO;
-using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -67,55 +66,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static string Key2Pem(AsymmetricKeyParameter privateKey, DEKAlgorithmName dekAlgorithmName, string password)
         {
-            string algorithmName;
-            switch (dekAlgorithmName)
-            {
-                case DEKAlgorithmName.AES_128_CBC: algorithmName = "AES-128-CBC"; break;
-                case DEKAlgorithmName.AES_128_CFB: algorithmName = "AES-128-CFB"; break;
-                case DEKAlgorithmName.AES_128_ECB: algorithmName = "AES-128-ECB"; break;
-                case DEKAlgorithmName.AES_128_OFB: algorithmName = "AES-128-OFB"; break;
-                case DEKAlgorithmName.AES_192_CBC: algorithmName = "AES-192-CBC"; break;
-                case DEKAlgorithmName.AES_192_CFB: algorithmName = "AES-192-CFB"; break;
-                case DEKAlgorithmName.AES_192_ECB: algorithmName = "AES-192-ECB"; break;
-                case DEKAlgorithmName.AES_192_OFB: algorithmName = "AES-192-OFB"; break;
-                case DEKAlgorithmName.AES_256_CBC: algorithmName = "AES-256-CBC"; break;
-                case DEKAlgorithmName.AES_256_CFB: algorithmName = "AES-256-CFB"; break;
-                case DEKAlgorithmName.AES_256_ECB: algorithmName = "AES-256-ECB"; break;
-                case DEKAlgorithmName.AES_256_OFB: algorithmName = "AES-256-OFB"; break;
-                case DEKAlgorithmName.BLOWFISH_CBC: algorithmName = "BF-CBC"; break;
-                case DEKAlgorithmName.BLOWFISH_CFB: algorithmName = "BF-CFB"; break;
-                case DEKAlgorithmName.BLOWFISH_ECB: algorithmName = "BF-ECB"; break;
-                case DEKAlgorithmName.BLOWFISH_OFB: algorithmName = "BF-OFB"; break;
-                case DEKAlgorithmName.DES_CBC: algorithmName = "DES-CBC"; break;
-                case DEKAlgorithmName.DES_CFB: algorithmName = "DES-CFB"; break;
-                case DEKAlgorithmName.DES_ECB: algorithmName = "DES-ECB"; break;
-                case DEKAlgorithmName.DES_OFB: algorithmName = "DES-OFB"; break;
-                case DEKAlgorithmName.DES_EDE_CBC: algorithmName = "DES-EDE-CBC"; break;
-                case DEKAlgorithmName.DES_EDE_CFB: algorithmName = "DES-EDE-CFB"; break;
-                case DEKAlgorithmName.DES_EDE_ECB: algorithmName = "DES-EDE-ECB"; break;
-                case DEKAlgorithmName.DES_EDE_OFB: algorithmName = "DES-EDE-OFB"; break;
-                case DEKAlgorithmName.DES_EDE3_CBC: algorithmName = "DES-EDE3-CBC"; break;
-                case DEKAlgorithmName.DES_EDE3_CFB: algorithmName = "DES-EDE3-CFB"; break;
-                case DEKAlgorithmName.DES_EDE3_ECB: algorithmName = "DES-EDE3-ECB"; break;
-                case DEKAlgorithmName.DES_EDE3_OFB: algorithmName = "DES-EDE3-OFB"; break;
-                case DEKAlgorithmName.RC2_40_CBC: algorithmName = "RC2-40-CBC"; break;
-                case DEKAlgorithmName.RC2_40_CFB: algorithmName = "RC2-40-CFB"; break;
-                case DEKAlgorithmName.RC2_40_ECB: algorithmName = "RC2-40-ECB"; break;
-                case DEKAlgorithmName.RC2_40_OFB: algorithmName = "RC2-40-OFB"; break;
-                case DEKAlgorithmName.RC2_64_CBC: algorithmName = "RC2-64-CBC"; break;
-                case DEKAlgorithmName.RC2_64_CFB: algorithmName = "RC2-64-CFB"; break;
-                case DEKAlgorithmName.RC2_64_ECB: algorithmName = "RC2-64-ECB"; break;
-                case DEKAlgorithmName.RC2_64_OFB: algorithmName = "RC2-64-OFB"; break;
-                case DEKAlgorithmName.RC2_CBC: algorithmName = "RC2-CBC"; break;
-                case DEKAlgorithmName.RC2_CFB: algorithmName = "RC2-CFB"; break;
-                case DEKAlgorithmName.RC2_ECB: algorithmName = "RC2-ECB"; break;
-                case DEKAlgorithmName.RC2_OFB: algorithmName = "RC2-OFB"; break;
-                default: throw new CryptographicException("Unsupported DEK algorithm.");
-            }
             using (StringWriter writer = new StringWriter())
             {
                 PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(privateKey, algorithmName, password.ToCharArray(), Common.SecureRandom);
+                pemWriter.WriteObject(privateKey, dekAlgorithmName.Name, password.ToCharArray(), Common.SecureRandom);
                 return writer.ToString();
             }
         }
@@ -144,55 +98,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static string KeyPair2Pem(AsymmetricCipherKeyPair asymmetricKeyPair, DEKAlgorithmName dekAlgorithmName, string password)
         {
-            string algorithmName;
-            switch (dekAlgorithmName)
-            {
-                case DEKAlgorithmName.AES_128_CBC: algorithmName = "AES-128-CBC"; break;
-                case DEKAlgorithmName.AES_128_CFB: algorithmName = "AES-128-CFB"; break;
-                case DEKAlgorithmName.AES_128_ECB: algorithmName = "AES-128-ECB"; break;
-                case DEKAlgorithmName.AES_128_OFB: algorithmName = "AES-128-OFB"; break;
-                case DEKAlgorithmName.AES_192_CBC: algorithmName = "AES-192-CBC"; break;
-                case DEKAlgorithmName.AES_192_CFB: algorithmName = "AES-192-CFB"; break;
-                case DEKAlgorithmName.AES_192_ECB: algorithmName = "AES-192-ECB"; break;
-                case DEKAlgorithmName.AES_192_OFB: algorithmName = "AES-192-OFB"; break;
-                case DEKAlgorithmName.AES_256_CBC: algorithmName = "AES-256-CBC"; break;
-                case DEKAlgorithmName.AES_256_CFB: algorithmName = "AES-256-CFB"; break;
-                case DEKAlgorithmName.AES_256_ECB: algorithmName = "AES-256-ECB"; break;
-                case DEKAlgorithmName.AES_256_OFB: algorithmName = "AES-256-OFB"; break;
-                case DEKAlgorithmName.BLOWFISH_CBC: algorithmName = "BF-CBC"; break;
-                case DEKAlgorithmName.BLOWFISH_CFB: algorithmName = "BF-CFB"; break;
-                case DEKAlgorithmName.BLOWFISH_ECB: algorithmName = "BF-ECB"; break;
-                case DEKAlgorithmName.BLOWFISH_OFB: algorithmName = "BF-OFB"; break;
-                case DEKAlgorithmName.DES_CBC: algorithmName = "DES-CBC"; break;
-                case DEKAlgorithmName.DES_CFB: algorithmName = "DES-CFB"; break;
-                case DEKAlgorithmName.DES_ECB: algorithmName = "DES-ECB"; break;
-                case DEKAlgorithmName.DES_OFB: algorithmName = "DES-OFB"; break;
-                case DEKAlgorithmName.DES_EDE_CBC: algorithmName = "DES-EDE-CBC"; break;
-                case DEKAlgorithmName.DES_EDE_CFB: algorithmName = "DES-EDE-CFB"; break;
-                case DEKAlgorithmName.DES_EDE_ECB: algorithmName = "DES-EDE-ECB"; break;
-                case DEKAlgorithmName.DES_EDE_OFB: algorithmName = "DES-EDE-OFB"; break;
-                case DEKAlgorithmName.DES_EDE3_CBC: algorithmName = "DES-EDE3-CBC"; break;
-                case DEKAlgorithmName.DES_EDE3_CFB: algorithmName = "DES-EDE3-CFB"; break;
-                case DEKAlgorithmName.DES_EDE3_ECB: algorithmName = "DES-EDE3-ECB"; break;
-                case DEKAlgorithmName.DES_EDE3_OFB: algorithmName = "DES-EDE3-OFB"; break;
-                case DEKAlgorithmName.RC2_40_CBC: algorithmName = "RC2-40-CBC"; break;
-                case DEKAlgorithmName.RC2_40_CFB: algorithmName = "RC2-40-CFB"; break;
-                case DEKAlgorithmName.RC2_40_ECB: algorithmName = "RC2-40-ECB"; break;
-                case DEKAlgorithmName.RC2_40_OFB: algorithmName = "RC2-40-OFB"; break;
-                case DEKAlgorithmName.RC2_64_CBC: algorithmName = "RC2-64-CBC"; break;
-                case DEKAlgorithmName.RC2_64_CFB: algorithmName = "RC2-64-CFB"; break;
-                case DEKAlgorithmName.RC2_64_ECB: algorithmName = "RC2-64-ECB"; break;
-                case DEKAlgorithmName.RC2_64_OFB: algorithmName = "RC2-64-OFB"; break;
-                case DEKAlgorithmName.RC2_CBC: algorithmName = "RC2-CBC"; break;
-                case DEKAlgorithmName.RC2_CFB: algorithmName = "RC2-CFB"; break;
-                case DEKAlgorithmName.RC2_ECB: algorithmName = "RC2-ECB"; break;
-                case DEKAlgorithmName.RC2_OFB: algorithmName = "RC2-OFB"; break;
-                default: throw new CryptographicException("Unsupported DEK algorithm.");
-            }
             using (StringWriter writer = new StringWriter())
             {
                 PemWriter pemWriter = new PemWriter(writer);
-                pemWriter.WriteObject(asymmetricKeyPair, algorithmName, password.ToCharArray(), Common.SecureRandom);
+                pemWriter.WriteObject(asymmetricKeyPair, dekAlgorithmName.Name, password.ToCharArray(), Common.SecureRandom);
                 return writer.ToString();
             }
         }

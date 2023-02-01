@@ -17,305 +17,6 @@ namespace Honoo.BouncyCastle.Helpers
     /// </summary>
     public static class SignatureAlgorithmHelper
     {
-        #region ECDSA
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA1withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA224withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA224);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_224withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA3_224);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_256withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA3_256);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_384withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA3_384);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_512withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA3_512);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA384withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA384);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA512withECDSA { get; } = new ECDSA(HashAlgorithmHelper.SHA512);
-
-        #endregion ECDSA
-
-        #region CVC-ECDSA
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA1withCVC_ECDSA { get; } = new CVC_ECDSA(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA224withCVC_ECDSA { get; } = new CVC_ECDSA(HashAlgorithmHelper.SHA224);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withCVC_ECDSA { get; } = new CVC_ECDSA(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA384withCVC_ECDSA { get; } = new CVC_ECDSA(HashAlgorithmHelper.SHA384);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA512withCVC_ECDSA { get; } = new CVC_ECDSA(HashAlgorithmHelper.SHA512);
-
-        #endregion CVC-ECDSA
-
-        #region PLAIN-ECDSA
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm RIPEMD160withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.RIPEMD160);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA1withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA224withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.SHA224);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA384withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.SHA384);
-
-        /// <summary>
-        /// Uses EllipticCurve.SecP256r1 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA512withPLAIN_ECDSA { get; } = new PLAIN_ECDSA(HashAlgorithmHelper.SHA512);
-
-        #endregion PLAIN-ECDSA
-
-        #region RSA
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm MD2withRSA { get; } = new RSA(HashAlgorithmHelper.MD2);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm MD5withRSA { get; } = new RSA(HashAlgorithmHelper.MD5);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm PSSwithRSA { get; } = new RSAandMGF1(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm RIPEMD128withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD128);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm RIPEMD160withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD160);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm RIPEMD256withRSA { get; } = new RSA(HashAlgorithmHelper.RIPEMD256);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA1withRSA { get; } = new RSA(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA224withRSA { get; } = new RSA(HashAlgorithmHelper.SHA224);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withRSA { get; } = new RSA(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_224withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_224);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_256withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_256);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_384withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_384);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_512withRSA { get; } = new RSA(HashAlgorithmHelper.SHA3_512);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA384withRSA { get; } = new RSA(HashAlgorithmHelper.SHA384);
-
-        /// <summary>
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA512withRSA { get; } = new RSA(HashAlgorithmHelper.SHA512);
-
-        #endregion RSA
-
-        #region DSA
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA1withDSA { get; } = new DSA(HashAlgorithmHelper.SHA1);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA224withDSA { get; } = new DSA(HashAlgorithmHelper.SHA224);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withDSA { get; } = new DSA(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_224withDSA { get; } = new DSA(HashAlgorithmHelper.SHA3_224);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_256withDSA { get; } = new DSA(HashAlgorithmHelper.SHA3_256);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_384withDSA { get; } = new DSA(HashAlgorithmHelper.SHA3_384);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA3_512withDSA { get; } = new DSA(HashAlgorithmHelper.SHA3_512);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA384withDSA { get; } = new DSA(HashAlgorithmHelper.SHA384);
-
-        /// <summary>
-        /// Legal key size 512-1024 bits (64 bits increments).
-        /// <para/>Uses key size 1024 bits, certainty 80 by default.
-        /// </summary>
-        public static ISignatureAlgorithm SHA512withDSA { get; } = new DSA(HashAlgorithmHelper.SHA512);
-
-        #endregion DSA
-
-        #region GOST3410
-
-        /// <summary>
-        /// Uses substitution box "D-A" by default.
-        /// <para/>Legal key size 512, 1024 bits.
-        /// <para/>Uses key size 1024 bits, procedure 2 by default.
-        /// </summary>
-        public static ISignatureAlgorithm GOST3411withGOST3410 { get; } = new GOST3410(HashAlgorithmHelper.GOST3411);
-
-        #endregion GOST3410
-
-        #region ECGOST3410
-
-        /// <summary>
-        /// Uses substitution box "D-A" by default.
-        /// <para/>Uses EllipticCurve.GostR3410x2001CryptoProA by default.
-        /// </summary>
-        public static ISignatureAlgorithm GOST3411withECGOST3410 { get; } = new ECGOST3410(HashAlgorithmHelper.GOST3411);
-
-        #endregion ECGOST3410
-
-        #region SM2
-
-        /// <summary>
-        ///
-        /// </summary>
-        public static ISignatureAlgorithm SHA256withSM2 { get; } = new SM2(HashAlgorithmHelper.SHA256);
-
-        /// <summary>
-        ///
-        /// </summary>
-        public static ISignatureAlgorithm SM3withSM2 { get; } = new SM2(HashAlgorithmHelper.SM3);
-
-        #endregion SM2
-
         /// <summary>
         /// Try get signature algorithm used arguments hash algorithm, asymmetric algorithm.
         /// </summary>
@@ -422,62 +123,62 @@ namespace Honoo.BouncyCastle.Helpers
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
-                case "1.2.840.10045.4.1": case "SHA1WITHECDSA": case "SHA-1WITHECDSA": algorithm = SHA1withECDSA; return true;
-                case "1.2.840.10045.4.3.1": case "SHA224WITHECDSA": case "SHA-224WITHECDSA": algorithm = SHA224withECDSA; return true;
-                case "1.2.840.10045.4.3.2": case "SHA256WITHECDSA": case "SHA-256WITHECDSA": algorithm = SHA256withECDSA; return true;
-                case "1.2.840.10045.4.3.3": case "SHA384WITHECDSA": case "SHA-384WITHECDSA": algorithm = SHA384withECDSA; return true;
-                case "1.2.840.10045.4.3.4": case "SHA512WITHECDSA": case "SHA-512WITHECDSA": algorithm = SHA512withECDSA; return true;
-                case "2.16.840.1.101.3.4.3.9": case "SHA3-224WITHECDSA": case "SHA-3-224WITHECDSA": algorithm = SHA3_224withECDSA; return true;
-                case "2.16.840.1.101.3.4.3.10": case "SHA3-256WITHECDSA": case "SHA-3-256WITHECDSA": algorithm = SHA3_256withECDSA; return true;
-                case "2.16.840.1.101.3.4.3.11": case "SHA3-384WITHECDSA": case "SHA-3-384WITHECDSA": algorithm = SHA3_384withECDSA; return true;
-                case "2.16.840.1.101.3.4.3.12": case "SHA3-512WITHECDSA": case "SHA-3-512WITHECDSA": algorithm = SHA3_512withECDSA; return true;
+                case "1.2.840.10045.4.1": case "SHA1WITHECDSA": case "SHA-1WITHECDSA": algorithm = SignatureAlgorithms.SHA1withECDSA; return true;
+                case "1.2.840.10045.4.3.1": case "SHA224WITHECDSA": case "SHA-224WITHECDSA": algorithm = SignatureAlgorithms.SHA224withECDSA; return true;
+                case "1.2.840.10045.4.3.2": case "SHA256WITHECDSA": case "SHA-256WITHECDSA": algorithm = SignatureAlgorithms.SHA256withECDSA; return true;
+                case "1.2.840.10045.4.3.3": case "SHA384WITHECDSA": case "SHA-384WITHECDSA": algorithm = SignatureAlgorithms.SHA384withECDSA; return true;
+                case "1.2.840.10045.4.3.4": case "SHA512WITHECDSA": case "SHA-512WITHECDSA": algorithm = SignatureAlgorithms.SHA512withECDSA; return true;
+                case "2.16.840.1.101.3.4.3.9": case "SHA3-224WITHECDSA": case "SHA-3-224WITHECDSA": algorithm = SignatureAlgorithms.SHA3_224withECDSA; return true;
+                case "2.16.840.1.101.3.4.3.10": case "SHA3-256WITHECDSA": case "SHA-3-256WITHECDSA": algorithm = SignatureAlgorithms.SHA3_256withECDSA; return true;
+                case "2.16.840.1.101.3.4.3.11": case "SHA3-384WITHECDSA": case "SHA-3-384WITHECDSA": algorithm = SignatureAlgorithms.SHA3_384withECDSA; return true;
+                case "2.16.840.1.101.3.4.3.12": case "SHA3-512WITHECDSA": case "SHA-3-512WITHECDSA": algorithm = SignatureAlgorithms.SHA3_512withECDSA; return true;
 
-                case "0.4.0.127.0.7.2.2.2.2.1": case "SHA1WITHCVC-ECDSA": case "SHA-1WITHCVC-ECDSA": algorithm = SHA1withCVC_ECDSA; return true;
-                case "0.4.0.127.0.7.2.2.2.2.2": case "SHA224WITHCVC-ECDSA": case "SHA-224WITHCVC-ECDSA": algorithm = SHA224withCVC_ECDSA; return true;
-                case "0.4.0.127.0.7.2.2.2.2.3": case "SHA256WITHCVC-ECDSA": case "SHA-256WITHCVC-ECDSA": algorithm = SHA256withCVC_ECDSA; return true;
-                case "0.4.0.127.0.7.2.2.2.2.4": case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": algorithm = SHA384withCVC_ECDSA; return true;
-                case "0.4.0.127.0.7.2.2.2.2.5": case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": algorithm = SHA512withCVC_ECDSA; return true;
+                case "0.4.0.127.0.7.2.2.2.2.1": case "SHA1WITHCVC-ECDSA": case "SHA-1WITHCVC-ECDSA": algorithm = SignatureAlgorithms.SHA1withCVC_ECDSA; return true;
+                case "0.4.0.127.0.7.2.2.2.2.2": case "SHA224WITHCVC-ECDSA": case "SHA-224WITHCVC-ECDSA": algorithm = SignatureAlgorithms.SHA224withCVC_ECDSA; return true;
+                case "0.4.0.127.0.7.2.2.2.2.3": case "SHA256WITHCVC-ECDSA": case "SHA-256WITHCVC-ECDSA": algorithm = SignatureAlgorithms.SHA256withCVC_ECDSA; return true;
+                case "0.4.0.127.0.7.2.2.2.2.4": case "SHA384WITHCVC-ECDSA": case "SHA-384WITHCVC-ECDSA": algorithm = SignatureAlgorithms.SHA384withCVC_ECDSA; return true;
+                case "0.4.0.127.0.7.2.2.2.2.5": case "SHA512WITHCVC-ECDSA": case "SHA-512WITHCVC-ECDSA": algorithm = SignatureAlgorithms.SHA512withCVC_ECDSA; return true;
 
-                case "0.4.0.127.0.7.1.1.4.1.1": case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": algorithm = SHA1withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.2": case "SHA224WITHPLAIN-ECDSA": case "SHA-224WITHPLAIN-ECDSA": algorithm = SHA224withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.3": case "SHA256WITHPLAIN-ECDSA": case "SHA-256WITHPLAIN-ECDSA": algorithm = SHA256withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.4": case "SHA384WITHPLAIN-ECDSA": case "SHA-384WITHPLAIN-ECDSA": algorithm = SHA384withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.5": case "SHA512WITHPLAIN-ECDSA": case "SHA-512WITHPLAIN-ECDSA": algorithm = SHA512withPLAIN_ECDSA; return true;
-                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": algorithm = RIPEMD160withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.1": case "SHA1WITHPLAIN-ECDSA": case "SHA-1WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.SHA1withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.2": case "SHA224WITHPLAIN-ECDSA": case "SHA-224WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.SHA224withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.3": case "SHA256WITHPLAIN-ECDSA": case "SHA-256WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.SHA256withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.4": case "SHA384WITHPLAIN-ECDSA": case "SHA-384WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.SHA384withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.5": case "SHA512WITHPLAIN-ECDSA": case "SHA-512WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.SHA512withPLAIN_ECDSA; return true;
+                case "0.4.0.127.0.7.1.1.4.1.6": case "RIPEMD160WITHPLAIN-ECDSA": case "RIPEMD-160WITHPLAIN-ECDSA": algorithm = SignatureAlgorithms.RIPEMD160withPLAIN_ECDSA; return true;
 
-                case "1.2.840.113549.1.1.10": case "PSSWITHRSA": case "SHA1WITHRSAANDMGF1": case "SHA-1WITHRSAANDMGF1": algorithm = PSSwithRSA; return true;
+                case "1.2.840.113549.1.1.10": case "PSSWITHRSA": case "SHA1WITHRSAANDMGF1": case "SHA-1WITHRSAANDMGF1": algorithm = SignatureAlgorithms.PSSwithRSA; return true;
 
-                case "1.2.840.113549.1.1.2": case "MD2WITHRSA": algorithm = MD2withRSA; return true;
-                case "1.2.840.113549.1.1.4": case "MD5WITHRSA": algorithm = MD5withRSA; return true;
-                case "1.3.36.3.3.1.3": case "RIPEMD128WITHRSA": case "RIPEMD-128WITHRSA": algorithm = RIPEMD128withRSA; return true;
-                case "1.3.36.3.3.1.2": case "RIPEMD160WITHRSA": case "RIPEMD-160WITHRSA": algorithm = RIPEMD160withRSA; return true;
-                case "1.3.36.3.3.1.4": case "RIPEMD256WITHRSA": case "RIPEMD-256WITHRSA": algorithm = RIPEMD256withRSA; return true;
-                case "1.2.840.113549.1.1.5": case "SHA1WITHRSA": case "SHA-1WITHRSA": algorithm = SHA1withRSA; return true;
-                case "1.2.840.113549.1.1.14": case "SHA224WITHRSA": case "SHA-224WITHRSA": algorithm = SHA224withRSA; return true;
-                case "1.2.840.113549.1.1.11": case "SHA256WITHRSA": case "SHA-256WITHRSA": algorithm = SHA256withRSA; return true;
-                case "1.2.840.113549.1.1.12": case "SHA384WITHRSA": case "SHA-384WITHRSA": algorithm = SHA384withRSA; return true;
-                case "1.2.840.113549.1.1.13": case "SHA512WITHRSA": case "SHA-512WITHRSA": algorithm = SHA512withRSA; return true;
-                case "2.16.840.1.101.3.4.3.13": case "SHA3-224WITHRSA": case "SHA-3-224WITHRSA": algorithm = SHA3_224withRSA; return true;
-                case "2.16.840.1.101.3.4.3.14": case "SHA3-256WITHRSA": case "SHA-3-256WITHRSA": algorithm = SHA3_256withRSA; return true;
-                case "2.16.840.1.101.3.4.3.15": case "SHA3-384WITHRSA": case "SHA-3-384WITHRSA": algorithm = SHA3_384withRSA; return true;
-                case "2.16.840.1.101.3.4.3.16": case "SHA3-512WITHRSA": case "SHA-3-512WITHRSA": algorithm = SHA3_512withRSA; return true;
+                case "1.2.840.113549.1.1.2": case "MD2WITHRSA": algorithm = SignatureAlgorithms.MD2withRSA; return true;
+                case "1.2.840.113549.1.1.4": case "MD5WITHRSA": algorithm = SignatureAlgorithms.MD5withRSA; return true;
+                case "1.3.36.3.3.1.3": case "RIPEMD128WITHRSA": case "RIPEMD-128WITHRSA": algorithm = SignatureAlgorithms.RIPEMD128withRSA; return true;
+                case "1.3.36.3.3.1.2": case "RIPEMD160WITHRSA": case "RIPEMD-160WITHRSA": algorithm = SignatureAlgorithms.RIPEMD160withRSA; return true;
+                case "1.3.36.3.3.1.4": case "RIPEMD256WITHRSA": case "RIPEMD-256WITHRSA": algorithm = SignatureAlgorithms.RIPEMD256withRSA; return true;
+                case "1.2.840.113549.1.1.5": case "SHA1WITHRSA": case "SHA-1WITHRSA": algorithm = SignatureAlgorithms.SHA1withRSA; return true;
+                case "1.2.840.113549.1.1.14": case "SHA224WITHRSA": case "SHA-224WITHRSA": algorithm = SignatureAlgorithms.SHA224withRSA; return true;
+                case "1.2.840.113549.1.1.11": case "SHA256WITHRSA": case "SHA-256WITHRSA": algorithm = SignatureAlgorithms.SHA256withRSA; return true;
+                case "1.2.840.113549.1.1.12": case "SHA384WITHRSA": case "SHA-384WITHRSA": algorithm = SignatureAlgorithms.SHA384withRSA; return true;
+                case "1.2.840.113549.1.1.13": case "SHA512WITHRSA": case "SHA-512WITHRSA": algorithm = SignatureAlgorithms.SHA512withRSA; return true;
+                case "2.16.840.1.101.3.4.3.13": case "SHA3-224WITHRSA": case "SHA-3-224WITHRSA": algorithm = SignatureAlgorithms.SHA3_224withRSA; return true;
+                case "2.16.840.1.101.3.4.3.14": case "SHA3-256WITHRSA": case "SHA-3-256WITHRSA": algorithm = SignatureAlgorithms.SHA3_256withRSA; return true;
+                case "2.16.840.1.101.3.4.3.15": case "SHA3-384WITHRSA": case "SHA-3-384WITHRSA": algorithm = SignatureAlgorithms.SHA3_384withRSA; return true;
+                case "2.16.840.1.101.3.4.3.16": case "SHA3-512WITHRSA": case "SHA-3-512WITHRSA": algorithm = SignatureAlgorithms.SHA3_512withRSA; return true;
 
-                case "1.2.840.10040.4.3": case "SHA1WITHDSA": case "SHA-1WITHDSA": algorithm = SHA1withDSA; return true;
-                case "2.16.840.1.101.3.4.3.1": case "SHA224WITHDSA": case "SHA-224WITHDSA": algorithm = SHA224withDSA; return true;
-                case "2.16.840.1.101.3.4.3.2": case "SHA256WITHDSA": case "SHA-256WITHDSA": algorithm = SHA256withDSA; return true;
-                case "2.16.840.1.101.3.4.3.3": case "SHA384WITHDSA": case "SHA-384WITHDSA": algorithm = SHA384withDSA; return true;
-                case "2.16.840.1.101.3.4.3.4": case "SHA512WITHDSA": case "SHA-512WITHDSA": algorithm = SHA512withDSA; return true;
-                case "2.16.840.1.101.3.4.3.5": case "SHA3-224WITHDSA": case "SHA-3-224WITHDSA": algorithm = SHA3_224withDSA; return true;
-                case "2.16.840.1.101.3.4.3.6": case "SHA3-256WITHDSA": case "SHA-3-256WITHDSA": algorithm = SHA3_256withDSA; return true;
-                case "2.16.840.1.101.3.4.3.7": case "SHA3-384WITHDSA": case "SHA-3-384WITHDSA": algorithm = SHA3_384withDSA; return true;
-                case "2.16.840.1.101.3.4.3.8": case "SHA3-512WITHDSA": case "SHA-3-512WITHDSA": algorithm = SHA3_512withDSA; return true;
+                case "1.2.840.10040.4.3": case "SHA1WITHDSA": case "SHA-1WITHDSA": algorithm = SignatureAlgorithms.SHA1withDSA; return true;
+                case "2.16.840.1.101.3.4.3.1": case "SHA224WITHDSA": case "SHA-224WITHDSA": algorithm = SignatureAlgorithms.SHA224withDSA; return true;
+                case "2.16.840.1.101.3.4.3.2": case "SHA256WITHDSA": case "SHA-256WITHDSA": algorithm = SignatureAlgorithms.SHA256withDSA; return true;
+                case "2.16.840.1.101.3.4.3.3": case "SHA384WITHDSA": case "SHA-384WITHDSA": algorithm = SignatureAlgorithms.SHA384withDSA; return true;
+                case "2.16.840.1.101.3.4.3.4": case "SHA512WITHDSA": case "SHA-512WITHDSA": algorithm = SignatureAlgorithms.SHA512withDSA; return true;
+                case "2.16.840.1.101.3.4.3.5": case "SHA3-224WITHDSA": case "SHA-3-224WITHDSA": algorithm = SignatureAlgorithms.SHA3_224withDSA; return true;
+                case "2.16.840.1.101.3.4.3.6": case "SHA3-256WITHDSA": case "SHA-3-256WITHDSA": algorithm = SignatureAlgorithms.SHA3_256withDSA; return true;
+                case "2.16.840.1.101.3.4.3.7": case "SHA3-384WITHDSA": case "SHA-3-384WITHDSA": algorithm = SignatureAlgorithms.SHA3_384withDSA; return true;
+                case "2.16.840.1.101.3.4.3.8": case "SHA3-512WITHDSA": case "SHA-3-512WITHDSA": algorithm = SignatureAlgorithms.SHA3_512withDSA; return true;
 
-                case "1.2.643.2.2.4": case "GOST3411WITHGOST3410": case "GOST3410": case "GOST3410-94": algorithm = GOST3411withGOST3410; return true;
+                case "1.2.643.2.2.4": case "GOST3411WITHGOST3410": case "GOST3410": case "GOST3410-94": algorithm = SignatureAlgorithms.GOST3411withGOST3410; return true;
 
-                case "1.2.643.2.2.3": case "GOST3411WITHECGOST3410": case "ECGOST3410": case "ECGOST3410-2001": algorithm = GOST3411withECGOST3410; return true;
+                case "1.2.643.2.2.3": case "GOST3411WITHECGOST3410": case "ECGOST3410": case "ECGOST3410-2001": algorithm = SignatureAlgorithms.GOST3411withECGOST3410; return true;
 
-                case "1.2.156.10197.1.503": case "SHA256WITHSM2": case "SHA-256WITHSM2": algorithm = SHA256withSM2; return true;
-                case "1.2.156.10197.1.501": case "SM3WITHSM2": algorithm = SM3withSM2; return true;
+                case "1.2.156.10197.1.503": case "SHA256WITHSM2": case "SHA-256WITHSM2": algorithm = SignatureAlgorithms.SHA256withSM2; return true;
+                case "1.2.156.10197.1.501": case "SM3WITHSM2": algorithm = SignatureAlgorithms.SM3withSM2; return true;
 
                 case "ED25519": algorithm = new Ed25519(); return true;
                 case "ED25519CTX": algorithm = new Ed25519ctx(); return true;

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// SM2.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public SM2(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithmHelper.SM2)
+        public SM2(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.SM2)
         {
         }
 

@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// ECNR.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public ECNR(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithmHelper.ECDSA)
+        public ECNR(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.ECDSA)
         {
         }
 

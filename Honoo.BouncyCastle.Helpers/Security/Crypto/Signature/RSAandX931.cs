@@ -39,7 +39,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <see cref="Whirlpool"/>.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public RSAandX931(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA)
+        public RSAandX931(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithms.RSA)
         {
         }
 

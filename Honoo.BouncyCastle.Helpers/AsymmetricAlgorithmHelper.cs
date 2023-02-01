@@ -1,5 +1,4 @@
-﻿using Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric;
-using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Math.EC;
@@ -12,60 +11,6 @@ namespace Honoo.BouncyCastle.Helpers
     /// </summary>
     public static class AsymmetricAlgorithmHelper
     {
-        /// <summary>
-        /// DSA.
-        /// <para/>Legal key size 512-1024 bits (64 bits increments).
-        /// </summary>
-        public static DSA DSA { get; } = new DSA();
-
-        /// <summary>
-        /// ECDH.
-        /// </summary>
-        public static ECDH ECDH { get; } = new ECDH();
-
-        /// <summary>
-        /// ECDSA.
-        /// </summary>
-        public static ECDSA ECDSA { get; } = new ECDSA();
-
-        /// <summary>
-        /// ECGOST3410.
-        /// </summary>
-        public static ECGOST3410 ECGOST3410 { get; } = new ECGOST3410();
-
-        /// <summary>
-        /// Ed25519.
-        /// </summary>
-        public static Ed25519 Ed25519 { get; } = new Ed25519();
-
-        /// <summary>
-        /// Ed448.
-        /// </summary>
-        public static Ed448 Ed448 { get; } = new Ed448();
-
-        /// <summary>
-        /// ElGamal.
-        /// <para/>Legal key size is more than or equal to 8 bits (8 bits increments).
-        /// </summary>
-        public static ElGamal ElGamal { get; } = new ElGamal();
-
-        /// <summary>
-        /// GOST3410
-        /// <para/>Legal key size 512, 1024 bits.
-        /// </summary>
-        public static GOST3410 GOST3410 { get; } = new GOST3410();
-
-        /// <summary>
-        /// RSA.
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// </summary>
-        public static RSA RSA { get; } = new RSA();
-
-        /// <summary>
-        /// SM2.
-        /// </summary>
-        public static SM2 SM2 { get; } = new SM2();
-
         /// <summary>
         /// Try generate asymmetric public key from asymmetric private key.
         /// </summary>
@@ -149,16 +94,16 @@ namespace Honoo.BouncyCastle.Helpers
             mechanism = mechanism.Replace('_', '-').ToUpperInvariant();
             switch (mechanism)
             {
-                case "DSA": algorithm = DSA; return true;
-                case "ECDH": algorithm = ECDH; return true;
-                case "ECDSA": algorithm = ECDSA; return true;
-                case "ECGOST3410": case "ECGOST3410-2001": algorithm = ECGOST3410; return true;
-                case "ED25519": algorithm = new Ed25519(); return true;
-                case "ED448": algorithm = new Ed448(); return true;
-                case "ELGAMAL": algorithm = ElGamal; return true;
-                case "GOST3410": case "GOST3410-94": algorithm = GOST3410; return true;
-                case "RSA": algorithm = RSA; return true;
-                case "SM2": algorithm = SM2; return true;
+                case "DSA": algorithm = AsymmetricAlgorithms.DSA; return true;
+                case "ECDH": algorithm = AsymmetricAlgorithms.ECDH; return true;
+                case "ECDSA": algorithm = AsymmetricAlgorithms.ECDSA; return true;
+                case "ECGOST3410": case "ECGOST3410-2001": algorithm = AsymmetricAlgorithms.ECGOST3410; return true;
+                case "ED25519": algorithm = AsymmetricAlgorithms.Ed25519; return true;
+                case "ED448": algorithm = AsymmetricAlgorithms.Ed448; return true;
+                case "ELGAMAL": algorithm = AsymmetricAlgorithms.ElGamal; return true;
+                case "GOST3410": case "GOST3410-94": algorithm = AsymmetricAlgorithms.GOST3410; return true;
+                case "RSA": algorithm = AsymmetricAlgorithms.RSA; return true;
+                case "SM2": algorithm = AsymmetricAlgorithms.SM2; return true;
                 default: algorithm = null; return false;
             }
         }
@@ -171,7 +116,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGetPaddingMode(string mechanism, out AsymmetricPaddingMode? padding)
         {
-            if (mechanism is null)
+            if (string.IsNullOrWhiteSpace(mechanism))
             {
                 padding = null;
                 return false;

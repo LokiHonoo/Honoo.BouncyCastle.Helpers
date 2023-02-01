@@ -24,7 +24,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// RSA/ISO9796-2.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public RSAandISO9796_2(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithmHelper.RSA)
+        public RSAandISO9796_2(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithms.RSA)
         {
         }
 

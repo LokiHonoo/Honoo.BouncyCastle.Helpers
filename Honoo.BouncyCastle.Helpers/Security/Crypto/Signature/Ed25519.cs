@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <summary>
         /// Ed25519.
         /// </summary>
-        public Ed25519() : this(AsymmetricAlgorithmHelper.Ed25519)
+        public Ed25519() : this(AsymmetricAlgorithms.Ed25519)
         {
         }
 

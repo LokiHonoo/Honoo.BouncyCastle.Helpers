@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <para/>Uses context byte[0] by default.
         /// </summary>
         /// <param name="context">Context.</param>
-        public Ed448ph(byte[] context) : this(context, AsymmetricAlgorithmHelper.Ed448)
+        public Ed448ph(byte[] context) : this(context, AsymmetricAlgorithms.Ed448)
         {
         }
 

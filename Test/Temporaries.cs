@@ -15,7 +15,6 @@ namespace Test
             {
                 Console.WriteLine(item);
             }
-            ;
             //
             //
             //
