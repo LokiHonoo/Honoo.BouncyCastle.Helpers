@@ -43,8 +43,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         {
             _name = name;
             _asymmetricAlgorithm = asymmetricAlgorithm ?? throw new ArgumentNullException(nameof(asymmetricAlgorithm));
-            _ = SignatureAlgorithmHelper.TryGetOid(name, out DerObjectIdentifier oid);
-            _oid = oid;
+            _ = SignatureAlgorithmHelper.TryGetOid(name, out _oid);
         }
 
         #endregion Constructor
@@ -77,7 +76,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <exception cref="Exception"/>
         public ISigner GenerateSigner(AsymmetricKeyParameter privateKey)
         {
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
@@ -98,7 +97,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <exception cref="Exception"/>
         public ISigner GenerateVerifier(AsymmetricKeyParameter publicKey)
         {
-            if (publicKey is null)
+            if (publicKey == null)
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
@@ -143,11 +142,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <exception cref="Exception"/>
         public byte[] Sign(AsymmetricKeyParameter privateKey, byte[] dataBuffer, int offset, int length)
         {
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -194,15 +193,15 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <returns></returns>
         public bool Verify(AsymmetricKeyParameter publicKey, byte[] dataBuffer, int offset, int length, byte[] signature, int signatureOffset, int signatureLength)
         {
-            if (publicKey is null)
+            if (publicKey == null)
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
-            if (signature is null)
+            if (signature == null)
             {
                 throw new ArgumentNullException(nameof(signature));
             }

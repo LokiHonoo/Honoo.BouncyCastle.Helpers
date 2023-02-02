@@ -88,11 +88,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                                int offset,
                                int length)
         {
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -171,11 +171,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                               int offset,
                               int length)
         {
-            if (publicKey is null)
+            if (publicKey == null)
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -213,7 +213,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                                                          IHashAlgorithm mgf1HashAlgorithm2,
                                                          AsymmetricKeyParameter privateKey)
         {
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
@@ -250,7 +250,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
                                                         IHashAlgorithm mgf1HashAlgorithm2,
                                                         AsymmetricKeyParameter publicKey)
         {
-            if (publicKey is null)
+            if (publicKey == null)
             {
                 throw new ArgumentNullException(nameof(publicKey));
             }

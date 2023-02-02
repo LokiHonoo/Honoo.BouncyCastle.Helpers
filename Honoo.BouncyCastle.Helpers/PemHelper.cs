@@ -167,22 +167,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Convert pem string to asymmetric private key.
-        /// </summary>
-        /// <param name="pem">pem string.</param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public static AsymmetricKeyParameter Pem2Key(string pem, string password)
-        {
-            using (StringReader reader = new StringReader(pem))
-            {
-                object obj = new PemReader(reader, new Password(password)).ReadObject();
-                return ((AsymmetricCipherKeyPair)obj).Private;
-            }
-        }
-
-        /// <summary>
         /// Convert pem string to asymmetric key.
         /// </summary>
         /// <param name="pem">pem string.</param>
@@ -201,6 +185,22 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     return (AsymmetricKeyParameter)obj;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Convert pem string to asymmetric private key.
+        /// </summary>
+        /// <param name="pem">pem string.</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public static AsymmetricKeyParameter Pem2Key(string pem, string password)
+        {
+            using (StringReader reader = new StringReader(pem))
+            {
+                object obj = new PemReader(reader, new Password(password)).ReadObject();
+                return ((AsymmetricCipherKeyPair)obj).Private;
             }
         }
 

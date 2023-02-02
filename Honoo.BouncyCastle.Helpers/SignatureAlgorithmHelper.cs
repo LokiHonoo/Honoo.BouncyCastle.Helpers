@@ -34,7 +34,7 @@ namespace Honoo.BouncyCastle.Helpers
                 algorithm = null;
                 return false;
             }
-            if (asymmetricAlgorithm is null)
+            if (asymmetricAlgorithm == null)
             {
                 algorithm = null;
                 return false;
@@ -52,9 +52,9 @@ namespace Honoo.BouncyCastle.Helpers
                 case "GOST3410": case "GOST3410-94": corresponding = asymmetricAlgorithm.Name == "GOST3410"; break;
                 case "PLAIN-ECDSA": corresponding = asymmetricAlgorithm.Name == "ECDSA"; break;
                 case "RSA": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
-                case "ISO9796-2": case "RSA/ISO9796-2": case "RSAANDISO9796-2": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "RSA/ISO9796-2": case "RSAANDISO9796-2": case "RSA-ISO9796-2": case "ISO9796-2": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
                 case "RSAANDMGF1": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
-                case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
+                case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": case "RSA-X9.31": case "RSA-X931": corresponding = asymmetricAlgorithm.Name == "RSA"; break;
                 case "SM2": corresponding = asymmetricAlgorithm.Name == "SM2"; break;
 
                 case "ED25519": corresponding = asymmetricAlgorithm.Name == "Ed25519"; ed = true; break;
@@ -80,7 +80,7 @@ namespace Honoo.BouncyCastle.Helpers
                 }
                 else
                 {
-                    if (hashAlgorithm is null)
+                    if (hashAlgorithm == null)
                     {
                         algorithm = null;
                         return false;
@@ -95,9 +95,9 @@ namespace Honoo.BouncyCastle.Helpers
                         case "GOST3410": case "GOST3410-94": algorithm = new GOST3410(hashAlgorithm, asymmetricAlgorithm); return true;
                         case "PLAIN-ECDSA": algorithm = new PLAIN_ECDSA(hashAlgorithm, asymmetricAlgorithm); return true;
                         case "RSA": algorithm = new RSA(hashAlgorithm, asymmetricAlgorithm); return true;
-                        case "RSA/ISO9796-2": case "RSAANDISO9796-2": case "ISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "RSA/ISO9796-2": case "RSAANDISO9796-2": case "RSA-ISO9796-2": case "ISO9796-2": algorithm = new RSAandISO9796_2(hashAlgorithm, asymmetricAlgorithm); return true;
                         case "RSAANDMGF1": algorithm = new RSAandMGF1(hashAlgorithm, asymmetricAlgorithm); return true;
-                        case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": algorithm = new RSAandX931(hashAlgorithm, asymmetricAlgorithm); return true;
+                        case "RSA/X9.31": case "RSA/X931": case "RSAANDX931": case "RSAANDX9.31": case "RSA-X9.31": case "RSA-X931": algorithm = new RSAandX931(hashAlgorithm, asymmetricAlgorithm); return true;
                         case "SM2": algorithm = new SM2(hashAlgorithm, asymmetricAlgorithm); return true;
                         default: break;
                     }

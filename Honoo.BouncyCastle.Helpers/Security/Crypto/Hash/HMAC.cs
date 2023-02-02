@@ -63,11 +63,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public byte[] ComputeHash(ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }

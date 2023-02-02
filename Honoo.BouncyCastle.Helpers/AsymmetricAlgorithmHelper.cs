@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static bool TryGeneratePublicKey(AsymmetricKeyParameter privateKey, out AsymmetricKeyParameter publicKey)
         {
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 publicKey = null;
                 return false;

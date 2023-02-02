@@ -76,7 +76,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <exception cref="Exception"/>
         public byte[] DeriveKeyMaterial(byte[] exchangeB, bool unsigned)
         {
-            if (exchangeB is null)
+            if (exchangeB == null)
             {
                 throw new ArgumentNullException(nameof(exchangeB));
             }

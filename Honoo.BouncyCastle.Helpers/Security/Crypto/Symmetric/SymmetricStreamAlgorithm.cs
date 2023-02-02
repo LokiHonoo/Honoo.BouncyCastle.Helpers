@@ -70,12 +70,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <exception cref="Exception"/>
         public byte[] Decrypt(ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -106,11 +106,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <exception cref="Exception"/>
         public byte[] Encrypt(ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }

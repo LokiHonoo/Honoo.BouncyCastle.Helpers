@@ -37,7 +37,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <exception cref="ArgumentNullException"></exception>
         public ECDHTerminalB(byte[] exchangeA)
         {
-            if (exchangeA is null)
+            if (exchangeA == null)
             {
                 throw new ArgumentNullException(nameof(exchangeA));
             }

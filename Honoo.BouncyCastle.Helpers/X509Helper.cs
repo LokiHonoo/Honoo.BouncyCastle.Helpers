@@ -7,6 +7,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.X509;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -26,19 +27,27 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="dn">Distinct name.</param>
         /// <param name="extensions">Extensions.</param>
         /// <exception cref="Exception"/>
-        public static void ExtractCsr(Pkcs10CertificationRequest csr, out AsymmetricKeyParameter publicKey, out X509Name dn, out X509Extensions extensions)
+        public static void ExtractCsr(Pkcs10CertificationRequest csr,
+                                      out AsymmetricKeyParameter publicKey,
+                                      out IList<X509NameEntity> dn,
+                                      out IList<X509ExtensionEntity> extensions)
         {
-            if (csr is null)
+            if (csr == null)
             {
                 throw new ArgumentNullException(nameof(csr));
             }
             publicKey = csr.GetPublicKey();
             CertificationRequestInfo csrInfo = csr.GetCertificationRequestInfo();
-            dn = csrInfo.Subject;
-            extensions = null;
+            dn = new List<X509NameEntity>();
+            IList oids = csrInfo.Subject.GetOidList();
+            IList values = csrInfo.Subject.GetValueList();
+            for (int i = 0; i < oids.Count; i++)
+            {
+                dn.Add(new X509NameEntity((DerObjectIdentifier)oids[i], (string)values[i]));
+            }
             if (csrInfo.Attributes != null)
             {
-                Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
+                extensions = new List<X509ExtensionEntity>();
                 foreach (AttributePkcs attribute in csrInfo.Attributes)
                 {
                     if (attribute.AttrType.Equals(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest))
@@ -48,12 +57,31 @@ namespace Honoo.BouncyCastle.Helpers
                             foreach (DerObjectIdentifier oid in exts.ExtensionOids)
                             {
                                 X509Extension ext = exts.GetExtension(oid);
-                                attributes.Add(oid, new X509Extension(ext.IsCritical, ext.Value));
+                                extensions.Add(new X509ExtensionEntity(oid, ext.IsCritical, ext.Value));
                             }
                         }
                     }
                 }
-                extensions = new X509Extensions(attributes);
+                //Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
+                //foreach (AttributePkcs attribute in csrInfo.Attributes)
+                //{
+                //    if (attribute.AttrType.Equals(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest))
+                //    {
+                //        foreach (X509Extensions exts in attribute.AttrValues)
+                //        {
+                //            foreach (DerObjectIdentifier oid in exts.ExtensionOids)
+                //            {
+                //                X509Extension ext = exts.GetExtension(oid);
+                //                attributes.Add(oid, new X509Extension(ext.IsCritical, ext.Value));
+                //            }
+                //        }
+                //    }
+                //}
+                //X509Extensions x509Extensions = new X509Extensions(attributes);
+            }
+            else
+            {
+                extensions = null;
             }
         }
 
@@ -62,41 +90,40 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
+        /// <param name="issuerCertificate">The certificate of issuer.</param>
         /// <param name="revocations">Revocation certificates.</param>
         /// <param name="extensions">Extensions.</param>
         /// <param name="thisUpdate"></param>
         /// <param name="nextUpdate"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"/>
         public static X509Crl GenerateCrl(ISignatureAlgorithm signatureAlgorithm,
                                           AsymmetricKeyParameter privateKey,
-                                          X509Certificate issuerCert,
+                                          X509Certificate issuerCertificate,
                                           IList<X509RevocationEntity> revocations,
-                                          X509Extensions extensions,
+                                          IList<X509ExtensionEntity> extensions,
                                           DateTime thisUpdate,
                                           DateTime nextUpdate)
         {
-            if (signatureAlgorithm is null)
+            if (signatureAlgorithm == null)
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (issuerCert is null)
+            if (issuerCertificate == null)
             {
-                throw new ArgumentNullException(nameof(issuerCert));
+                throw new ArgumentNullException(nameof(issuerCertificate));
             }
-            if (signatureAlgorithm.Oid is null)
+            if (signatureAlgorithm.Oid == null)
             {
                 throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
             }
             else
             {
-                return GenerateCrl(signatureAlgorithm.Oid.Id, privateKey, issuerCert.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
+                return GenerateCrl(signatureAlgorithm.Oid.Id, privateKey, issuerCertificate.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
             }
         }
 
@@ -105,19 +132,18 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm name or oid supported by x590.</param>
         /// <param name="privateKey">Asymmetric private key.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
+        /// <param name="issuerCertificate">The certificate of issuer.</param>
         /// <param name="revocations">Revocation certificates.</param>
         /// <param name="extensions">Extensions.</param>
         /// <param name="thisUpdate"></param>
         /// <param name="nextUpdate"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"/>
         public static X509Crl GenerateCrl(string signatureAlgorithm,
                                           AsymmetricKeyParameter privateKey,
-                                          X509Certificate issuerCert,
+                                          X509Certificate issuerCertificate,
                                           IList<X509RevocationEntity> revocations,
-                                          X509Extensions extensions,
+                                          IList<X509ExtensionEntity> extensions,
                                           DateTime thisUpdate,
                                           DateTime nextUpdate)
         {
@@ -125,17 +151,17 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (privateKey is null)
+            if (privateKey == null)
             {
                 throw new ArgumentNullException(nameof(privateKey));
             }
-            if (issuerCert is null)
+            if (issuerCertificate == null)
             {
-                throw new ArgumentNullException(nameof(issuerCert));
+                throw new ArgumentNullException(nameof(issuerCertificate));
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCrl(oid.Id, privateKey, issuerCert.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
+                return GenerateCrl(oid.Id, privateKey, issuerCertificate.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
             }
             else
             {
@@ -154,22 +180,22 @@ namespace Honoo.BouncyCastle.Helpers
         /// <exception cref="Exception"/>
         public static Pkcs10CertificationRequest GenerateCsr(ISignatureAlgorithm signatureAlgorithm,
                                                              AsymmetricCipherKeyPair asymmetricKeyPair,
-                                                             X509Name dn,
-                                                             X509Extensions extensions)
+                                                             IList<X509NameEntity> dn,
+                                                             IList<X509ExtensionEntity> extensions)
         {
-            if (signatureAlgorithm is null)
+            if (signatureAlgorithm == null)
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (asymmetricKeyPair is null)
+            if (asymmetricKeyPair == null)
             {
                 throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
-            if (dn is null)
+            if (dn == null)
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            if (signatureAlgorithm.Oid is null)
+            if (signatureAlgorithm.Oid == null)
             {
                 throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
             }
@@ -190,26 +216,27 @@ namespace Honoo.BouncyCastle.Helpers
         /// <exception cref="Exception"/>
         public static Pkcs10CertificationRequest GenerateCsr(string signatureAlgorithm,
                                                              AsymmetricCipherKeyPair asymmetricKeyPair,
-                                                             X509Name dn,
-                                                             X509Extensions extensions)
+                                                             IList<X509NameEntity> dn,
+                                                             IList<X509ExtensionEntity> extensions)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (asymmetricKeyPair is null)
+            if (asymmetricKeyPair == null)
             {
                 throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
-            if (dn is null)
+            if (dn == null)
             {
                 throw new ArgumentNullException(nameof(dn));
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
                 Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, asymmetricKeyPair.Private, Common.SecureRandom);
-                DerSet attribute = extensions is null ? null : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(extensions)));
-                return new Pkcs10CertificationRequest(signatureFactory, dn, asymmetricKeyPair.Public, attribute);
+                DerSet attribute = extensions == null ? null
+                    : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(GenerateX509Extensions(extensions))));
+                return new Pkcs10CertificationRequest(signatureFactory, GenerateX509Name(dn), asymmetricKeyPair.Public, attribute);
             }
             else
             {
@@ -228,32 +255,33 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="end">The end time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static X509Certificate GenerateIssuerCert(ISignatureAlgorithm signatureAlgorithm,
-                                                         AsymmetricCipherKeyPair asymmetricKeyPair,
-                                                         X509Name dn,
-                                                         X509Extensions extensions,
-                                                         DateTime start,
-                                                         DateTime end)
+        public static X509Certificate GenerateIssuerCertificate(ISignatureAlgorithm signatureAlgorithm,
+                                                                AsymmetricCipherKeyPair asymmetricKeyPair,
+                                                                IList<X509NameEntity> dn,
+                                                                IList<X509ExtensionEntity> extensions,
+                                                                DateTime start,
+                                                                DateTime end)
         {
-            if (signatureAlgorithm is null)
+            if (signatureAlgorithm == null)
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (asymmetricKeyPair is null)
+            if (asymmetricKeyPair == null)
             {
                 throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
-            if (dn is null)
+            if (dn == null)
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            if (signatureAlgorithm.Oid is null)
+            if (signatureAlgorithm.Oid == null)
             {
                 throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, asymmetricKeyPair.Private, dn, asymmetricKeyPair.Public, dn, extensions, start, end);
+                X509Name dn_ = GenerateX509Name(dn);
+                return GenerateCertificate(signatureAlgorithm.Oid.Id, asymmetricKeyPair.Private, dn_, asymmetricKeyPair.Public, dn_, extensions, start, end);
             }
         }
 
@@ -268,28 +296,29 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="end">The end time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static X509Certificate GenerateIssuerCert(string signatureAlgorithm,
-                                                         AsymmetricCipherKeyPair asymmetricKeyPair,
-                                                         X509Name dn,
-                                                         X509Extensions extensions,
-                                                         DateTime start,
-                                                         DateTime end)
+        public static X509Certificate GenerateIssuerCertificate(string signatureAlgorithm,
+                                                                AsymmetricCipherKeyPair asymmetricKeyPair,
+                                                                IList<X509NameEntity> dn,
+                                                                IList<X509ExtensionEntity> extensions,
+                                                                DateTime start,
+                                                                DateTime end)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (asymmetricKeyPair is null)
+            if (asymmetricKeyPair == null)
             {
                 throw new ArgumentNullException(nameof(asymmetricKeyPair));
             }
-            if (dn is null)
+            if (dn == null)
             {
                 throw new ArgumentNullException(nameof(dn));
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, asymmetricKeyPair.Private, dn, asymmetricKeyPair.Public, dn, extensions, start, end);
+                X509Name dn_ = GenerateX509Name(dn);
+                return GenerateCertificate(oid.Id, asymmetricKeyPair.Private, dn_, asymmetricKeyPair.Public, dn_, extensions, start, end);
             }
             else
             {
@@ -300,45 +329,63 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Generate Pkcs#12 certificate.
         /// </summary>
-        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="output">Output stream.</param>
         /// <param name="privateKeyAlias">The alias of private key.</param>
-        /// <param name="namedCerts">Certificate collection with alias set.</param>
+        /// <param name="privateKey">Asymmetric private key.</param>
+        /// <param name="chain">Chain collection for private key.</param>
+        /// <param name="certificateAlias">The alias of certificate.</param>
+        /// <param name="certificate">Certificate.</param>
         /// <param name="password">Password.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static Pkcs12Store GeneratePkcs12(AsymmetricKeyParameter privateKey,
-                                                 string privateKeyAlias,
-                                                 IDictionary<string, X509Certificate> namedCerts,
-                                                 string password)
+        public static void GeneratePkcs12(Stream output,
+                                          string privateKeyAlias,
+                                          AsymmetricKeyParameter privateKey,
+                                          IList<X509Certificate> chain,
+                                          string certificateAlias,
+                                          X509Certificate certificate,
+                                          string password)
         {
-            if (privateKey is null)
+            if (output is null)
             {
-                throw new ArgumentNullException(nameof(privateKey));
+                throw new ArgumentNullException(nameof(output));
             }
-            if (privateKeyAlias is null)
+            if (string.IsNullOrWhiteSpace(privateKeyAlias))
             {
                 throw new ArgumentNullException(nameof(privateKeyAlias));
             }
-            if (namedCerts is null)
+            if (privateKey == null)
             {
-                throw new ArgumentNullException(nameof(namedCerts));
+                throw new ArgumentNullException(nameof(privateKey));
             }
-            using (MemoryStream ms = new MemoryStream())
+            if (chain == null)
             {
-                Pkcs12Store store = new Pkcs12StoreBuilder().Build();
-                List<X509CertificateEntry> certEntries = new List<X509CertificateEntry>();
-                foreach (KeyValuePair<string, X509Certificate> namedCert in namedCerts)
-                {
-                    X509CertificateEntry certEntry = new X509CertificateEntry(namedCert.Value);
-                    store.SetCertificateEntry(namedCert.Key, certEntry);
-                    certEntries.Add(certEntry);
-                }
-                store.SetKeyEntry(privateKeyAlias, new AsymmetricKeyEntry(privateKey), certEntries.ToArray());
-                char[] pass = string.IsNullOrWhiteSpace(password) ? null : password.ToCharArray();
-                store.Save(ms, pass, Common.SecureRandom);
-                ms.Flush();
-                return new Pkcs12Store(ms, pass);
+                throw new ArgumentNullException(nameof(chain));
             }
+            if (chain.Count == 0)
+            {
+                throw new ArgumentNullException(nameof(chain));
+            }
+            if (password == null)
+            {
+                password = string.Empty;
+            }
+            Pkcs12StoreBuilder builder = new Pkcs12StoreBuilder();
+            // builder =  builder.SetKeyAlgorithm(keyAlgorithmName.Oid);
+            // builder = builder.SetCertAlgorithm(certificateAlgorithmName.Oid);
+            Pkcs12Store pkcs12 = builder.Build();
+            List<X509CertificateEntry> certEntries = new List<X509CertificateEntry>();
+            foreach (X509Certificate cert in chain)
+            {
+                certEntries.Add(new X509CertificateEntry(cert));
+            }
+            pkcs12.SetKeyEntry(privateKeyAlias, new AsymmetricKeyEntry(privateKey), certEntries.ToArray());
+
+            if (!string.IsNullOrWhiteSpace(certificateAlias) && certificate != null)
+            {
+                pkcs12.SetCertificateEntry(certificateAlias, new X509CertificateEntry(certificate));
+            }
+            pkcs12.Save(output, password.ToCharArray(), Common.SecureRandom);
         }
 
         /// <summary>
@@ -346,7 +393,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm supported by x590.</param>
         /// <param name="issuerPrivateKey">The asymmetric private key of issuer.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
+        /// <param name="issuerCertificate">The certificate of issuer.</param>
         /// <param name="subjectPublicKey">The asymmetric public key of subject.</param>
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
@@ -354,34 +401,38 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="end">The end time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static X509Certificate GenerateSubjectCert(ISignatureAlgorithm signatureAlgorithm,
-                                                          AsymmetricKeyParameter issuerPrivateKey,
-                                                          X509Certificate issuerCert,
-                                                          AsymmetricKeyParameter subjectPublicKey,
-                                                          X509Name subjectDN,
-                                                          X509Extensions subjectExtensions,
-                                                          DateTime start,
-                                                          DateTime end)
+        public static X509Certificate GenerateSubjectCertificate(ISignatureAlgorithm signatureAlgorithm,
+                                                                 AsymmetricKeyParameter issuerPrivateKey,
+                                                                 X509Certificate issuerCertificate,
+                                                                 AsymmetricKeyParameter subjectPublicKey,
+                                                                 IList<X509NameEntity> subjectDN,
+                                                                 IList<X509ExtensionEntity> subjectExtensions,
+                                                                 DateTime start,
+                                                                 DateTime end)
         {
-            if (signatureAlgorithm is null)
+            if (signatureAlgorithm == null)
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (issuerPrivateKey is null)
+            if (issuerPrivateKey == null)
             {
                 throw new ArgumentNullException(nameof(issuerPrivateKey));
             }
-            if (issuerCert is null)
+            if (issuerCertificate == null)
             {
-                throw new ArgumentNullException(nameof(issuerCert));
+                throw new ArgumentNullException(nameof(issuerCertificate));
             }
-            if (subjectPublicKey is null)
+            if (subjectPublicKey == null)
             {
                 throw new ArgumentNullException(nameof(subjectPublicKey));
             }
+            if (subjectDN == null)
+            {
+                throw new ArgumentNullException(nameof(subjectDN));
+            }
             try
             {
-                issuerCert.CheckValidity();
+                issuerCertificate.CheckValidity();
             }
             catch
             {
@@ -389,19 +440,26 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(end);
+                issuerCertificate.CheckValidity(end);
             }
             catch
             {
                 throw new CryptographicException("The end time exceeds the validity of the issuer certificate.");
             }
-            if (signatureAlgorithm.Oid is null)
+            if (signatureAlgorithm.Oid == null)
             {
                 throw new ArgumentException("Unsupported signature algorithm.", nameof(signatureAlgorithm));
             }
             else
             {
-                return GenerateCert(signatureAlgorithm.Oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, end);
+                return GenerateCertificate(signatureAlgorithm.Oid.Id,
+                                           issuerPrivateKey,
+                                           issuerCertificate.SubjectDN,
+                                           subjectPublicKey,
+                                           GenerateX509Name(subjectDN),
+                                           subjectExtensions,
+                                           start,
+                                           end);
             }
         }
 
@@ -410,7 +468,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="signatureAlgorithm">Signature algorithm name or oid supported by x590.</param>
         /// <param name="issuerPrivateKey">The asymmetric private key of issuer.</param>
-        /// <param name="issuerCert">The certificate of issuer.</param>
+        /// <param name="issuerCertificate">The certificate of issuer.</param>
         /// <param name="subjectPublicKey">The asymmetric public key of subject.</param>
         /// <param name="subjectDN">The distinct name of subject.</param>
         /// <param name="subjectExtensions">Extensions of subject.</param>
@@ -418,34 +476,38 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="end">The end time.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public static X509Certificate GenerateSubjectCert(string signatureAlgorithm,
-                                                          AsymmetricKeyParameter issuerPrivateKey,
-                                                          X509Certificate issuerCert,
-                                                          AsymmetricKeyParameter subjectPublicKey,
-                                                          X509Name subjectDN,
-                                                          X509Extensions subjectExtensions,
-                                                          DateTime start,
-                                                          DateTime end)
+        public static X509Certificate GenerateSubjectCertificate(string signatureAlgorithm,
+                                                                 AsymmetricKeyParameter issuerPrivateKey,
+                                                                 X509Certificate issuerCertificate,
+                                                                 AsymmetricKeyParameter subjectPublicKey,
+                                                                 IList<X509NameEntity> subjectDN,
+                                                                 IList<X509ExtensionEntity> subjectExtensions,
+                                                                 DateTime start,
+                                                                 DateTime end)
         {
             if (string.IsNullOrWhiteSpace(signatureAlgorithm))
             {
                 throw new ArgumentNullException(nameof(signatureAlgorithm));
             }
-            if (issuerPrivateKey is null)
+            if (issuerPrivateKey == null)
             {
                 throw new ArgumentNullException(nameof(issuerPrivateKey));
             }
-            if (issuerCert is null)
+            if (issuerCertificate == null)
             {
-                throw new ArgumentNullException(nameof(issuerCert));
+                throw new ArgumentNullException(nameof(issuerCertificate));
             }
-            if (subjectPublicKey is null)
+            if (subjectPublicKey == null)
             {
                 throw new ArgumentNullException(nameof(subjectPublicKey));
             }
+            if (subjectDN == null)
+            {
+                throw new ArgumentNullException(nameof(subjectDN));
+            }
             try
             {
-                issuerCert.CheckValidity();
+                issuerCertificate.CheckValidity();
             }
             catch
             {
@@ -453,7 +515,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             try
             {
-                issuerCert.CheckValidity(end);
+                issuerCertificate.CheckValidity(end);
             }
             catch
             {
@@ -461,7 +523,14 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
             {
-                return GenerateCert(oid.Id, issuerPrivateKey, issuerCert.SubjectDN, subjectPublicKey, subjectDN, subjectExtensions, start, end);
+                return GenerateCertificate(oid.Id,
+                                           issuerPrivateKey,
+                                           issuerCertificate.SubjectDN,
+                                           subjectPublicKey,
+                                           GenerateX509Name(subjectDN),
+                                           subjectExtensions,
+                                           start,
+                                           end);
             }
             else
             {
@@ -470,57 +539,33 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Generate x509 extensions.
+        /// Read Pkcs#12 certificate.
         /// </summary>
-        /// <param name="entities">X509 extension collection.</param>
+        /// <param name="input">Input stream.</param>
+        /// <param name="password">Password.</param>
         /// <returns></returns>
-        public static X509Extensions GenerateX509Extensions(IList<X509ExtensionEntity> entities)
+        /// <exception cref="Exception"/>
+        public static Pkcs12Store ReadPkcs12(Stream input, string password)
         {
-            if (entities is null)
+            if (input is null)
             {
-                throw new ArgumentNullException(nameof(entities));
+                throw new ArgumentNullException(nameof(input));
             }
-            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
-            Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
-            foreach (X509ExtensionEntity entity in entities)
+            if (password == null)
             {
-                DerObjectIdentifier oid = GetX509ExtensionOid(entity.Label);
-                ordering.Add(oid);
-                attributes.Add(oid, new X509Extension(entity.IsCritical, new DerOctetString(entity.Value)));
+                password = string.Empty;
             }
-            return new X509Extensions(ordering, attributes);
+            return new Pkcs12Store(input, password.ToCharArray());
         }
 
-        /// <summary>
-        /// Generate x509 name.
-        /// </summary>
-        /// <param name="entities">X509 name collection.</param>
-        /// <returns></returns>
-        public static X509Name GenerateX509Name(IList<X509NameEntity> entities)
-        {
-            if (entities is null)
-            {
-                throw new ArgumentNullException(nameof(entities));
-            }
-            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
-            Dictionary<DerObjectIdentifier, string> attributes = new Dictionary<DerObjectIdentifier, string>();
-            foreach (X509NameEntity entity in entities)
-            {
-                DerObjectIdentifier oid = GetX509NameOid(entity.Label);
-                ordering.Add(oid);
-                attributes.Add(oid, entity.Value);
-            }
-            return new X509Name(ordering, attributes);
-        }
-
-        private static X509Certificate GenerateCert(string signatureAlgorithmOid,
-                                                    AsymmetricKeyParameter issuerPrivateKey,
-                                                    X509Name issuerDN,
-                                                    AsymmetricKeyParameter subjectPublicKey,
-                                                    X509Name subjectDN,
-                                                    X509Extensions subjectExtensions,
-                                                    DateTime start,
-                                                    DateTime end)
+        private static X509Certificate GenerateCertificate(string signatureAlgorithmOid,
+                                                           AsymmetricKeyParameter issuerPrivateKey,
+                                                           X509Name issuerDN,
+                                                           AsymmetricKeyParameter subjectPublicKey,
+                                                           X509Name subjectDN,
+                                                           IList<X509ExtensionEntity> subjectExtensions,
+                                                           DateTime start,
+                                                           DateTime end)
         {
             ISignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithmOid, issuerPrivateKey, Common.SecureRandom);
             BigInteger sn = new BigInteger(128, Common.SecureRandom);
@@ -531,10 +576,9 @@ namespace Honoo.BouncyCastle.Helpers
             generator.SetSubjectDN(subjectDN);
             if (subjectExtensions != null)
             {
-                foreach (DerObjectIdentifier oid in subjectExtensions.ExtensionOids)
+                foreach (X509ExtensionEntity extension in subjectExtensions)
                 {
-                    X509Extension extension = subjectExtensions.GetExtension(oid);
-                    generator.AddExtension(oid, extension.IsCritical, extension.GetParsedValue());
+                    generator.AddExtension(extension.Oid, extension.IsCritical, extension.Value);
                 }
             }
             generator.SetNotBefore(start);
@@ -546,7 +590,7 @@ namespace Honoo.BouncyCastle.Helpers
                                            AsymmetricKeyParameter privateKey,
                                            X509Name dn,
                                            IList<X509RevocationEntity> revocations,
-                                           X509Extensions extensions,
+                                           IList<X509ExtensionEntity> extensions,
                                            DateTime thisUpdate,
                                            DateTime nextUpdate)
         {
@@ -562,10 +606,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             if (extensions != null)
             {
-                foreach (DerObjectIdentifier oid in extensions.ExtensionOids)
+                foreach (X509ExtensionEntity extension in extensions)
                 {
-                    X509Extension extension = extensions.GetExtension(oid);
-                    generator.AddExtension(oid, extension.IsCritical, extension.GetParsedValue());
+                    generator.AddExtension(extension.Oid, extension.IsCritical, extension.Value);
                 }
             }
 
@@ -574,87 +617,36 @@ namespace Honoo.BouncyCastle.Helpers
             return generator.Generate(signatureFactory);
         }
 
-        private static DerObjectIdentifier GetX509ExtensionOid(X509ExtensionLabel label)
+        private static X509Extensions GenerateX509Extensions(IList<X509ExtensionEntity> entities)
         {
-            switch (label)
+            if (entities == null)
             {
-                case X509ExtensionLabel.AuditIdentity: return X509Extensions.AuditIdentity;
-                case X509ExtensionLabel.AuthorityInfoAccess: return X509Extensions.AuthorityInfoAccess;
-                case X509ExtensionLabel.AuthorityKeyIdentifier: return X509Extensions.AuthorityKeyIdentifier;
-                case X509ExtensionLabel.BasicConstraints: return X509Extensions.BasicConstraints;
-                case X509ExtensionLabel.BiometricInfo: return X509Extensions.BiometricInfo;
-                case X509ExtensionLabel.CertificateIssuer: return X509Extensions.CertificateIssuer;
-                case X509ExtensionLabel.CertificatePolicies: return X509Extensions.CertificatePolicies;
-                case X509ExtensionLabel.CrlDistributionPoints: return X509Extensions.CrlDistributionPoints;
-                case X509ExtensionLabel.CrlNumber: return X509Extensions.CrlNumber;
-                case X509ExtensionLabel.DeltaCrlIndicator: return X509Extensions.DeltaCrlIndicator;
-                case X509ExtensionLabel.ExpiredCertsOnCrl: return X509Extensions.ExpiredCertsOnCrl;
-                case X509ExtensionLabel.ExtendedKeyUsage: return X509Extensions.ExtendedKeyUsage;
-                case X509ExtensionLabel.FreshestCrl: return X509Extensions.FreshestCrl;
-                case X509ExtensionLabel.InhibitAnyPolicy: return X509Extensions.InhibitAnyPolicy;
-                case X509ExtensionLabel.InstructionCode: return X509Extensions.InstructionCode;
-                case X509ExtensionLabel.InvalidityDate: return X509Extensions.InvalidityDate;
-                case X509ExtensionLabel.IssuerAlternativeName: return X509Extensions.IssuerAlternativeName;
-                case X509ExtensionLabel.IssuingDistributionPoint: return X509Extensions.IssuingDistributionPoint;
-                case X509ExtensionLabel.KeyUsage: return X509Extensions.KeyUsage;
-                case X509ExtensionLabel.LogoType: return X509Extensions.LogoType;
-                case X509ExtensionLabel.NameConstraints: return X509Extensions.NameConstraints;
-                case X509ExtensionLabel.NoRevAvail: return X509Extensions.NoRevAvail;
-                case X509ExtensionLabel.PolicyConstraints: return X509Extensions.PolicyConstraints;
-                case X509ExtensionLabel.PolicyMappings: return X509Extensions.PolicyMappings;
-                case X509ExtensionLabel.PrivateKeyUsagePeriod: return X509Extensions.PrivateKeyUsagePeriod;
-                case X509ExtensionLabel.QCStatements: return X509Extensions.QCStatements;
-                case X509ExtensionLabel.ReasonCode: return X509Extensions.ReasonCode;
-                case X509ExtensionLabel.SubjectAlternativeName: return X509Extensions.SubjectAlternativeName;
-                case X509ExtensionLabel.SubjectDirectoryAttributes: return X509Extensions.SubjectDirectoryAttributes;
-                case X509ExtensionLabel.SubjectInfoAccess: return X509Extensions.SubjectInfoAccess;
-                case X509ExtensionLabel.SubjectKeyIdentifier: return X509Extensions.SubjectKeyIdentifier;
-                case X509ExtensionLabel.TargetInformation: return X509Extensions.TargetInformation;
-                default: throw new CryptographicException("Unsupported X509Extension.");
+                throw new ArgumentNullException(nameof(entities));
             }
+            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
+            Dictionary<DerObjectIdentifier, X509Extension> attributes = new Dictionary<DerObjectIdentifier, X509Extension>();
+            foreach (X509ExtensionEntity entity in entities)
+            {
+                ordering.Add(entity.Oid);
+                attributes.Add(entity.Oid, new X509Extension(entity.IsCritical, new DerOctetString(entity.Value)));
+            }
+            return new X509Extensions(ordering, attributes);
         }
 
-        private static DerObjectIdentifier GetX509NameOid(X509NameLabel label)
+        private static X509Name GenerateX509Name(IList<X509NameEntity> entities)
         {
-            switch (label)
+            if (entities == null)
             {
-                case X509NameLabel.BusinessCategory: return X509Name.BusinessCategory;
-                case X509NameLabel.C: return X509Name.C;
-                case X509NameLabel.CN: return X509Name.CN;
-                case X509NameLabel.CountryOfCitizenship: return X509Name.CountryOfCitizenship;
-                case X509NameLabel.CountryOfResidence: return X509Name.CountryOfResidence;
-                case X509NameLabel.DateOfBirth: return X509Name.DateOfBirth;
-                case X509NameLabel.DC: return X509Name.DC;
-                case X509NameLabel.DmdName: return X509Name.DmdName;
-                case X509NameLabel.DnQualifier: return X509Name.DnQualifier;
-                case X509NameLabel.E: return X509Name.E;
-                case X509NameLabel.EmailAddress: return X509Name.EmailAddress;
-                case X509NameLabel.Gender: return X509Name.Gender;
-                case X509NameLabel.Generation: return X509Name.Generation;
-                case X509NameLabel.GivenName: return X509Name.GivenName;
-                case X509NameLabel.Initials: return X509Name.Initials;
-                case X509NameLabel.L: return X509Name.L;
-                case X509NameLabel.Name: return X509Name.Name;
-                case X509NameLabel.NameAtBirth: return X509Name.NameAtBirth;
-                case X509NameLabel.O: return X509Name.O;
-                case X509NameLabel.OrganizationIdentifier: return X509Name.OrganizationIdentifier;
-                case X509NameLabel.OU: return X509Name.OU;
-                case X509NameLabel.PlaceOfBirth: return X509Name.PlaceOfBirth;
-                case X509NameLabel.PostalAddress: return X509Name.PostalAddress;
-                case X509NameLabel.PostalCode: return X509Name.PostalCode;
-                case X509NameLabel.Pseudonym: return X509Name.Pseudonym;
-                case X509NameLabel.SerialNumber: return X509Name.SerialNumber;
-                case X509NameLabel.ST: return X509Name.ST;
-                case X509NameLabel.Street: return X509Name.Street;
-                case X509NameLabel.Surname: return X509Name.Surname;
-                case X509NameLabel.T: return X509Name.T;
-                case X509NameLabel.TelephoneNumber: return X509Name.TelephoneNumber;
-                case X509NameLabel.UID: return X509Name.UID;
-                case X509NameLabel.UniqueIdentifier: return X509Name.UniqueIdentifier;
-                case X509NameLabel.UnstructuredAddress: return X509Name.UnstructuredAddress;
-                case X509NameLabel.UnstructuredName: return X509Name.UnstructuredName;
-                default: throw new CryptographicException("Unsupported X509Name.");
+                throw new ArgumentNullException(nameof(entities));
             }
+            List<DerObjectIdentifier> ordering = new List<DerObjectIdentifier>();
+            Dictionary<DerObjectIdentifier, string> attributes = new Dictionary<DerObjectIdentifier, string>();
+            foreach (X509NameEntity entity in entities)
+            {
+                ordering.Add(entity.Oid);
+                attributes.Add(entity.Oid, entity.Value);
+            }
+            return new X509Name(ordering, attributes);
         }
     }
 }

@@ -71,11 +71,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             {
                 case AsymmetricPaddingMode.PKCS1: cipher = new Pkcs1Encoding(cipher); break;
                 case AsymmetricPaddingMode.OAEP:
-                    if (mgf1HashAlgorithm1 is null)
+                    if (mgf1HashAlgorithm1 == null)
                     {
                         cipher = new OaepEncoding(cipher);
                     }
-                    else if (mgf1HashAlgorithm2 is null)
+                    else if (mgf1HashAlgorithm2 == null)
                     {
                         cipher = new OaepEncoding(cipher, mgf1HashAlgorithm1.GenerateDigest());
                     }

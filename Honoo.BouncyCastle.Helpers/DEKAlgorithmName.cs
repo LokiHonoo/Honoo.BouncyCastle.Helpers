@@ -180,7 +180,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            return obj is DEKAlgorithmName && Equals((DEKAlgorithmName)obj);
+            return obj is DEKAlgorithmName name && Equals(name);
         }
 
         /// <summary>

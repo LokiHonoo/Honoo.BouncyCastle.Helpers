@@ -23,7 +23,7 @@ namespace Test
                 Console.WriteLine("  6. ECDH ");
                 Console.WriteLine("  7. Pem read/write");
                 Console.WriteLine("  8. Generate public key from Private key");
-                Console.WriteLine("  9. ");
+                Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("  Z. Temporaries");

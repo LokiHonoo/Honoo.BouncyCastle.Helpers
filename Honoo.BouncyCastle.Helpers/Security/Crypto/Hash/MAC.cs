@@ -114,11 +114,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public byte[] ComputeHash(MACCipherMode mode, MACPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -174,13 +174,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             switch (mode)
             {
                 case MACCipherMode.CBC:
-                    digest = pad is null ? new CbcBlockCipherMac(_blockAlgorithm.GenerateEngine(), _hashSize)
+                    digest = pad == null ? new CbcBlockCipherMac(_blockAlgorithm.GenerateEngine(), _hashSize)
                         : new CbcBlockCipherMac(_blockAlgorithm.GenerateEngine(), _hashSize, pad);
                     break;
 
                 case MACCipherMode.CFB:
                     int cfbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    digest = pad is null ? new CfbBlockCipherMac(_blockAlgorithm.GenerateEngine(), cfbs, _hashSize)
+                    digest = pad == null ? new CfbBlockCipherMac(_blockAlgorithm.GenerateEngine(), cfbs, _hashSize)
                         : new CfbBlockCipherMac(_blockAlgorithm.GenerateEngine(), cfbs, _hashSize, pad);
                     break;
 

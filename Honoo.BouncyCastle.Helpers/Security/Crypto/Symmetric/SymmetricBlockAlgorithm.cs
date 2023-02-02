@@ -82,12 +82,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <exception cref="Exception"/>
         public byte[] Decrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -122,11 +122,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <exception cref="Exception"/>
         public byte[] Encrypt(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters, byte[] dataBuffer, int offset, int length)
         {
-            if (parameters is null)
+            if (parameters == null)
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
-            if (dataBuffer is null)
+            if (dataBuffer == null)
             {
                 throw new ArgumentNullException(nameof(dataBuffer));
             }
@@ -552,28 +552,28 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             switch (mode)
             {
                 case SymmetricCipherMode.CBC:
-                    cipher = pad is null ? new BufferedBlockCipher(new CbcBlockCipher(engine))
+                    cipher = pad == null ? new BufferedBlockCipher(new CbcBlockCipher(engine))
                         : new PaddedBufferedBlockCipher(new CbcBlockCipher(engine), pad);
                     break;
 
                 case SymmetricCipherMode.ECB:
-                    cipher = pad is null ? new BufferedBlockCipher(engine) : new PaddedBufferedBlockCipher(engine, pad);
+                    cipher = pad == null ? new BufferedBlockCipher(engine) : new PaddedBufferedBlockCipher(engine, pad);
                     break;
 
                 case SymmetricCipherMode.OFB:
                     int ofbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    cipher = pad is null ? new BufferedBlockCipher(new OfbBlockCipher(engine, ofbs))
+                    cipher = pad == null ? new BufferedBlockCipher(new OfbBlockCipher(engine, ofbs))
                         : new PaddedBufferedBlockCipher(new OfbBlockCipher(engine, ofbs), pad);
                     break;
 
                 case SymmetricCipherMode.CFB:
                     int cfbs = ((ParametersWithIV)parameters).GetIV().Length * 8;
-                    cipher = pad is null ? new BufferedBlockCipher(new CfbBlockCipher(engine, cfbs))
+                    cipher = pad == null ? new BufferedBlockCipher(new CfbBlockCipher(engine, cfbs))
                         : new PaddedBufferedBlockCipher(new CfbBlockCipher(engine, cfbs), pad);
                     break;
 
                 case SymmetricCipherMode.CTS:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         cipher = new CtsBlockCipher(new CbcBlockCipher(engine));
                         break;
@@ -581,12 +581,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     throw new CryptographicException("CTS cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 case SymmetricCipherMode.CTR:
-                    cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
+                    cipher = pad == null ? new BufferedBlockCipher(new SicBlockCipher(engine))
                         : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
                     break;
 
                 case SymmetricCipherMode.CTS_ECB:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         cipher = new CtsBlockCipher(engine);
                         break;
@@ -596,28 +596,28 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.GOFB:
                     if (_blockSize == 64)
                     {
-                        cipher = pad is null ? new BufferedBlockCipher(new GOfbBlockCipher(engine))
+                        cipher = pad == null ? new BufferedBlockCipher(new GOfbBlockCipher(engine))
                             : new PaddedBufferedBlockCipher(new GOfbBlockCipher(engine), pad);
                         break;
                     }
                     throw new CryptographicException("GOFB cipher mode uses with a block size of 64 bits algorithm (e.g. DESede).");
 
                 case SymmetricCipherMode.OpenPGPCFB:
-                    cipher = pad is null ? new BufferedBlockCipher(new OpenPgpCfbBlockCipher(engine))
+                    cipher = pad == null ? new BufferedBlockCipher(new OpenPgpCfbBlockCipher(engine))
                         : new PaddedBufferedBlockCipher(new OpenPgpCfbBlockCipher(engine), pad);
                     break;
 
                 case SymmetricCipherMode.SIC:
                     if (_blockSize >= 128)
                     {
-                        cipher = pad is null ? new BufferedBlockCipher(new SicBlockCipher(engine))
+                        cipher = pad == null ? new BufferedBlockCipher(new SicBlockCipher(engine))
                             : new PaddedBufferedBlockCipher(new SicBlockCipher(engine), pad);
                         break;
                     }
                     throw new CryptographicException("SIC cipher mode uses with a block size of at least 128 bits algorithm (e.g. AES).");
 
                 case SymmetricCipherMode.CCM:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         if (_blockSize == 128)
                         {
@@ -629,7 +629,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     throw new CryptographicException("CCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 case SymmetricCipherMode.EAX:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         if (_blockSize == 64 || _blockSize == 128)
                         {
@@ -641,7 +641,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     throw new CryptographicException("EAX cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 case SymmetricCipherMode.GCM:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         if (_blockSize == 128)
                         {
@@ -653,7 +653,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                     throw new CryptographicException("GCM cipher mode can only select SymmetricPaddingMode.NoPadding padding mode.");
 
                 case SymmetricCipherMode.OCB:
-                    if (pad is null)
+                    if (pad == null)
                     {
                         if (_blockSize == 128)
                         {

@@ -60,7 +60,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <returns></returns>
         public override IDigest GenerateDigest()
         {
-            return _sBox is null ? new Gost3411Digest() : new Gost3411Digest(_sBox);
+            return _sBox == null ? new Gost3411Digest() : new Gost3411Digest(_sBox);
         }
 
         private static byte[] GetSBox(Gost28147SBox sBox)
