@@ -108,7 +108,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        ///
+        /// Returns the hash code for this object.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

@@ -194,7 +194,7 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Returns the hash code for this string.
+        /// Returns the hash code for this object.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -203,7 +203,7 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        ///
+        /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

@@ -107,7 +107,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public abstract IDigest GenerateDigest();
 
         /// <summary>
-        ///
+        /// Returns the hash code for this object.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

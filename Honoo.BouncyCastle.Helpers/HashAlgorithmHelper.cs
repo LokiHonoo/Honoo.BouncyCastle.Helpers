@@ -68,7 +68,6 @@ namespace Honoo.BouncyCastle.Helpers
                 case "SM3": algorithm = HashAlgorithms.SM3; return true;
                 case "TIGER": algorithm = HashAlgorithms.Tiger; return true;
                 case "WHIRLPOOL": algorithm = HashAlgorithms.Whirlpool; return true;
-
                 default: break;
             }
             return TryGetAlgorithmNano(mechanism, out algorithm);

@@ -89,7 +89,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         public abstract ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength);
 
         /// <summary>
-        ///
+        /// Returns the hash code for this object.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
