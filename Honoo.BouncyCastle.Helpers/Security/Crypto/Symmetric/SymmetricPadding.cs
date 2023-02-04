@@ -1,6 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto.Paddings;
 
-namespace Honoo.BouncyCastle.Helpers
+namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 {
     internal static class SymmetricPadding
     {
