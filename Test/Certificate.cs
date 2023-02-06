@@ -13,12 +13,10 @@ namespace Test
     {
         internal static PemTestObject Demo()
         {
-            string caSignatureAlgorithmName = "SHA512withECDSA";
-            string userSignatureAlgorithmName = "SHA256withECDSA";
             //
             // CA build self.
             //
-            _ = SignatureAlgorithmHelper.TryGetAlgorithm(caSignatureAlgorithmName, out ISignatureAlgorithm caSignatureAlgorithm);
+            _ = SignatureAlgorithmHelper.TryGetAlgorithm("SHA512withECDSA", out ISignatureAlgorithm caSignatureAlgorithm);
             AsymmetricCipherKeyPair caKeyPair = caSignatureAlgorithm.AsymmetricAlgorithm.GenerateKeyPair();
             //
             X509NameEntity[] caDN = new X509NameEntity[]
@@ -68,7 +66,7 @@ namespace Test
                                   out AsymmetricKeyParameter userPublicKey,
                                   out IList<X509NameEntity> userDNExtracted,
                                   out IList<X509ExtensionEntity> userExtensionsExtracted);
-            X509Certificate userCert = X509Helper.GenerateSubjectCertificate(userSignatureAlgorithmName,
+            X509Certificate userCert = X509Helper.GenerateSubjectCertificate("SHA256withECDSA",
                                                                              caKeyPair.Private,
                                                                              caCert,
                                                                              userPublicKey,

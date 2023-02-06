@@ -75,6 +75,18 @@ namespace Test
                             Pri2Pub.Test();
                             goto end;
 
+                        case 'Q':
+                        case 'q':
+                            Console.Clear();
+                            HashSpeed.Test();
+                            goto end;
+
+                        case 'W':
+                        case 'w':
+                            Console.Clear();
+                            EncryptionSpeed.Test();
+                            goto end;
+
                         case 'Z':
                         case 'z':
                             Console.Clear();

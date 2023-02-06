@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         internal override IBlockCipher GenerateEngine()
         {
-            return new AesLightEngine();
+            return new AesEngine();
         }
     }
 }
