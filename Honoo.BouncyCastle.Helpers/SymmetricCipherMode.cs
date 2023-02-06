@@ -81,7 +81,7 @@
         /// MAC size 32-128 bits (8 bits increments).
         /// <para/>GCM cipher mode uses with a block size of 128 bits algorithm (e.g. AES).
         /// <para/>This cipher mode can only select <see cref="SymmetricPaddingMode.NoPadding" /> padding mode.
-        /// <para/>Warning: GCM cipher mode cannot be auto reused. The cipher instance needs to be recreated every time. (BouncyCastle 1.9.0 has not been fixed).
+        /// <para/>BUG: GCM cipher mode cannot be auto reused. The cipher instance needs to be recreated every time. (BouncyCastle 1.9.0 has not been fixed).
         /// </summary>
         GCM,
 
@@ -90,6 +90,7 @@
         /// MAC size 64-128 bits (8 bits increments).
         /// <para/>OCB cipher mode uses with a block size of 128 bits algorithm (e.g. AES).
         /// <para/>This cipher mode can only select <see cref="SymmetricPaddingMode.NoPadding" /> padding mode.
+        /// <para/>BUG: OCB cipher mode supported null(0) Nonce/IV size but BouncyCastle cannot set that. (BouncyCastle 1.9.0 has not been fixed).
         /// </summary>
         OCB,
     }

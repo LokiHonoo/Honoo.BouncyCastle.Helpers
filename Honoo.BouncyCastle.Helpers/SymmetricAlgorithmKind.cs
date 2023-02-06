@@ -1,4 +1,4 @@
-﻿namespace Honoo.Security.Cryptography
+﻿namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
     /// Symmetric algorithm kind.

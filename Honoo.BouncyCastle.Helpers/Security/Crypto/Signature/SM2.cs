@@ -2,7 +2,6 @@
 using Org.BouncyCastle.Crypto.Signers;
 using System;
 using System.Globalization;
-using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -17,28 +16,19 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// SM2.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public SM2(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.SM2)
-        {
-        }
-
-        /// <summary>
-        /// SM2.
-        /// </summary>
-        /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
-        public SM2(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withSM2", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
+        public SM2(IHashAlgorithm hashAlgorithm)
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withSM2", hashAlgorithm.Name), AsymmetricAlgorithms.SM2)
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate signer.
@@ -48,18 +38,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         {
             IDigest digest = _hashAlgorithm.GenerateDigest();
             return new SM2Signer(digest);
-        }
-
-        private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
-        {
-            if (asymmetricAlgorithm.Name != "SM2")
-            {
-                throw new CryptographicException("Requires SM2 asymmetric algorithm.");
-            }
-            else
-            {
-                return asymmetricAlgorithm;
-            }
         }
     }
 }

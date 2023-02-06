@@ -22,19 +22,21 @@ namespace Test
             // Alice work.
             //
             IECDHTerminalA terminalA = AsymmetricAlgorithms.ECDH.GenerateTerminalA(256);
-            // Send exchangeA to Bob.
-            byte[] exchangeToBob = terminalA.ExchangeA;
+            // Send to Bob.
+            byte[] publicKeyA = terminalA.PublicKey;
+            byte[] pA = terminalA.P;
+            byte[] gA = terminalA.G;
             //
             // Bob work.
             //
-            IECDHTerminalB terminalB = AsymmetricAlgorithms.ECDH.GenerateTerminalB(exchangeToBob);
+            IECDHTerminalB terminalB = AsymmetricAlgorithms.ECDH.GenerateTerminalB(publicKeyA, pA, gA);
             byte[] pmsB = terminalB.DeriveKeyMaterial(true);
-            // Send exchangeB to Alice.
-            byte[] exchangeToAlice = terminalB.ExchangeB;
+            // Send to Alice.
+            byte[] publicKeyB = terminalB.PublicKey;
             //
             // Alice work.
             //
-            byte[] pmsA = terminalA.DeriveKeyMaterial(exchangeToAlice, true);
+            byte[] pmsA = terminalA.DeriveKeyMaterial(publicKeyB, true);
             //
             //
             //

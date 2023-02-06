@@ -3,7 +3,6 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
@@ -11,18 +10,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// SM2.
     /// </summary>
-    public sealed class SM2 : AsymmetricSignatureAlgorithm
+    public sealed class SM2 : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// SM2.
         /// </summary>
-        public SM2() : base("SM2", AsymmetricAlgorithmKind.Signature)
+        public SM2() : base("SM2", GMObjectIdentifiers.sm2sign, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.
@@ -39,7 +38,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="ellipticCurve">Elliptic curve.</param>
         /// <returns></returns>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(SM2EllipticCurve ellipticCurve)
         {
             X9ECParameters x9Parameters = GenerateX9(ellipticCurve);

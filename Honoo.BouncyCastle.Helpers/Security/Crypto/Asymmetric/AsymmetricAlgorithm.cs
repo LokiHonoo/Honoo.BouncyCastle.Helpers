@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Crypto;
 using System;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
@@ -11,7 +12,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #region Properties
 
         private readonly AsymmetricAlgorithmKind _kind;
+
         private readonly string _name;
+
+        private readonly DerObjectIdentifier _oid;
 
         /// <summary>
         /// Asymmetric algorithm kind.
@@ -23,22 +27,29 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         public string Name => _name;
 
+        ///// <summary>
+        ///// Gets signature algorithm oid. It's maybe 'null' if not supported.
+        ///// </summary>
+        internal DerObjectIdentifier Oid => _oid;
+
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Asymmetric algorithm.
         /// </summary>
         /// <param name="name">Asymmetric algorithm name.</param>
+        /// <param name="oid">Asymmetric algorithm oid.</param>
         /// <param name="kind">Asymmetric algorithm kind.</param>
-        protected AsymmetricAlgorithm(string name, AsymmetricAlgorithmKind kind)
+        protected AsymmetricAlgorithm(string name, DerObjectIdentifier oid, AsymmetricAlgorithmKind kind)
         {
             _name = name;
+            _oid = oid;
             _kind = kind;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Determines whether the specified object is equal to the current.
@@ -61,7 +72,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         }
 
         /// <summary>
-        /// Generate key pair by default settings.
+        /// Generate key pair by default settings. Cast to algorithm class to replacement parameters.
         /// </summary>
         /// <returns></returns>
         public abstract AsymmetricCipherKeyPair GenerateKeyPair();

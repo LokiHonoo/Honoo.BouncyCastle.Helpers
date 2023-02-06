@@ -8,12 +8,21 @@ namespace Honoo.BouncyCastle.Helpers
     [Flags]
     public enum AsymmetricAlgorithmKind
     {
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-
+        /// <summary>
+        /// Indicates the algorithm is a asymmetric signature algorithm.
+        /// </summary>
         Signature = 1,
+        /// <summary>
+        /// Indicates the algorithm is a asymmetric encryption algorithm.
+        /// </summary>
         Encryption = 2,
-        Both = Signature | Encryption,
+        /// <summary>
+        /// Indicates the algorithm is a asymmetric signature and encryption algorithm.
+        /// </summary>
+        SignatureAndEncryption = Signature | Encryption,
+        /// <summary>
+        /// Indicates the algorithm is a asymmetric key exchange algorithm.
+        /// </summary>
         KeyExchange = 4,
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
     }
 }

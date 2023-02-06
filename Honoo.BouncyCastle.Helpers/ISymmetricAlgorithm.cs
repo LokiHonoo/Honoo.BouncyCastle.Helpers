@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        KeySizes[] KeySizes { get; }
+        KeySizes[] LegalKeySizes { get; }
 
         /// <summary>
         /// Symmetric algorithm kind.

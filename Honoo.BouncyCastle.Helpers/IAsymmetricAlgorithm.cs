@@ -18,6 +18,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         string Name { get; }
 
+        ///// <summary>
+        ///// Gets signature algorithm oid. It's maybe 'null' if not supported.
+        ///// </summary>
+        //DerObjectIdentifier Oid { get; }
+
         /// <summary>
         /// Generate Asymmetric key pair.
         /// </summary>

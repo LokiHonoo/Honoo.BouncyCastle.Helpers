@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal IV size bits.
         /// </summary>
-        KeySizes[] IVSizes { get; }
+        KeySizes[] LegalIVSizes { get; }
 
         /// <summary>
         /// Generate a new symmetric stream algorithm and decrypt data.

@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Salsa20.
@@ -41,7 +41,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
             _rounds = rounds;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate engine.

@@ -18,7 +18,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// DESede, DESede3, TDEA, TripleDES, 3DES.
@@ -28,7 +28,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         internal override IBlockCipher GenerateEngine()
         {

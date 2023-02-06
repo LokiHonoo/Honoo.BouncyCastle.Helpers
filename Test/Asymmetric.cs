@@ -3,7 +3,6 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Cryptography;
 
@@ -13,10 +12,13 @@ namespace Test
     {
         private static int _diff = 0;
         private static int _execute = 0;
+        private static readonly byte[] _input = new byte[15];
         private static int _total = 0;
 
         internal static void Test()
         {
+            Utilities.Random.NextBytes(_input);
+            //
             _total = 0;
             _execute = 0;
             _diff = 0;
@@ -26,8 +28,10 @@ namespace Test
             //
             Demo1();
             Demo2();
-            ////
+            Console.WriteLine("\r\n\r\n");
+            //
             Test1();
+            Test2();
             //
             Console.WriteLine("\r\n\r\n");
             Console.WriteLine("Total={0}  Ignore={1}  Diff={2}", _total, _total - _execute, _diff);
@@ -35,42 +39,35 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = new byte[5];
-            Utilities.Random.NextBytes(test);
             AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithms.RSA.GenerateKeyPair();
             // example 1
-            byte[] enc1 = AsymmetricAlgorithms.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, test, 0, test.Length);
-            _ = AsymmetricAlgorithms.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc1, 0, enc1.Length);
+            byte[] enc = AsymmetricAlgorithms.RSA.Encrypt(AsymmetricPaddingMode.PKCS1, keyPair.Public, _input, 0, _input.Length);
+            _ = AsymmetricAlgorithms.RSA.Decrypt(AsymmetricPaddingMode.PKCS1, keyPair.Private, enc, 0, enc.Length);
             // example 2
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(AsymmetricPaddingMode.PKCS1, keyPair.Public);
             IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.RSA.GenerateDecryptor(AsymmetricPaddingMode.PKCS1, keyPair.Private);
-            byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
-            byte[] dec2 = decryptor.ProcessBlock(enc2, 0, enc2.Length);
-            //
-            Console.WriteLine(BitConverter.ToString(test).Replace("-", ""));
-            Console.WriteLine(BitConverter.ToString(dec2).Replace("-", ""));
+            enc = encryptor.ProcessBlock(_input, 0, _input.Length);
+            _ = decryptor.ProcessBlock(enc, 0, enc.Length);
         }
 
         private static void Demo2()
         {
-            byte[] test = new byte[5];
-            Utilities.Random.NextBytes(test);
             AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithms.RSA.GenerateKeyPair();
             // example 1
-            byte[] enc1 = AsymmetricAlgorithms.RSA.Encrypt(AsymmetricPaddingMode.OAEP,
-                                                           HashAlgorithms.Whirlpool,
-                                                           HashAlgorithms.Whirlpool,
-                                                           keyPair.Public,
-                                                           test,
-                                                           0,
-                                                           test.Length);
+            byte[] enc = AsymmetricAlgorithms.RSA.Encrypt(AsymmetricPaddingMode.OAEP,
+                                                          HashAlgorithms.Whirlpool,
+                                                          HashAlgorithms.Whirlpool,
+                                                          keyPair.Public,
+                                                          _input,
+                                                          0,
+                                                          _input.Length);
             _ = AsymmetricAlgorithms.RSA.Decrypt(AsymmetricPaddingMode.OAEP,
                                                  HashAlgorithms.Whirlpool,
                                                  HashAlgorithms.Whirlpool,
                                                  keyPair.Private,
-                                                 enc1,
+                                                 enc,
                                                  0,
-                                                 enc1.Length);
+                                                 enc.Length);
             // example 2
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(AsymmetricPaddingMode.OAEP,
                                                                                           HashAlgorithms.RIPEMD160,
@@ -80,69 +77,68 @@ namespace Test
                                                                                           HashAlgorithms.RIPEMD160,
                                                                                           HashAlgorithms.SHAKE_256,
                                                                                           keyPair.Private);
-            byte[] enc2 = encryptor.ProcessBlock(test, 0, test.Length);
-            byte[] dec2 = decryptor.ProcessBlock(enc2, 0, enc2.Length);
-            Console.WriteLine(BitConverter.ToString(test).Replace("-", ""));
-            Console.WriteLine(BitConverter.ToString(dec2).Replace("-", ""));
+            enc = encryptor.ProcessBlock(_input, 0, _input.Length);
+            _ = decryptor.ProcessBlock(enc, 0, enc.Length);
         }
 
         private static void Test1()
         {
             Array paddings = Enum.GetValues(typeof(AsymmetricPaddingMode));
-            //
-            List<IAsymmetricEncryptionAlgorithm> algorithms = new List<IAsymmetricEncryptionAlgorithm>
+            foreach (int paddingValue in paddings)
             {
-                AsymmetricAlgorithms.ElGamal,
-                AsymmetricAlgorithms.RSA
-            };
-            //
-            byte[] test = new byte[5];
-            Utilities.Random.NextBytes(test);
-            foreach (IAsymmetricEncryptionAlgorithm algorithm in algorithms)
-            {
-                foreach (int paddingValue in paddings)
+                _total++;
+                AsymmetricPaddingMode padding = (AsymmetricPaddingMode)paddingValue;
+                string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", AsymmetricAlgorithms.ElGamal.Name, padding.ToString());
+                if (padding == AsymmetricPaddingMode.ISO9796_1)
                 {
-                    _total++;
-                    AsymmetricPaddingMode padding = (AsymmetricPaddingMode)paddingValue;
-                    string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", algorithm.Name, padding.ToString());
-                    try
-                    {
-                        AsymmetricCipherKeyPair keyPair = algorithm.GenerateKeyPair();
-                        IAsymmetricBlockCipher encryptor = algorithm.GenerateEncryptor(padding, keyPair.Public);
-                        IAsymmetricBlockCipher decryptor = algorithm.GenerateDecryptor(padding, keyPair.Private);
-                        XTest(mechanism, encryptor, decryptor, test);
-                        _execute++;
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
-                    }
+                    Console.WriteLine("{0}-------------------------------- Ignored.", mechanism.PadRight(32));
+                }
+                else
+                {
+                    AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithms.ElGamal.GenerateKeyPair();
+                    IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.ElGamal.GenerateEncryptor(padding, keyPair.Public);
+                    IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.ElGamal.GenerateDecryptor(padding, keyPair.Private);
+                    XTest(mechanism, encryptor, decryptor);
+                    _execute++;
                 }
             }
+            foreach (int paddingValue in paddings)
             {
-                AsymmetricCipherKeyPair keyPair;
-                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048))
-                {
-                    keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
-                }
-                IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(AsymmetricPaddingMode.NoPadding, keyPair.Public);
-                IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.RSA.GenerateDecryptor(AsymmetricPaddingMode.NoPadding, keyPair.Private);
-                XTest("Use .NET RSA KEY 2048", encryptor, decryptor, test);
+                _total++;
+                AsymmetricPaddingMode padding = (AsymmetricPaddingMode)paddingValue;
+                string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", AsymmetricAlgorithms.RSA.Name, padding.ToString());
+                AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithms.RSA.GenerateKeyPair();
+                IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(padding, keyPair.Public);
+                IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.RSA.GenerateDecryptor(padding, keyPair.Private);
+                XTest(mechanism, encryptor, decryptor);
+                _execute++;
             }
         }
 
-        private static void XTest(string mechanism, IAsymmetricBlockCipher encryptor, IAsymmetricBlockCipher decryptor, byte[] test)
+        private static void Test2()
         {
-            byte[] enc = encryptor.ProcessBlock(test, 0, test.Length);
+            AsymmetricCipherKeyPair keyPair;
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048))
+            {
+                keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
+            }
+            IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(AsymmetricPaddingMode.NoPadding, keyPair.Public);
+            IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.RSA.GenerateDecryptor(AsymmetricPaddingMode.NoPadding, keyPair.Private);
+            XTest("Use .NET RSA KEY 2048", encryptor, decryptor);
+        }
+
+        private static void XTest(string mechanism, IAsymmetricBlockCipher encryptor, IAsymmetricBlockCipher decryptor)
+        {
+            byte[] enc = encryptor.ProcessBlock(_input, 0, _input.Length);
             byte[] dec = decryptor.ProcessBlock(enc, 0, enc.Length);
-            bool diff = !StructuralComparisons.StructuralEqualityComparer.Equals(dec, test);
+            bool diff = !StructuralComparisons.StructuralEqualityComparer.Equals(dec, _input);
             //
             Console.Write("{0}{1} max {2} bytes - src {3} bytes, enc {4} bytes - ",
-                mechanism.PadRight(32),
-                encryptor.AlgorithmName.PadRight(32),
-                encryptor.GetInputBlockSize(),
-                test.Length,
-                enc.Length);
+                          mechanism.PadRight(32),
+                          encryptor.AlgorithmName.PadRight(32),
+                          encryptor.GetInputBlockSize(),
+                          _input.Length,
+                          enc.Length);
             if (diff)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;

@@ -37,8 +37,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        public KeySizes[] KeySizes
-        { get { return (KeySizes[])_blockAlgorithm.KeySizes.Clone(); } }
+        public KeySizes[] LegalKeySizes => _blockAlgorithm.LegalKeySizes;
 
         /// <summary>
         /// Gets mac size bits.
@@ -54,7 +53,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// MAC.
@@ -87,7 +86,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             _hashSize = macSize;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate a new digest and compute data hash.
@@ -240,32 +239,51 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// Try get legal IV sizes.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="padding">MAC padding mode.</param>
         /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
-        public bool TryGetIVSizes(MACCipherMode mode, out KeySizes[] ivSizes)
+        public bool TryGetIVSizes(MACCipherMode mode, MACPaddingMode padding, out KeySizes[] ivSizes)
         {
             switch (mode)
             {
                 case MACCipherMode.CBC: ivSizes = new KeySizes[] { new KeySizes(_blockAlgorithm.BlockSize, _blockAlgorithm.BlockSize, 0) }; return true;
-                case MACCipherMode.CFB: ivSizes = new KeySizes[] { new KeySizes(8, _blockAlgorithm.BlockSize, 8) }; return true;
-                default: break;
+                case MACCipherMode.CFB:
+                    if (padding == MACPaddingMode.X923 || padding == MACPaddingMode.ISO7816_4)
+                    {
+                        ivSizes = new KeySizes[] { new KeySizes(16, _blockAlgorithm.BlockSize, 8) };
+                    }
+                    else
+                    {
+                        ivSizes = new KeySizes[] { new KeySizes(8, _blockAlgorithm.BlockSize, 8) };
+                    }
+                    return true;
+
+                default: ivSizes = null; return false;
             }
-            ivSizes = null;
-            return false;
         }
 
         /// <summary>
         /// Verify IV size.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="padding">MAC padding mode.</param>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>
-        public bool VerifyIVSize(MACCipherMode mode, int ivSize)
+        public bool VerifyIVSize(MACCipherMode mode, MACPaddingMode padding, int ivSize)
         {
             switch (mode)
             {
                 case MACCipherMode.CBC: return ivSize == _blockAlgorithm.BlockSize;
-                case MACCipherMode.CFB: return ivSize >= 8 && ivSize <= _blockAlgorithm.BlockSize && ivSize % 8 == 0;
+                case MACCipherMode.CFB:
+                    if (padding == MACPaddingMode.X923 || padding == MACPaddingMode.ISO7816_4)
+                    {
+                        return ivSize >= 16 && ivSize <= _blockAlgorithm.BlockSize && ivSize % 8 == 0;
+                    }
+                    else
+                    {
+                        return ivSize >= 16 && ivSize <= _blockAlgorithm.BlockSize && ivSize % 8 == 0;
+                    }
+
                 default: return false;
             }
         }

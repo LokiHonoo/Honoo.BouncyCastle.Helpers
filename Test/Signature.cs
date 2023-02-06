@@ -11,12 +11,15 @@ namespace Test
 {
     internal static class Signature
     {
+        private static readonly byte[] _input = new byte[123];
         private static int _diff = 0;
         private static int _execute = 0;
         private static int _total = 0;
 
         internal static void Test()
         {
+            Utilities.Random.NextBytes(_input);
+            //
             _total = 0;
             _execute = 0;
             _diff = 0;
@@ -40,26 +43,21 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = new byte[83];
-            Utilities.Random.NextBytes(test);
             AsymmetricCipherKeyPair keyPair = SignatureAlgorithms.SHA256withECDSA.AsymmetricAlgorithm.GenerateKeyPair();
             // example 1
-            byte[] signature1 = SignatureAlgorithms.SHA256withECDSA.Sign(keyPair.Private, test);
-            bool same1 = SignatureAlgorithms.SHA256withECDSA.Verify(keyPair.Public, test, signature1);
+            byte[] signature = SignatureAlgorithms.SHA256withECDSA.Sign(keyPair.Private, _input);
+            _ = SignatureAlgorithms.SHA256withECDSA.Verify(keyPair.Public, _input, signature);
             // example 2
             ISigner signer = SignatureAlgorithms.SHA256withECDSA.GenerateSigner(keyPair.Private);
             ISigner verifier = SignatureAlgorithms.SHA256withECDSA.GenerateVerifier(keyPair.Public);
-            signer.BlockUpdate(test, 0, test.Length);
-            byte[] signature2 = signer.GenerateSignature();
-            verifier.BlockUpdate(test, 0, test.Length);
-            bool same2 = verifier.VerifySignature(signature2);
+            signer.BlockUpdate(_input, 0, _input.Length);
+            signature = signer.GenerateSignature();
+            verifier.BlockUpdate(_input, 0, _input.Length);
+            _ = verifier.VerifySignature(signature);
         }
 
         private static void Test1()
         {
-            byte[] test = new byte[83];
-            Utilities.Random.NextBytes(test);
-            //
             Type type = typeof(SignatureAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
@@ -70,7 +68,7 @@ namespace Test
                     AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
                     ISigner signer = algorithm.GenerateSigner(keyPair.Private);
                     ISigner verifier = algorithm.GenerateVerifier(keyPair.Public);
-                    XTest(algorithm, signer, verifier, test);
+                    XTest(algorithm, signer, verifier, _input);
                     _execute++;
                 }
             }
@@ -87,7 +85,7 @@ namespace Test
                 AsymmetricCipherKeyPair keyPair = algorithm.AsymmetricAlgorithm.GenerateKeyPair();
                 ISigner signer = algorithm.GenerateSigner(keyPair.Private);
                 ISigner verifier = algorithm.GenerateVerifier(keyPair.Public);
-                XTest(algorithm, signer, verifier, test);
+                XTest(algorithm, signer, verifier, _input);
             }
         }
 

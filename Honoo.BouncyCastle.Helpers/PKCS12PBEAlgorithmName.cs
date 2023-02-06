@@ -48,7 +48,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         internal PKCS12PBEAlgorithmName(string name, DerObjectIdentifier oid)
         {
@@ -56,7 +56,7 @@ namespace Honoo.BouncyCastle.Helpers
             _oid = oid;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Determines whether two specified object have different value.

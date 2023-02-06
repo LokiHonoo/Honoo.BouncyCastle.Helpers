@@ -13,10 +13,13 @@ namespace Test
     {
         private static int _diff = 0;
         private static int _execute = 0;
+        private static readonly byte[] _input = new byte[123];
         private static int _total = 0;
 
         internal static void Test()
         {
+            Utilities.Random.NextBytes(_input);
+            //
             _total = 0;
             _execute = 0;
             _diff = 0;
@@ -31,8 +34,10 @@ namespace Test
             ////
             Test1();
             Test2();
-            Test3();
-            Test4();
+            Test3(false);
+            Test3(true);
+            Test4(false);
+            Test4(true);
             //
             Console.WriteLine("\r\n\r\n");
             Console.WriteLine("Total={0}  Ignore={1}  Diff={2}", _total, _total - _execute, _diff);
@@ -40,98 +45,61 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             // example 1
-            byte[] hash1 = HashAlgorithms.SHA3_256.ComputeHash(test);
+            _ = HashAlgorithms.SHA3_256.ComputeHash(_input);
             // example 2
             IDigest digest = HashAlgorithms.SHA3_256.GenerateDigest();
-            byte[] hash2 = new byte[HashAlgorithms.SHA3_256.HashSize / 8];
-            digest.BlockUpdate(test, 0, test.Length);
-            digest.DoFinal(hash2, 0);
+            byte[] hash = new byte[HashAlgorithms.SHA3_256.HashSize / 8];
+            digest.BlockUpdate(_input, 0, _input.Length);
+            digest.DoFinal(hash, 0);
         }
 
         private static void Demo2()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            byte[] key = new byte[72]; // Any value
+            byte[] key = new byte[71]; // Any value
             Utilities.Random.NextBytes(key);
             ICipherParameters parameters = HMACAlgorithms.SHA3_256_HMAC.GenerateParameters(key);
             // example 1
-            byte[] hash1 = HMACAlgorithms.SHA3_256_HMAC.ComputeHash(parameters, test);
+            _ = HMACAlgorithms.SHA3_256_HMAC.ComputeHash(parameters, _input);
             // example 2
             IMac digest = HMACAlgorithms.SHA3_256_HMAC.GenerateDigest(parameters);
-            byte[] hash2 = new byte[HMACAlgorithms.SHA3_256_HMAC.HashSize / 8];
-            digest.BlockUpdate(test, 0, test.Length);
-            digest.DoFinal(hash2, 0);
+            byte[] hash = new byte[HMACAlgorithms.SHA3_256_HMAC.HashSize / 8];
+            digest.BlockUpdate(_input, 0, _input.Length);
+            digest.DoFinal(hash, 0);
         }
 
         private static void Demo3()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
             ICipherParameters parameters = CMACAlgorithms.AES_CMAC.GenerateParameters(key);
             // example 1
-            byte[] hash1 = CMACAlgorithms.AES_CMAC.ComputeHash(parameters, test);
+            _ = CMACAlgorithms.AES_CMAC.ComputeHash(parameters, _input);
             // example 2
             IMac digest = CMACAlgorithms.AES_CMAC.GenerateDigest(parameters);
             byte[] hash = new byte[CMACAlgorithms.AES_CMAC.HashSize / 8];
-            digest.BlockUpdate(test, 0, test.Length);
+            digest.BlockUpdate(_input, 0, _input.Length);
             digest.DoFinal(hash, 0);
         }
 
         private static void Demo4()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             byte[] key = new byte[128 / 8]; // AES key size
             Utilities.Random.NextBytes(key);
             byte[] iv = new byte[128 / 8]; // AES IV size
             Utilities.Random.NextBytes(iv);
             ICipherParameters parameters = MACAlgorithms.AES_MAC.GenerateParameters(key, iv);
             // example 1
-            byte[] hash1 = MACAlgorithms.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, test);
+            _ = MACAlgorithms.AES_MAC.ComputeHash(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters, _input);
             // example 2
             IMac digest = MACAlgorithms.AES_MAC.GenerateDigest(MACCipherMode.CBC, MACPaddingMode.NoPadding, parameters);
             byte[] hash = new byte[MACAlgorithms.AES_MAC.HashSize / 8];
-            digest.BlockUpdate(test, 0, test.Length);
+            digest.BlockUpdate(_input, 0, _input.Length);
             digest.DoFinal(hash, 0);
-        }
-
-        private static int GetQualitySize(KeySizes[] sizes)
-        {
-            int size = sizes[0].MinSize;
-            int max = Math.Min(sizes[sizes.Length - 1].MaxSize, 256);
-            foreach (KeySizes item in sizes)
-            {
-                while (size < max)
-                {
-                    if (item.SkipSize == 0)
-                    {
-                        size = item.MinSize;
-                        break;
-                    }
-                    else if (size + item.SkipSize <= item.MaxSize)
-                    {
-                        size += item.SkipSize;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            return size;
         }
 
         private static void Test1()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            //
             Type type = typeof(HashAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
@@ -140,7 +108,7 @@ namespace Test
                 {
                     _total++;
                     IDigest digest = algorithm.GenerateDigest();
-                    XTest(algorithm.Name, digest, test);
+                    XTest(algorithm.Name, digest, _input);
                     _execute++;
                 }
             }
@@ -153,19 +121,17 @@ namespace Test
                 _execute++;
                 HashAlgorithmHelper.TryGetAlgorithm(name, out IHashAlgorithm algorithm);
                 IDigest digest = algorithm.GenerateDigest();
-                XTest(algorithm.Name, digest, test);
+                XTest(algorithm.Name, digest, _input);
             }
             Console.WriteLine();
         }
 
         private static void Test2()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             byte[] key = new byte[19];
             Utilities.Random.NextBytes(key);
             //
-            Type type = typeof(HMACHelper);
+            Type type = typeof(HMACAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
@@ -174,7 +140,7 @@ namespace Test
                     _total++;
                     ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
-                    XTest(algorithm.Name, digest, test);
+                    XTest(algorithm.Name, digest, _input);
                     _execute++;
                 }
             }
@@ -182,38 +148,33 @@ namespace Test
             Console.WriteLine();
         }
 
-        private static void Test3()
+        private static void Test3(bool testMax)
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            //
-            Type type = typeof(CMACHelper);
+            Type type = typeof(CMACAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
                 if (property.GetValue(type, null) is ICMAC algorithm)
                 {
                     _total++;
-                    int keySize = GetQualitySize(algorithm.KeySizes);
+                    int keySize = testMax ? Math.Min(algorithm.LegalKeySizes[0].MaxSize, 65536) : algorithm.LegalKeySizes[0].MinSize;
                     byte[] key = new byte[keySize / 8];
                     Utilities.Random.NextBytes(key);
                     ICipherParameters parameters = algorithm.GenerateParameters(key);
                     IMac digest = algorithm.GenerateDigest(parameters);
-                    XTest(algorithm.Name, digest, test);
+                    XTest(algorithm.Name, digest, _input);
                     _execute++;
                 }
             }
             Console.WriteLine();
         }
 
-        private static void Test4()
+        private static void Test4(bool testMax)
         {
             Array modes = Enum.GetValues(typeof(MACCipherMode));
             Array paddings = Enum.GetValues(typeof(MACPaddingMode));
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             //
-            Type type = typeof(MACHelper);
+            Type type = typeof(MACAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
             {
@@ -222,28 +183,37 @@ namespace Test
                     foreach (int modeValue in modes)
                     {
                         MACCipherMode mode = (MACCipherMode)modeValue;
-                        int keySize = GetQualitySize(algorithm.KeySizes);
-                        byte[] key = new byte[keySize / 8];
-                        Utilities.Random.NextBytes(key);
-                        algorithm.TryGetIVSizes(mode, out KeySizes[] ivSizes);
-                        int ivSize = GetQualitySize(ivSizes);
-                        byte[] iv = new byte[ivSize / 8];
-                        Utilities.Random.NextBytes(iv);
-                        ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
                         foreach (int paddingValue in paddings)
                         {
                             _total++;
                             MACPaddingMode padding = (MACPaddingMode)paddingValue;
                             string mechanism = string.Format(CultureInfo.InvariantCulture, "{0}/{1}/{2}", algorithm.Name, mode.ToString(), padding.ToString());
-                            IMac digest = algorithm.GenerateDigest(mode, padding, parameters);
-                            try
+                            if (algorithm.TryGetIVSizes(mode, padding, out KeySizes[] ivSizes))
                             {
-                                XTest(mechanism, digest, test);
-                                _execute++;
-                            }
-                            catch (Exception)
-                            {
-                                Console.WriteLine("{0}-------- Ignored --------", mechanism.PadRight(32));
+                                int keySize = testMax ? Math.Min(algorithm.LegalKeySizes[0].MaxSize, 65536) : algorithm.LegalKeySizes[0].MinSize;
+                                byte[] key = new byte[keySize / 8];
+                                Utilities.Random.NextBytes(key);
+                                int ivSize = testMax ? Math.Min(ivSizes[0].MaxSize, 65536) : ivSizes[0].MinSize;
+
+                                if (mode == MACCipherMode.CFB && (padding == MACPaddingMode.X923 || padding == MACPaddingMode.ISO7816_4) && ivSize == 8)
+                                {
+                                    ivSize = 24;
+                                }
+
+                                byte[] iv = new byte[ivSize / 8];
+                                Utilities.Random.NextBytes(iv);
+                                ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
+
+                                IMac digest = algorithm.GenerateDigest(mode, padding, parameters);
+                                try
+                                {
+                                    XTest(mechanism, digest, _input);
+                                    _execute++;
+                                }
+                                catch (Exception)
+                                {
+                                    Console.WriteLine("{0}-------- Ignored --------", mechanism.PadRight(32));
+                                }
                             }
                         }
                     }

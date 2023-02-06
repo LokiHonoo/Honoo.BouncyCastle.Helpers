@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// GOST3411.
@@ -52,7 +52,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             _sBox = sBox;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate digest. The digest can be reused.

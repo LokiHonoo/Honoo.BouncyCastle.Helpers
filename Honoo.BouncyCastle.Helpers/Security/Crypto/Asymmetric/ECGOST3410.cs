@@ -4,7 +4,6 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
@@ -12,18 +11,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECGOST3410.
     /// </summary>
-    public sealed class ECGOST3410 : AsymmetricSignatureAlgorithm
+    public sealed class ECGOST3410 : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ECGOST3410.
         /// </summary>
-        public ECGOST3410() : base("ECGOST3410", AsymmetricAlgorithmKind.Signature)
+        public ECGOST3410() : base("ECGOST3410", CryptoProObjectIdentifiers.GostR3410x2001, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.
@@ -40,7 +39,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="ellipticCurve">Elliptic curve.</param>
         /// <returns></returns>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(ECGOST3410EllipticCurve ellipticCurve)
         {
             X9ECParameters x9Parameters = GenerateX9(ellipticCurve);

@@ -10,8 +10,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
     /// <summary>
     /// RSA/X9.31.
-    /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-    /// <para/>Uses key size 2048 bits, certainty 25 by default.
     /// <para/>Legal signature hash Algorithm:
     /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,
     /// <see cref="RIPEMD128"/>,<see cref="RIPEMD160"/>,
@@ -26,12 +24,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// RSA/X9.31.
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
         /// <para/>Legal signature hash Algorithm:
         /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,
         /// <see cref="RIPEMD128"/>,<see cref="RIPEMD160"/>,
@@ -39,29 +35,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <see cref="Whirlpool"/>.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public RSAandX931(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, (IAsymmetricAlgorithm)AsymmetricAlgorithms.RSA)
-        {
-        }
-
-        /// <summary>
-        /// RSA/X9.31.
-        /// <para/>Legal key size is more than or equal to 24 bits (8 bits increments).
-        /// <para/>Uses key size 2048 bits, certainty 25 by default.
-        /// <para/>Legal signature hash Algorithm:
-        /// <see cref="SHA1"/>,<see cref="SHA224"/>,<see cref="SHA256"/>,<see cref="SHA384"/>,<see cref="SHA512"/>,
-        /// <see cref="RIPEMD128"/>,<see cref="RIPEMD160"/>,
-        /// <see cref="SHA512T"/>/224,<see cref="SHA512T"/>/256,
-        /// <see cref="Whirlpool"/>.
-        /// </summary>
-        /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
-        public RSAandX931(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSA/X9.31", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
+        public RSAandX931(IHashAlgorithm hashAlgorithm)
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withRSA/X9.31", hashAlgorithm.Name), AsymmetricAlgorithms.RSA)
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate signer.
@@ -71,18 +51,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         {
             IDigest digest = _hashAlgorithm.GenerateDigest();
             return new X931Signer(new RsaBlindedEngine(), digest);
-        }
-
-        private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
-        {
-            if (asymmetricAlgorithm.Name != "RSA")
-            {
-                throw new CryptographicException("Requires RSA asymmetric algorithm.");
-            }
-            else
-            {
-                return asymmetricAlgorithm;
-            }
         }
     }
 }

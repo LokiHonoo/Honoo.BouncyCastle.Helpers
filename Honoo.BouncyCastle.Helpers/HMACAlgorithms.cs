@@ -28,6 +28,16 @@ namespace Honoo.BouncyCastle.Helpers
         public static IHMAC BLAKE2s_256_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2s_256);
 
         /// <summary>
+        /// Hash size 128 bits.
+        /// </summary>
+        public static IHMAC CSHAKE_128_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE_128);
+
+        /// <summary>
+        /// Hash size 256 bits.
+        /// </summary>
+        public static IHMAC CSHAKE_256_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE_256);
+
+        /// <summary>
         /// Hash size 256 bits.
         /// </summary>
         public static IHMAC DSTU7564_256_HMAC { get; } = new HMAC(HashAlgorithms.DSTU7564_256);

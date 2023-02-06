@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         #region Properties
 
         private readonly int _blockSize;
-        private readonly KeySizes[] _keySizes;
+        private readonly KeySizes[] _legalKeySizes;
 
         /// <summary>
         /// Gets block size bits.
@@ -26,12 +26,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        public override KeySizes[] KeySizes
-        { get { return (KeySizes[])_keySizes.Clone(); } }
+        public override KeySizes[] LegalKeySizes
+        { get { return (KeySizes[])_legalKeySizes.Clone(); } }
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Symmetric block algorithm.
@@ -50,10 +50,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 throw new CryptographicException("Unsupported block size.");
             }
             _blockSize = blockSize;
-            _keySizes = keySizes;
+            _legalKeySizes = keySizes;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate a new symmetric block algorithm and decrypt data.
@@ -158,44 +158,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         public IBufferedCipher GenerateEncryptor(SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
         {
             return GenerateCipher(true, mode, padding, parameters);
-        }
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key bytes.</param>
-        /// <param name="iv">IV bytes.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public override ICipherParameters GenerateParameters(byte[] key, byte[] iv)
-        {
-            ICipherParameters parameters = GenerateKeyParameter(key);
-            if (iv != null)
-            {
-                parameters = new ParametersWithIV(parameters, iv);
-            }
-            return parameters;
-        }
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="keyBuffer">Key buffer bytes.</param>
-        /// <param name="keyOffset">The starting offset to read.</param>
-        /// <param name="keyLength">The length to read.</param>
-        /// <param name="ivBuffer">IV buffer bytes.</param>
-        /// <param name="ivOffset">The starting offset to read.</param>
-        /// <param name="ivLength">The length to read.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public override ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength)
-        {
-            ICipherParameters parameters = GenerateKeyParameter(keyBuffer, keyOffset, keyLength);
-            if (ivBuffer != null && ivLength > 0)
-            {
-                parameters = new ParametersWithIV(parameters, ivBuffer, ivOffset, ivLength);
-            }
-            return parameters;
         }
 
         /// <summary>
@@ -310,7 +272,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.OCB:
                     if (!pad && _blockSize == 128)
                     {
-                        ivSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
+                        /*
+                         * BUG: OCB cipher mode supported null(0) Nonce/IV size but BouncyCastle cannot set that. (BouncyCastle 1.9.0 has not been fixed).
+                         * So use limit min value 8.
+                         */
+
+                        ivSizes = new KeySizes[] { new KeySizes(8, 120, 8) };
                         return true;
                     }
                     break;
@@ -379,44 +346,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <returns></returns>
         public bool TryGetNonceSizes(SymmetricCipherMode mode, SymmetricPaddingMode padding, out KeySizes[] nonceSizes)
         {
-            switch (mode)
-            {
-                case SymmetricCipherMode.CCM:
-                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
-                    {
-                        nonceSizes = new KeySizes[] { new KeySizes(56, 104, 8) };
-                        return true;
-                    }
-                    break;
-
-                case SymmetricCipherMode.EAX:
-                    if (padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128))
-                    {
-                        nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
-                        return true;
-                    }
-                    break;
-
-                case SymmetricCipherMode.GCM:
-                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
-                    {
-                        nonceSizes = new KeySizes[] { new KeySizes(8, 2147483640, 8) };
-                        return true;
-                    }
-                    break;
-
-                case SymmetricCipherMode.OCB:
-                    if (padding == SymmetricPaddingMode.NoPadding && _blockSize == 128)
-                    {
-                        nonceSizes = new KeySizes[] { new KeySizes(0, 120, 8) };
-                        return true;
-                    }
-                    break;
-
-                default: break;
-            }
-            nonceSizes = null;
-            return false;
+            return TryGetIVSizes(mode, padding, out nonceSizes);
         }
 
         /// <summary>
@@ -456,7 +386,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 case SymmetricCipherMode.CCM: return !pad && _blockSize == 128 && ivSize >= 56 && ivSize <= 104 && ivSize % 8 == 0;
                 case SymmetricCipherMode.EAX: return !pad && (_blockSize == 64 || _blockSize == 128) && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
                 case SymmetricCipherMode.GCM: return !pad && _blockSize == 128 && ivSize >= 8 && ivSize <= 2147483640 && ivSize % 8 == 0;
-                case SymmetricCipherMode.OCB: return !pad && _blockSize == 128 && ivSize >= 0 && ivSize <= 120 && ivSize % 8 == 0;
+
+                /*
+                 * BUG: OCB cipher mode supported null(0) Nonce/IV size but BouncyCastle cannot set that. (BouncyCastle 1.9.0 has not been fixed).
+                 * So use limit min value 8.
+                 */
+
+                case SymmetricCipherMode.OCB: return !pad && _blockSize == 128 && ivSize >= 8 && ivSize <= 120 && ivSize % 8 == 0;
                 default: return false;
             }
         }
@@ -468,7 +404,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <returns></returns>
         public override bool VerifyKeySize(int keySize)
         {
-            return DetectionUtilities.ValidSize(_keySizes, keySize);
+            return DetectionUtilities.ValidSize(_legalKeySizes, keySize);
         }
 
         /// <summary>
@@ -495,43 +431,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// </summary>
         /// <param name="mode">Symmetric algorithm cipher mode.</param>
         /// <param name="padding">Symmetric algorithm padding mode.</param>
-        /// <param name="nonceSizes">Nonce size bits.</param>
+        /// <param name="nonceSize">Nonce size bits.</param>
         /// <returns></returns>
-        public bool VerifyNonceSize(SymmetricCipherMode mode, SymmetricPaddingMode padding, int nonceSizes)
+        public bool VerifyNonceSize(SymmetricCipherMode mode, SymmetricPaddingMode padding, int nonceSize)
         {
-            switch (mode)
-            {
-                case SymmetricCipherMode.CCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 56 && nonceSizes <= 104 && nonceSizes % 8 == 0;
-                case SymmetricCipherMode.EAX: return padding == SymmetricPaddingMode.NoPadding && (_blockSize == 64 || _blockSize == 128) && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case SymmetricCipherMode.GCM: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 8 && nonceSizes <= 2147483640 && nonceSizes % 8 == 0;
-                case SymmetricCipherMode.OCB: return padding == SymmetricPaddingMode.NoPadding && _blockSize == 128 && nonceSizes >= 0 && nonceSizes <= 120 && nonceSizes % 8 == 0;
-                default: return false;
-            }
+            return VerifyIVSize(mode, padding, nonceSize);
         }
 
         internal abstract IBlockCipher GenerateEngine();
-
-        /// <summary>
-        /// Generate KeyParameter.
-        /// </summary>
-        /// <param name="key">Key.</param>
-        /// <returns></returns>
-        protected virtual KeyParameter GenerateKeyParameter(byte[] key)
-        {
-            return new KeyParameter(key);
-        }
-
-        /// <summary>
-        /// Generate KeyParameter.
-        /// </summary>
-        /// <param name="keyBuffer">Key buffer bytes.</param>
-        /// <param name="offset">Offset.</param>
-        /// <param name="length">Length.</param>
-        /// <returns></returns>
-        protected virtual KeyParameter GenerateKeyParameter(byte[] keyBuffer, int offset, int length)
-        {
-            return new KeyParameter(keyBuffer, offset, length);
-        }
 
         private IBufferedCipher GenerateCipher(bool forEncryption, SymmetricCipherMode mode, SymmetricPaddingMode padding, ICipherParameters parameters)
         {

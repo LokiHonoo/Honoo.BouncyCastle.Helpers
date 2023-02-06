@@ -20,7 +20,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// SHA512T.
@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate digest. The digest can be reused.

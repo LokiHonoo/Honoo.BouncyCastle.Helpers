@@ -19,7 +19,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Rijndael.
@@ -32,7 +32,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         internal override IBlockCipher GenerateEngine()
         {

@@ -142,14 +142,14 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         internal DEKAlgorithmName(string name)
         {
             _name = name;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Determines whether two specified object have different value.

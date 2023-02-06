@@ -10,35 +10,35 @@ namespace Test
         {
             AsymmetricCipherKeyPair keyPair = AsymmetricAlgorithms.RSA.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out AsymmetricKeyParameter publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal RSA " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.ECDSA.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal ECDSA " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.DSA.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal DSA " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.SM2.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal SM2 " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.ElGamal.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal ElGamal " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.GOST3410.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal GOST3410 " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.ECGOST3410.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal ECGOST3410 " + publicKey.Equals(keyPair.Public));
             //
             keyPair = AsymmetricAlgorithms.Ed448.GenerateKeyPair();
             AsymmetricAlgorithmHelper.TryGeneratePublicKey(keyPair.Private, out publicKey);
-            Console.WriteLine(publicKey.Equals(keyPair.Public));
+            Console.WriteLine("Equal Ed448 " + publicKey.Equals(keyPair.Public));
             //
             //
             //

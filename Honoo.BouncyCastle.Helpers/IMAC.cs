@@ -22,7 +22,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        KeySizes[] KeySizes { get; }
+        KeySizes[] LegalKeySizes { get; }
 
         /// <summary>
         /// Gets mac size bits.
@@ -98,17 +98,19 @@ namespace Honoo.BouncyCastle.Helpers
         /// Try get legal IV sizes.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="padding">MAC padding mode.</param>
         /// <param name="ivSizes">Legal IV size bits.</param>
         /// <returns></returns>
-        bool TryGetIVSizes(MACCipherMode mode, out KeySizes[] ivSizes);
+        bool TryGetIVSizes(MACCipherMode mode, MACPaddingMode padding, out KeySizes[] ivSizes);
 
         /// <summary>
         /// Verify IV size.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
+        /// <param name="padding">MAC padding mode.</param>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>
-        bool VerifyIVSize(MACCipherMode mode, int ivSize);
+        bool VerifyIVSize(MACCipherMode mode, MACPaddingMode padding, int ivSize);
 
         /// <summary>
         /// Verify key size.

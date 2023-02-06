@@ -159,9 +159,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(issuerCertificate));
             }
-            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            if (SignatureAlgorithmHelper.TryGetAlgorithm(signatureAlgorithm, out ISignatureAlgorithm algorithm))
             {
-                return GenerateCrl(oid.Id, privateKey, issuerCertificate.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
+                return GenerateCrl(algorithm.Oid.Id, privateKey, issuerCertificate.SubjectDN, revocations, extensions, thisUpdate, nextUpdate);
             }
             else
             {
@@ -231,9 +231,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            if (SignatureAlgorithmHelper.TryGetAlgorithm(signatureAlgorithm, out ISignatureAlgorithm algorithm))
             {
-                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(oid.Id, asymmetricKeyPair.Private, Common.SecureRandom);
+                Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(algorithm.Oid.Id, asymmetricKeyPair.Private, Common.SecureRandom);
                 DerSet attribute = extensions == null ? null
                     : new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(GenerateX509Extensions(extensions))));
                 return new Pkcs10CertificationRequest(signatureFactory, GenerateX509Name(dn), asymmetricKeyPair.Public, attribute);
@@ -315,10 +315,10 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new ArgumentNullException(nameof(dn));
             }
-            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            if (SignatureAlgorithmHelper.TryGetAlgorithm(signatureAlgorithm, out ISignatureAlgorithm algorithm))
             {
                 X509Name dn_ = GenerateX509Name(dn);
-                return GenerateCertificate(oid.Id, asymmetricKeyPair.Private, dn_, asymmetricKeyPair.Public, dn_, extensions, start, end);
+                return GenerateCertificate(algorithm.Oid.Id, asymmetricKeyPair.Private, dn_, asymmetricKeyPair.Public, dn_, extensions, start, end);
             }
             else
             {
@@ -521,9 +521,9 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new CryptographicException("The end time exceeds the validity of the issuer certificate.");
             }
-            if (SignatureAlgorithmHelper.TryGetOid(signatureAlgorithm, out DerObjectIdentifier oid))
+            if (SignatureAlgorithmHelper.TryGetAlgorithm(signatureAlgorithm, out ISignatureAlgorithm algorithm))
             {
-                return GenerateCertificate(oid.Id,
+                return GenerateCertificate(algorithm.Oid.Id,
                                            issuerPrivateKey,
                                            issuerCertificate.SubjectDN,
                                            subjectPublicKey,

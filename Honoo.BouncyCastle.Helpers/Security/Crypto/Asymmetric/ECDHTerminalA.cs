@@ -7,7 +7,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 using System;
-using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -19,28 +19,57 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #region Properties
 
         private readonly ECDHBasicAgreement _agreement;
-        private readonly byte[] _exchangeA;
+        private readonly byte[] _g;
+        private readonly byte[] _p;
+        private readonly byte[] _publicKey;
 
         /// <summary>
         /// Exchange this bytes to terminal Bob.
         /// </summary>
-        public byte[] ExchangeA => _exchangeA;
+        public byte[] G => _g;
+
+        /// <summary>
+        /// Exchange this bytes to terminal Bob.
+        /// </summary>
+        public byte[] P => _p;
+
+        /// <summary>
+        /// Exchange this bytes to terminal Bob.
+        /// </summary>
+        public byte[] PublicKey => _publicKey;
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
+
+        /// <summary>
+        /// ECDiffieHellman terminal Alice.
+        /// <para/>Uses certainty 20 by default.
+        /// </summary>
+        /// <param name="keySize">Key size.
+        /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
+        /// </param>
+        /// <exception cref="Exception"/>
+        public ECDHTerminalA(int keySize) : this(keySize, 20)
+        {
+        }
 
         /// <summary>
         /// ECDiffieHellman terminal Alice.
         /// </summary>
-        /// <param name="size">Size.
+        /// <param name="keySize">Key size.
         /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>
-        public ECDHTerminalA(int size, int certainty)
+        /// <exception cref="Exception"/>
+        public ECDHTerminalA(int keySize, int certainty)
         {
+            if (keySize != 192 && keySize != 224 && keySize != 239 && keySize != 256 && keySize != 384 && keySize != 521)
+            {
+                throw new CryptographicException("Legal key size 192, 224, 239, 256, 384, 521.");
+            }
             DHParametersGenerator parametersGenerator = new DHParametersGenerator();
-            parametersGenerator.Init(size, certainty, Common.SecureRandom);
+            parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
             DHParameters parameters = parametersGenerator.GenerateParameters();
             ECKeyPairGenerator keyPairGenerator = new ECKeyPairGenerator("ECDH");
             DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
@@ -49,39 +78,31 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             ECDHBasicAgreement agreement = new ECDHBasicAgreement();
             agreement.Init(keyPair.Private);
             //
-            List<byte> exchange = new List<byte>();
             SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            byte[] publicKeyBytes = publicKeyInfo.GetEncoded();
-            exchange.AddRange(BitConverter.GetBytes(publicKeyBytes.Length));
-            exchange.AddRange(publicKeyBytes);
-            byte[] pBytes = parameters.P.ToByteArray();
-            exchange.AddRange(BitConverter.GetBytes(pBytes.Length));
-            exchange.AddRange(pBytes);
-            byte[] gBytes = parameters.G.ToByteArray();
-            exchange.AddRange(BitConverter.GetBytes(gBytes.Length));
-            exchange.AddRange(gBytes);
+            _publicKey = publicKeyInfo.GetEncoded();
+            _p = parameters.P.ToByteArray();
+            _g = parameters.G.ToByteArray();
             //
             _agreement = agreement;
-            _exchangeA = exchange.ToArray();
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Derive key material from the terminal Bob's exchange.
         /// </summary>
-        /// <param name="exchangeB">The terminal Bob's exchange.</param>
+        /// <param name="publicKeyB">The terminal Bob's public key.</param>
         /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public byte[] DeriveKeyMaterial(byte[] exchangeB, bool unsigned)
+        public byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsigned)
         {
-            if (exchangeB == null)
+            if (publicKeyB == null)
             {
-                throw new ArgumentNullException(nameof(exchangeB));
+                throw new ArgumentNullException(nameof(publicKeyB));
             }
-            AsymmetricKeyParameter publicKeyB = PublicKeyFactory.CreateKey(exchangeB);
-            BigInteger integer = _agreement.CalculateAgreement(publicKeyB);
+            AsymmetricKeyParameter publicKeyBob = PublicKeyFactory.CreateKey(publicKeyB);
+            BigInteger integer = _agreement.CalculateAgreement(publicKeyBob);
             return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
         }
 
@@ -92,7 +113,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public bool Equals(ECDHTerminalA other)
         {
-            return _agreement.Equals(other._agreement) & _exchangeA.Equals(other._exchangeA);
+            return _agreement.Equals(
+                other._agreement)
+                & _publicKey.Equals(other._publicKey)
+                & _p.Equals(other._p)
+                & _g.Equals(other._g);
         }
 
         /// <summary>
@@ -111,7 +136,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return _agreement.GetHashCode() ^ _exchangeA.GetHashCode();
+            return _agreement.GetHashCode() ^ _publicKey.GetHashCode() ^ _p.GetHashCode() ^ _g.GetHashCode();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Exchange this bytes with terminal Alice.
         /// </summary>
-        byte[] ExchangeB { get; }
+        byte[] PublicKey { get; }
 
         /// <summary>
         /// Derive key material.

@@ -49,6 +49,8 @@ namespace Honoo.BouncyCastle.Helpers
                 case "BLAKE2B-384": algorithm = HMACAlgorithms.BLAKE2b_384_HMAC; return true;
                 case "BLAKE2B-512": algorithm = HMACAlgorithms.BLAKE2b_512_HMAC; return true;
                 case "BLAKE2S-256": algorithm = HMACAlgorithms.BLAKE2s_256_HMAC; return true;
+                case "CSHAKE128": case "CSHAKE-128": algorithm = HMACAlgorithms.CSHAKE_128_HMAC; return true;
+                case "CSHAKE256": case "CSHAKE-256": algorithm = HMACAlgorithms.CSHAKE_256_HMAC; return true;
                 case "DSTU7564-256": algorithm = HMACAlgorithms.DSTU7564_256_HMAC; return true;
                 case "DSTU7564-384": algorithm = HMACAlgorithms.DSTU7564_384_HMAC; return true;
                 case "DSTU7564-512": algorithm = HMACAlgorithms.DSTU7564_512_HMAC; return true;

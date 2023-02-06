@@ -27,7 +27,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Hash algorithm.
@@ -46,7 +46,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             _hashSize = hashSize;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate a new digest and compute data hash.

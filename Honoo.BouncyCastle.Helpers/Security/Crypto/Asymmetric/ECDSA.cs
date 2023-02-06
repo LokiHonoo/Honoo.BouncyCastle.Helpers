@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Asn1.Anssi;
 using Org.BouncyCastle.Asn1.CryptoPro;
+using Org.BouncyCastle.Asn1.Eac;
 using Org.BouncyCastle.Asn1.GM;
 using Org.BouncyCastle.Asn1.Nist;
 using Org.BouncyCastle.Asn1.Rosstandart;
@@ -9,7 +10,6 @@ using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
@@ -17,18 +17,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDSA.
     /// </summary>
-    public sealed class ECDSA : AsymmetricSignatureAlgorithm
+    public sealed class ECDSA : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ECDSA.
         /// </summary>
-        public ECDSA() : base("ECDSA", AsymmetricAlgorithmKind.Signature)
+        public ECDSA() : base("ECDSA", EacObjectIdentifiers.id_TA_ECDSA, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.
@@ -45,7 +45,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// </summary>
         /// <param name="ellipticCurve">Elliptic curve.</param>
         /// <returns></returns>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(EllipticCurve ellipticCurve)
         {
             X9ECParameters x9Parameters = GenerateX9(ellipticCurve);

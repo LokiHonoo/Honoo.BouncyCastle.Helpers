@@ -2,7 +2,6 @@
 using Org.BouncyCastle.Crypto.Signers;
 using System;
 using System.Globalization;
-using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -17,28 +16,19 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ECNR.
         /// </summary>
         /// <param name="hashAlgorithm">Hash algorithm.</param>
-        public ECNR(IHashAlgorithm hashAlgorithm) : this(hashAlgorithm, AsymmetricAlgorithms.ECDSA)
-        {
-        }
-
-        /// <summary>
-        /// ECNR.
-        /// </summary>
-        /// <param name="hashAlgorithm">Hash algorithm.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
-        public ECNR(IHashAlgorithm hashAlgorithm, IAsymmetricAlgorithm asymmetricAlgorithm)
-            : base(string.Format(CultureInfo.InvariantCulture, "{0}withECNR", hashAlgorithm.Name), EnsureAlgorithm(asymmetricAlgorithm))
+        public ECNR(IHashAlgorithm hashAlgorithm)
+            : base(string.Format(CultureInfo.InvariantCulture, "{0}withECNR", hashAlgorithm.Name), AsymmetricAlgorithms.ECDSA)
         {
             _hashAlgorithm = hashAlgorithm ?? throw new ArgumentNullException(nameof(hashAlgorithm));
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate signer.
@@ -48,18 +38,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         {
             IDigest digest = _hashAlgorithm.GenerateDigest();
             return new DsaDigestSigner(new ECNRSigner(), digest);
-        }
-
-        private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
-        {
-            if (asymmetricAlgorithm.Name != "ECDSA")
-            {
-                throw new CryptographicException("Requires ECDSA asymmetric algorithm.");
-            }
-            else
-            {
-                return asymmetricAlgorithm;
-            }
         }
     }
 }

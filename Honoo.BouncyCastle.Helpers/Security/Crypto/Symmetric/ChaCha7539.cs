@@ -17,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ChaCha7539, ChaCha20.
@@ -27,7 +27,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate engine.

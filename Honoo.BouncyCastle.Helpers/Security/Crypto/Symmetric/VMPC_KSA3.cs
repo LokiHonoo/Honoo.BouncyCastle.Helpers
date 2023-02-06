@@ -17,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// VMPC-KSA3.
@@ -27,7 +27,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate engine.

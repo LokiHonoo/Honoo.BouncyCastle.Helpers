@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Threefish.
@@ -40,18 +40,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="blockSize">Block size bits.</param>
         /// <exception cref="Exception"/>
         public Threefish(int blockSize)
-            : base(string.Format(CultureInfo.InvariantCulture, "Threefish-{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, GetKeySizes(blockSize))
+            : base(string.Format(CultureInfo.InvariantCulture, "Threefish-{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, GetBlockSizes(blockSize))
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         internal override IBlockCipher GenerateEngine()
         {
             return new ThreefishEngine(base.BlockSize);
         }
 
-        private static KeySizes[] GetKeySizes(int blockSize)
+        private static KeySizes[] GetBlockSizes(int blockSize)
         {
             _keySizes.TryGetValue(blockSize, out KeySizes[] keySizes);
             return keySizes;

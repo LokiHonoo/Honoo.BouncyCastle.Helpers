@@ -18,47 +18,42 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #region Properties
 
         private readonly ECDHBasicAgreement _agreement;
-        private readonly byte[] _exchangeB;
+        private readonly byte[] _publicKey;
         private readonly AsymmetricKeyParameter _publicKeyA;
 
         /// <summary>
         /// Exchange this bytes to terminal Alice.
         /// </summary>
-        public byte[] ExchangeB => _exchangeB;
+        public byte[] PublicKey => _publicKey;
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ECDiffieHellman terminal Bob.
         /// </summary>
-        /// <param name="exchangeA">Terminal Alice's exchange.</param>
+        /// <param name="publicKeyA">Terminal Alice's public key.</param>
+        /// <param name="pA">Terminal Alice's P value.</param>
+        /// <param name="gA">Terminal Alice's G value.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ECDHTerminalB(byte[] exchangeA)
+        public ECDHTerminalB(byte[] publicKeyA, byte[] pA, byte[] gA)
         {
-            if (exchangeA == null)
+            if (publicKeyA == null)
             {
-                throw new ArgumentNullException(nameof(exchangeA));
+                throw new ArgumentNullException(nameof(publicKeyA));
             }
-            int index = 0;
-            int length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] publicKeyBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, publicKeyBytes, 0, length);
-            index += length;
-            length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] pBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, pBytes, 0, length);
-            index += length;
-            length = BitConverter.ToInt32(exchangeA, index);
-            index += 4;
-            byte[] gBytes = new byte[length];
-            Buffer.BlockCopy(exchangeA, index, gBytes, 0, length);
+            if (pA == null)
+            {
+                throw new ArgumentNullException(nameof(pA));
+            }
+            if (gA == null)
+            {
+                throw new ArgumentNullException(nameof(gA));
+            }
             //
-            AsymmetricKeyParameter publicKeyA = PublicKeyFactory.CreateKey(publicKeyBytes);
-            DHParameters parameters = new DHParameters(new BigInteger(pBytes), new BigInteger(gBytes));
+            AsymmetricKeyParameter publicKeyAlice = PublicKeyFactory.CreateKey(publicKeyA);
+            DHParameters parameters = new DHParameters(new BigInteger(pA), new BigInteger(gA));
             ECKeyPairGenerator generator = new ECKeyPairGenerator("ECDH");
             DHKeyGenerationParameters generationParameters = new DHKeyGenerationParameters(Common.SecureRandom, parameters);
             generator.Init(generationParameters);
@@ -67,13 +62,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             agreement.Init(keyPair.Private);
             //
             SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            //
+            _publicKey = publicKeyInfo.GetEncoded();
+            _publicKeyA = publicKeyAlice;
             _agreement = agreement;
-            _exchangeB = publicKeyInfo.GetEncoded();
-            _publicKeyA = publicKeyA;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Derive key material.
@@ -94,7 +88,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public bool Equals(ECDHTerminalB other)
         {
-            return _agreement.Equals(other._agreement) & _exchangeB.Equals(other._exchangeB);
+            return _agreement.Equals(other._agreement) & _publicKey.Equals(other._publicKey);
         }
 
         /// <summary>
@@ -113,7 +107,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return _agreement.GetHashCode() ^ _exchangeB.GetHashCode();
+            return _agreement.GetHashCode() ^ _publicKey.GetHashCode();
         }
     }
 }

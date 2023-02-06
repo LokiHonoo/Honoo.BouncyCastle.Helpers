@@ -1,8 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Utilities;
-using System;
-using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 {
@@ -17,7 +15,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Ed25519ctx.
@@ -32,22 +30,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         /// <para/>Uses context byte[0] by default.
         /// </summary>
         /// <param name="context">Context.</param>
-        public Ed25519ctx(byte[] context) : this(context, AsymmetricAlgorithms.Ed25519)
+        public Ed25519ctx(byte[] context) : base("Ed25519ctx", AsymmetricAlgorithms.Ed25519)
         {
+            _context = context ?? Arrays.EmptyBytes;
         }
 
-        /// <summary>
-        /// Ed25519ctx.
-        /// <para/>Uses context byte[0] by default.
-        /// </summary>
-        /// <param name="context">Context.</param>
-        /// <param name="asymmetricAlgorithm">Asymmetric algorithm.</param>
-        public Ed25519ctx(byte[] context, IAsymmetricAlgorithm asymmetricAlgorithm) : base("Ed25519ctx", EnsureAlgorithm(asymmetricAlgorithm))
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate signer.
@@ -56,18 +44,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         protected override ISigner GenerateSignerCore()
         {
             return new Ed25519ctxSigner(_context);
-        }
-
-        private static IAsymmetricAlgorithm EnsureAlgorithm(IAsymmetricAlgorithm asymmetricAlgorithm)
-        {
-            if (asymmetricAlgorithm.Name != "Ed25519")
-            {
-                throw new CryptographicException("Requires Ed25519 asymmetric algorithm.");
-            }
-            else
-            {
-                return asymmetricAlgorithm;
-            }
         }
     }
 }

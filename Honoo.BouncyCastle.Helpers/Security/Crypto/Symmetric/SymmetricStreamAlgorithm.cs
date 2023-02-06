@@ -1,6 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers.Utilities;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
 using System;
 using System.Security.Cryptography;
 
@@ -13,24 +12,24 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     {
         #region Properties
 
-        private readonly KeySizes[] _ivSizes;
-        private readonly KeySizes[] _keySizes;
+        private readonly KeySizes[] _legalIVSizes;
+        private readonly KeySizes[] _legalKeySizes;
 
         /// <summary>
         /// Gets legal IV size bits.
         /// </summary>
-        public KeySizes[] IVSizes
-        { get { return (KeySizes[])_ivSizes.Clone(); } }
+        public KeySizes[] LegalIVSizes
+        { get { return (KeySizes[])_legalIVSizes.Clone(); } }
 
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        public override KeySizes[] KeySizes
-        { get { return (KeySizes[])_keySizes.Clone(); } }
+        public override KeySizes[] LegalKeySizes
+        { get { return (KeySizes[])_legalKeySizes.Clone(); } }
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Symmetric stream algorithm.
@@ -41,11 +40,11 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="ivSizes">IV sizes.</param>
         protected SymmetricStreamAlgorithm(string name, SymmetricAlgorithmKind kind, KeySizes[] keySizes, KeySizes[] ivSizes) : base(name, kind)
         {
-            _keySizes = keySizes;
-            _ivSizes = ivSizes;
+            _legalKeySizes = keySizes;
+            _legalIVSizes = ivSizes;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate a new symmetric stream algorithm and decrypt data.
@@ -141,51 +140,13 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         }
 
         /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="key">Key bytes.</param>
-        /// <param name="iv">IV bytes.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public override ICipherParameters GenerateParameters(byte[] key, byte[] iv)
-        {
-            ICipherParameters parameters = new KeyParameter(key);
-            if (iv != null)
-            {
-                parameters = new ParametersWithIV(parameters, iv);
-            }
-            return parameters;
-        }
-
-        /// <summary>
-        /// Generate parameters.
-        /// </summary>
-        /// <param name="keyBuffer">Key buffer bytes.</param>
-        /// <param name="keyOffset">The starting offset to read.</param>
-        /// <param name="keyLength">The length to read.</param>
-        /// <param name="ivBuffer">IV buffer bytes.</param>
-        /// <param name="ivOffset">The starting offset to read.</param>
-        /// <param name="ivLength">The length to read.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"/>
-        public override ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength)
-        {
-            ICipherParameters parameters = new KeyParameter(keyBuffer, keyOffset, keyLength);
-            if (ivBuffer != null && ivLength > 0)
-            {
-                parameters = new ParametersWithIV(parameters, ivBuffer, ivOffset, ivLength);
-            }
-            return parameters;
-        }
-
-        /// <summary>
         /// Verify IV size.
         /// </summary>
         /// <param name="ivSize">IV size bits.</param>
         /// <returns></returns>
         public bool VerifyIVSize(int ivSize)
         {
-            return DetectionUtilities.ValidSize(_ivSizes, ivSize);
+            return DetectionUtilities.ValidSize(_legalIVSizes, ivSize);
         }
 
         /// <summary>
@@ -195,7 +156,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <returns></returns>
         public override bool VerifyKeySize(int keySize)
         {
-            return DetectionUtilities.ValidSize(_keySizes, keySize);
+            return DetectionUtilities.ValidSize(_legalKeySizes, keySize);
         }
 
         /// <summary>

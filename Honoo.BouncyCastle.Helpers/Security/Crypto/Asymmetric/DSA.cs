@@ -1,8 +1,9 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1.X9;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -10,19 +11,19 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// DSA.
     /// <para/>Legal key size 512-1024 bits (64 bits increments).
     /// </summary>
-    public sealed class DSA : AsymmetricSignatureAlgorithm
+    public sealed class DSA : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// DSA.
         /// <para/>Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
-        public DSA() : base("DSA", AsymmetricAlgorithmKind.Signature)
+        public DSA() : base("DSA", X9ObjectIdentifiers.IdDsa, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.
@@ -36,14 +37,33 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// Generate Asymmetric key pair.
+        /// <para/>Uses certainty 80 by default.
         /// </summary>
-        /// <param name="keySize">Key size bits.</param>
+        /// <param name="keySize">Key size bits.
+        /// <para/>Legal key size 512-1024 bits (64 bits increments).
+        /// </param>
+        /// <returns></returns>
+        /// <exception cref="Exception"/>
+        public AsymmetricCipherKeyPair GenerateKeyPair(int keySize)
+        {
+            return GenerateKeyPair(keySize, 80);
+        }
+
+        /// <summary>
+        /// Generate Asymmetric key pair.
+        /// </summary>
+        /// <param name="keySize">Key size bits.
+        /// <para/>Legal key size 512-1024 bits (64 bits increments).
+        /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int certainty)
         {
+            if (keySize < 512 || keySize > 1024 || keySize % 64 != 0)
+            {
+                throw new CryptographicException("Legal key size 512-1024 bits (64 bits increments).");
+            }
             DsaParametersGenerator parametersGenerator = new DsaParametersGenerator();
             parametersGenerator.Init(keySize, certainty, Common.SecureRandom);
             DsaParameters parameters = parametersGenerator.GenerateParameters();

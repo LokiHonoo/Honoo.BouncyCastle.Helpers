@@ -8,17 +8,27 @@ namespace Honoo.BouncyCastle.Helpers
     public interface IECDHTerminalA
     {
         /// <summary>
-        /// Exchange this bytes with terminal Bob.
+        /// Exchange this bytes to terminal Bob.
         /// </summary>
-        byte[] ExchangeA { get; }
+        byte[] G { get; }
+
+        /// <summary>
+        /// Exchange this bytes to terminal Bob.
+        /// </summary>
+        byte[] P { get; }
+
+        /// <summary>
+        /// Exchange this bytes to terminal Bob.
+        /// </summary>
+        byte[] PublicKey { get; }
 
         /// <summary>
         /// Derive key material from the terminal Bob's exchange.
         /// </summary>
-        /// <param name="exchangeB">The terminal Bob's exchange.</param>
+        /// <param name="publicKeyB">The terminal Bob's public key.</param>
         /// <param name="unsigned">Output unsigned bytes.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        byte[] DeriveKeyMaterial(byte[] exchangeB, bool unsigned);
+        byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsigned);
     }
 }

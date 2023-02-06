@@ -23,7 +23,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// BLAKE2b.
@@ -66,7 +66,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             _personalization = personalization;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate digest. The digest can be reused.

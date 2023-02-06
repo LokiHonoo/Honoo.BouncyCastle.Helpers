@@ -1,8 +1,8 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1.CryptoPro;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -10,19 +10,19 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// GOST3410.
     /// <para/>Legal key size 512, 1024 bits.
     /// </summary>
-    public sealed class GOST3410 : AsymmetricSignatureAlgorithm
+    public sealed class GOST3410 : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// GOST3410.
         /// <para/>Legal key size 512, 1024 bits.
         /// </summary>
-        public GOST3410() : base("GOST3410", AsymmetricAlgorithmKind.Signature)
+        public GOST3410() : base("GOST3410", CryptoProObjectIdentifiers.GostR3410x94, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.
@@ -41,7 +41,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <param name="procedure">Procedure.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public AsymmetricCipherKeyPair GenerateKeyPair(int keySize, int procedure)
         {
             Gost3410ParametersGenerator parametersGenerator = new Gost3410ParametersGenerator();

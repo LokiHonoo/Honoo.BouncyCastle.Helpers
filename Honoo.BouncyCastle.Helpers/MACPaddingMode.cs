@@ -16,7 +16,7 @@
         PKCS7,
 
         /// <summary>
-        /// Warning: If the end of the plaintext is 0x00, it will be removed.
+        /// Zeros padding mode. Warning: End will be removed if the end of the plaintext is 0x00.
         /// </summary>
         Zeros,
 

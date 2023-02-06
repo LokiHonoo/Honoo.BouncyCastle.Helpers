@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1.EdEC;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 
@@ -7,18 +8,18 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// Ed25519.
     /// </summary>
-    public sealed class Ed25519 : AsymmetricSignatureAlgorithm
+    public sealed class Ed25519 : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// Ed25519.
         /// </summary>
-        public Ed25519() : base("Ed25519", AsymmetricAlgorithmKind.Signature)
+        public Ed25519() : base("Ed25519", EdECObjectIdentifiers.id_Ed25519, AsymmetricAlgorithmKind.Signature)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair.

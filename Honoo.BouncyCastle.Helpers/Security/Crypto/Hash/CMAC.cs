@@ -34,8 +34,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
-        public KeySizes[] KeySizes
-        { get { return (KeySizes[])_blockAlgorithm.KeySizes.Clone(); } }
+        public KeySizes[] LegalKeySizes => _blockAlgorithm.LegalKeySizes;
 
         /// <summary>
         /// Gets mac size bits.
@@ -51,7 +50,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
 
         #endregion Properties
 
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// CMAC.
@@ -86,7 +85,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
             _hashSize = macSize;
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate a new digest and compute data hash.

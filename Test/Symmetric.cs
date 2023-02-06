@@ -10,12 +10,15 @@ namespace Test
 {
     internal static class Symmetric
     {
+        private static readonly byte[] _input = new byte[123];
         private static int _diff = 0;
         private static int _execute = 0;
         private static int _total = 0;
 
         internal static void Test()
         {
+            Utilities.Random.NextBytes(_input);
+            //
             _total = 0;
             _execute = 0;
             _diff = 0;
@@ -26,9 +29,12 @@ namespace Test
             Demo1();
             Demo2();
             Demo3();
-            ////
-            Test1();
-            Test2();
+            Console.WriteLine("\r\n\r\n");
+            //
+            Test1(false);
+            Test1(true);
+            Test2(false);
+            Test2(true);
             //
             Console.WriteLine("\r\n\r\n");
             Console.WriteLine("Total={0}  Ignore={1}  Diff={2}", _total, _total - _execute, _diff);
@@ -36,94 +42,60 @@ namespace Test
 
         private static void Demo1()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            byte[] key = new byte[128 / 8]; // AES key size
+            byte[] key = new byte[128 / 8];
             Utilities.Random.NextBytes(key);
-            byte[] iv = new byte[128 / 8]; // AES IV size
+            byte[] iv = new byte[128 / 8];
             Utilities.Random.NextBytes(iv);
             ICipherParameters parameters = SymmetricAlgorithms.AES.GenerateParameters(key, iv);
             // example 1
-            byte[] enc1 = SymmetricAlgorithms.AES.Encrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithms.AES.Decrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, enc1, 0, enc1.Length);
+            byte[] enc = SymmetricAlgorithms.AES.Encrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, _input, 0, _input.Length);
+            _ = SymmetricAlgorithms.AES.Decrypt(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters, enc, 0, enc.Length);
             // example 2
             IBufferedCipher encryptor = SymmetricAlgorithms.AES.GenerateEncryptor(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
             IBufferedCipher decryptor = SymmetricAlgorithms.AES.GenerateDecryptor(SymmetricCipherMode.CBC, SymmetricPaddingMode.PKCS7, parameters);
-            byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
-            _ = decryptor.DoFinal(enc2, 0, enc2.Length);
+            enc = encryptor.DoFinal(_input, 0, _input.Length);
+            _ = decryptor.DoFinal(enc, 0, enc.Length);
         }
 
         private static void Demo2()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            byte[] key = new byte[128 / 8]; // AES key size
+            byte[] key = new byte[128 / 8];
             Utilities.Random.NextBytes(key);
-            byte[] nonce = new byte[16 / 8]; // SymmetricAeadCipherMode.CCM legal
+            byte[] nonce = new byte[64 / 8]; // See SymmetricCipherMode.GCM summary
             Utilities.Random.NextBytes(nonce);
-            int macSize = 96; // SymmetricAeadCipherMode.CCM legal
+            int macSize = 96; // See SymmetricCipherMode.GCM summary
             ICipherParameters parameters = SymmetricAlgorithms.AES.GenerateParameters(key, nonce, macSize, null);
             // example 1
-            byte[] enc1 = SymmetricAlgorithms.AES.Encrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithms.AES.Decrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, enc1, 0, enc1.Length);
+            byte[] enc = SymmetricAlgorithms.AES.Encrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, _input, 0, _input.Length);
+            _ = SymmetricAlgorithms.AES.Decrypt(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters, enc, 0, enc.Length);
             // example 2
             IBufferedCipher encryptor = SymmetricAlgorithms.AES.GenerateEncryptor(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters);
             IBufferedCipher decryptor = SymmetricAlgorithms.AES.GenerateDecryptor(SymmetricCipherMode.GCM, SymmetricPaddingMode.NoPadding, parameters);
-            byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
+            byte[] enc2 = encryptor.DoFinal(_input, 0, _input.Length);
             _ = decryptor.DoFinal(enc2, 0, enc2.Length);
         }
 
         private static void Demo3()
         {
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
-            byte[] key = new byte[128 / 8]; // HC128 key size
+            byte[] key = new byte[128 / 8];
             Utilities.Random.NextBytes(key);
-            byte[] iv = new byte[128 / 8]; // HC128 IV size
+            byte[] iv = new byte[128 / 8];
             Utilities.Random.NextBytes(iv);
             ICipherParameters parameters = SymmetricAlgorithms.HC128.GenerateParameters(key, iv);
             // example 1
-            byte[] enc1 = SymmetricAlgorithms.HC128.Encrypt(parameters, test, 0, test.Length);
-            _ = SymmetricAlgorithms.HC128.Decrypt(parameters, enc1, 0, enc1.Length);
+            byte[] enc = SymmetricAlgorithms.HC128.Encrypt(parameters, _input, 0, _input.Length);
+            _ = SymmetricAlgorithms.HC128.Decrypt(parameters, enc, 0, enc.Length);
             // example 2
             IBufferedCipher encryptor = SymmetricAlgorithms.HC128.GenerateEncryptor(parameters);
             IBufferedCipher decryptor = SymmetricAlgorithms.HC128.GenerateDecryptor(parameters);
-            byte[] enc2 = encryptor.DoFinal(test, 0, test.Length);
+            byte[] enc2 = encryptor.DoFinal(_input, 0, _input.Length);
             _ = decryptor.DoFinal(enc2, 0, enc2.Length);
         }
 
-        private static int GetQualitySize(KeySizes[] sizes)
-        {
-            int size = sizes[0].MinSize;
-            int max = Math.Min(sizes[sizes.Length - 1].MaxSize, 256);
-            foreach (KeySizes item in sizes)
-            {
-                while (size < max)
-                {
-                    if (item.SkipSize == 0)
-                    {
-                        size = item.MinSize;
-                        break;
-                    }
-                    else if (size + item.SkipSize <= item.MaxSize)
-                    {
-                        size += item.SkipSize;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            return size;
-        }
-
-        private static void Test1()
+        private static void Test1(bool testMax)
         {
             Array modes1 = Enum.GetValues(typeof(SymmetricCipherMode));
             Array paddings = Enum.GetValues(typeof(SymmetricPaddingMode));
-            byte[] test = new byte[123];
-            Utilities.Random.NextBytes(test);
             //
             Type type = typeof(SymmetricAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
@@ -142,24 +114,23 @@ namespace Test
 
                             if (algorithm.TryGetIVSizes(mode, padding, out KeySizes[] ivSizes))
                             {
-                                int keySize = GetQualitySize(algorithm.KeySizes);
+                                int keySize = testMax ? Math.Min(algorithm.LegalKeySizes[0].MaxSize, 65536) : algorithm.LegalKeySizes[0].MinSize;
                                 byte[] key = new byte[keySize / 8];
                                 Utilities.Random.NextBytes(key);
-                                int ivSize = GetQualitySize(ivSizes);
+                                int ivSize = testMax ? Math.Min(ivSizes[0].MaxSize, 65536) : ivSizes[0].MinSize;
                                 byte[] iv = ivSize == 0 ? null : new byte[ivSize / 8];
                                 if (iv != null)
                                 {
                                     Utilities.Random.NextBytes(iv);
                                 }
                                 ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
-
                                 IBufferedCipher encryptor = algorithm.GenerateEncryptor(mode, padding, parameters);
                                 IBufferedCipher decryptor = algorithm.GenerateDecryptor(mode, padding, parameters);
                                 try
                                 {
                                     if (mode == SymmetricCipherMode.GCM)
                                     {
-                                        XTestGCM(mechanism, encryptor, decryptor, test);
+                                        XTestGCM(mechanism, encryptor, decryptor, _input);
                                     }
                                     else if (padding == SymmetricPaddingMode.NoPadding)
                                     {
@@ -169,7 +140,7 @@ namespace Test
                                     }
                                     else
                                     {
-                                        XTest(mechanism, encryptor, decryptor, test);
+                                        XTest(mechanism, encryptor, decryptor, _input);
                                     }
                                     _execute++;
                                 }
@@ -184,11 +155,8 @@ namespace Test
             }
         }
 
-        private static void Test2()
+        private static void Test2(bool testMax)
         {
-            byte[] test = new byte[37];
-            Utilities.Random.NextBytes(test);
-            //
             Type type = typeof(SymmetricAlgorithms);
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
             foreach (PropertyInfo property in properties)
@@ -196,10 +164,10 @@ namespace Test
                 if (property.GetValue(type, null) is ISymmetricStreamAlgorithm algorithm)
                 {
                     _total++;
-                    int keySize = GetQualitySize(algorithm.KeySizes);
+                    int keySize = testMax ? Math.Min(algorithm.LegalKeySizes[0].MaxSize, 65536) : algorithm.LegalKeySizes[0].MinSize;
                     byte[] key = new byte[keySize / 8];
                     Utilities.Random.NextBytes(key);
-                    int ivSize = GetQualitySize(algorithm.IVSizes);
+                    int ivSize = testMax ? Math.Min(algorithm.LegalIVSizes[0].MaxSize, 65536) : algorithm.LegalIVSizes[0].MinSize;
                     byte[] iv = ivSize == 0 ? null : new byte[ivSize / 8];
                     if (iv != null)
                     {
@@ -208,7 +176,7 @@ namespace Test
                     ICipherParameters parameters = algorithm.GenerateParameters(key, iv);
                     IBufferedCipher encryptor = algorithm.GenerateEncryptor(parameters);
                     IBufferedCipher decryptor = algorithm.GenerateDecryptor(parameters);
-                    XTest(algorithm.Name, encryptor, decryptor, test);
+                    XTest(algorithm.Name, encryptor, decryptor, _input);
                     _execute++;
                 }
             }

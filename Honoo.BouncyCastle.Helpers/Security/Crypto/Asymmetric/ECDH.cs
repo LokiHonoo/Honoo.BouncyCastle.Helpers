@@ -1,6 +1,6 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Asn1.Eac;
+using Org.BouncyCastle.Crypto;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
@@ -9,16 +9,16 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// </summary>
     public sealed class ECDH : AsymmetricAlgorithm
     {
-        #region Constructor
+        #region Construction
 
         /// <summary>
         /// ECDiffieHellman.
         /// </summary>
-        public ECDH() : base("ECDH", AsymmetricAlgorithmKind.KeyExchange)
+        public ECDH() : base("ECDH", EacObjectIdentifiers.id_CA_ECDH, AsymmetricAlgorithmKind.KeyExchange)
         {
         }
 
-        #endregion Constructor
+        #endregion Construction
 
         /// <summary>
         /// Generate Asymmetric key pair. Allways throw <see cref="NotImplementedException"/>.
@@ -32,20 +32,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 
         /// <summary>
         /// Generate ECDH terminal Alice.
-        /// <para/>Uses key size 256 bits, certainty 20 by default.
-        /// </summary>
-        /// <returns></returns>
-        public IECDHTerminalA GenerateTerminalA()
-        {
-            return GenerateTerminalA(256, 20);
-        }
-
-        /// <summary>
-        /// Generate ECDH terminal Alice.
         /// <para/>Uses certainty 20 by default.
         /// </summary>
-        /// <param name="keySize">Key size bits.
-        /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
+        /// <param name="keySize">Key size.
+        /// <para/>Legal key size Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <returns></returns>
         public IECDHTerminalA GenerateTerminalA(int keySize)
@@ -56,12 +46,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate ECDH terminal Alice.
         /// </summary>
-        /// <param name="keySize">Key size bits.
-        /// <para/>Can be Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
+        /// <param name="keySize">Key size.
+        /// <para/>Legal key size Prime192v1, SecP224r1, Prime239v1, Prime256v1, SecP384r1, SecP521r1.
         /// </param>
         /// <param name="certainty">Certainty.</param>
         /// <returns></returns>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
+        /// <exception cref="Exception"/>
         public IECDHTerminalA GenerateTerminalA(int keySize, int certainty)
         {
             return new ECDHTerminalA(keySize, certainty);
@@ -70,13 +60,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate ECDH terminal Bob.
         /// </summary>
-        /// <param name="exchangeA">Terminal Alice's exchange.</param>
+        /// <param name="publicKeyA">Terminal Alice's public key.</param>
+        /// <param name="pA">Terminal Alice's P value.</param>
+        /// <param name="gA">Terminal Alice's G value.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        [SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
-        public IECDHTerminalB GenerateTerminalB(byte[] exchangeA)
+        public IECDHTerminalB GenerateTerminalB(byte[] publicKeyA, byte[] pA, byte[] gA)
         {
-            return new ECDHTerminalB(exchangeA);
+            return new ECDHTerminalB(publicKeyA, pA, gA);
         }
     }
 }
