@@ -13,7 +13,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDiffieHellman terminal Bob.
     /// </summary>
-    public sealed class ECDHTerminalB : IEquatable<ECDHTerminalB>, IECDHTerminalB
+    public sealed class ECDHTerminalB : IECDHTerminalB
     {
         #region Properties
 
@@ -79,35 +79,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         {
             BigInteger integer = _agreement.CalculateAgreement(_publicKeyA);
             return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(ECDHTerminalB other)
-        {
-            return _agreement.Equals(other._agreement) & _publicKey.Equals(other._publicKey);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((ECDHTerminalB)obj);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _agreement.GetHashCode() ^ _publicKey.GetHashCode();
         }
     }
 }

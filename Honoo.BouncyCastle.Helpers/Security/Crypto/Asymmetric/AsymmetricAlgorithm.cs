@@ -1,13 +1,12 @@
 ﻿using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Crypto;
-using System;
 
 namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
 {
     /// <summary>
     /// Asymmetric algorithm.
     /// </summary>
-    public abstract class AsymmetricAlgorithm : IEquatable<AsymmetricAlgorithm>, IAsymmetricAlgorithm
+    public abstract class AsymmetricAlgorithm : IAsymmetricAlgorithm
     {
         #region Properties
 
@@ -52,47 +51,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         #endregion Construction
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(AsymmetricAlgorithm other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((AsymmetricAlgorithm)obj);
-        }
-
-        /// <summary>
         /// Generate key pair by default settings. Cast to algorithm class to replacement parameters.
         /// </summary>
         /// <returns></returns>
         public abstract AsymmetricCipherKeyPair GenerateKeyPair();
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
-        }
     }
 }

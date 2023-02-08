@@ -15,7 +15,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
     /// <summary>
     /// Signature algorithm.
     /// </summary>
-    public abstract class SignatureAlgorithm : IEquatable<SignatureAlgorithm>, ISignatureAlgorithm
+    public abstract class SignatureAlgorithm : ISignatureAlgorithm
     {
         #region Properties
 
@@ -55,26 +55,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         }
 
         #endregion Construction
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(SignatureAlgorithm other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((SignatureAlgorithm)obj);
-        }
 
         /// <summary>
         /// Generate signer. The signer can be reused.
@@ -119,15 +99,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
         }
 
         /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
         /// Generate a new signature algorithm and sign data.
         /// </summary>
         /// <param name="privateKey">Asymmetric private key.</param>
@@ -165,15 +136,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Signature
             ISigner signer = GenerateSigner(privateKey);
             signer.BlockUpdate(dataBuffer, offset, length);
             return signer.GenerateSignature();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
         }
 
         /// <summary>

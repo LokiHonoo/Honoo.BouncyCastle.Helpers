@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
     /// <summary>
     /// ECDiffieHellman terminal Alice.
     /// </summary>
-    public sealed class ECDHTerminalA : IEquatable<ECDHTerminalA>, IECDHTerminalA
+    public sealed class ECDHTerminalA : IECDHTerminalA
     {
         #region Properties
 
@@ -104,39 +104,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             AsymmetricKeyParameter publicKeyBob = PublicKeyFactory.CreateKey(publicKeyB);
             BigInteger integer = _agreement.CalculateAgreement(publicKeyBob);
             return unsigned ? integer.ToByteArrayUnsigned() : integer.ToByteArray();
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(ECDHTerminalA other)
-        {
-            return _agreement.Equals(
-                other._agreement)
-                & _p.Equals(other._p)
-                & _g.Equals(other._g)
-                & _publicKey.Equals(other._publicKey);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((ECDHTerminalA)obj);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _agreement.GetHashCode() ^ _p.GetHashCode() ^ _g.GetHashCode() ^ _publicKey.GetHashCode();
         }
     }
 }

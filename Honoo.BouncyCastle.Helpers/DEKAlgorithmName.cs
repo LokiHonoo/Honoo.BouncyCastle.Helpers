@@ -7,7 +7,7 @@ namespace Honoo.BouncyCastle.Helpers
     /// </summary>
     public sealed class DEKAlgorithmName : IEquatable<DEKAlgorithmName>
     {
-        #region Static properties
+        #region AlgorithmNames
 
         /// <summary></summary>
         public static DEKAlgorithmName AES_128_CBC { get; } = new DEKAlgorithmName("AES-128-CBC");
@@ -46,16 +46,16 @@ namespace Honoo.BouncyCastle.Helpers
         public static DEKAlgorithmName AES_256_OFB { get; } = new DEKAlgorithmName("AES-256-OFB");
 
         /// <summary></summary>
-        public static DEKAlgorithmName BLOWFISH_CBC { get; } = new DEKAlgorithmName("BLOWFISH-CBC");
+        public static DEKAlgorithmName BLOWFISH_CBC { get; } = new DEKAlgorithmName("BF-CBC");
 
         /// <summary></summary>
-        public static DEKAlgorithmName BLOWFISH_CFB { get; } = new DEKAlgorithmName("BLOWFISH-CFB");
+        public static DEKAlgorithmName BLOWFISH_CFB { get; } = new DEKAlgorithmName("BF-CFB");
 
         /// <summary></summary>
-        public static DEKAlgorithmName BLOWFISH_ECB { get; } = new DEKAlgorithmName("BLOWFISH-ECB");
+        public static DEKAlgorithmName BLOWFISH_ECB { get; } = new DEKAlgorithmName("BF-ECB");
 
         /// <summary></summary>
-        public static DEKAlgorithmName BLOWFISH_OFB { get; } = new DEKAlgorithmName("BLOWFISH-OFB");
+        public static DEKAlgorithmName BLOWFISH_OFB { get; } = new DEKAlgorithmName("BF-OFB");
 
         /// <summary></summary>
         public static DEKAlgorithmName DES_CBC { get; } = new DEKAlgorithmName("DES-CBC");
@@ -129,14 +129,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary></summary>
         public static DEKAlgorithmName RC2_OFB { get; } = new DEKAlgorithmName("RC2-OFB");
 
-        #endregion Static properties
+        #endregion AlgorithmNames
 
         #region Properties
 
         private readonly string _name;
 
         /// <summary>
-        /// DEK algorithm name.
+        /// Gets this DEK algorithm's name.
         /// </summary>
         public string Name => _name;
 
@@ -152,38 +152,6 @@ namespace Honoo.BouncyCastle.Helpers
         #endregion Construction
 
         /// <summary>
-        /// Determines whether two specified object have different value.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator !=(DEKAlgorithmName left, DEKAlgorithmName right)
-        {
-            return !(left == right);
-        }
-
-        /// <summary>
-        /// Determines whether two specified object have the same value.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator ==(DEKAlgorithmName left, DEKAlgorithmName right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Determines whether the specified System.Object is equal to the current System.Object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return obj is DEKAlgorithmName name && Equals(name);
-        }
-
-        /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="other"></param>
@@ -191,15 +159,6 @@ namespace Honoo.BouncyCastle.Helpers
         public bool Equals(DEKAlgorithmName other)
         {
             return _name == other._name;
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
         }
 
         /// <summary>

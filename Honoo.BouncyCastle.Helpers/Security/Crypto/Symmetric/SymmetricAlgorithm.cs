@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
     /// <summary>
     /// Symmetric algorithm.
     /// </summary>
-    public abstract class SymmetricAlgorithm : IEquatable<SymmetricAlgorithm>, ISymmetricAlgorithm
+    public abstract class SymmetricAlgorithm : ISymmetricAlgorithm
     {
         #region Properties
 
@@ -52,20 +52,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(SymmetricAlgorithm other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((SymmetricAlgorithm)obj);
-        }
 
         /// <summary>
         /// Generate parameters.
@@ -103,24 +89,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
                 parameters = new ParametersWithIV(parameters, ivBuffer, ivOffset, ivLength);
             }
             return parameters;
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
         }
 
         /// <summary>

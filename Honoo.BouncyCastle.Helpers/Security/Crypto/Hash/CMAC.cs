@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     /// <para/>Legal mac size is between 8 and block size (8 bits increments).
     /// <para/>Used block size as mac size by default.
     /// </summary>
-    public sealed class CMAC : IEquatable<CMAC>, ICMAC
+    public sealed class CMAC : ICMAC
     {
         #region Properties
 
@@ -127,26 +127,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(CMAC other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((CMAC)obj);
-        }
-
-        /// <summary>
         /// Generate digest. The digest can be reused.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
@@ -181,24 +161,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public ICipherParameters GenerateParameters(byte[] keyBuffer, int offset, int length)
         {
             return _blockAlgorithm.GenerateParameters(keyBuffer, offset, length, null, 0, 0);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
         }
 
         /// <summary>

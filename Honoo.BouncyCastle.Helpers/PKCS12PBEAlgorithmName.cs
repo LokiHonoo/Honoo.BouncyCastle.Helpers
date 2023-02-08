@@ -59,38 +59,6 @@ namespace Honoo.BouncyCastle.Helpers
         #endregion Construction
 
         /// <summary>
-        /// Determines whether two specified object have different value.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator !=(PKCS12PBEAlgorithmName left, PKCS12PBEAlgorithmName right)
-        {
-            return !(left == right);
-        }
-
-        /// <summary>
-        /// Determines whether two specified object have the same value.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator ==(PKCS12PBEAlgorithmName left, PKCS12PBEAlgorithmName right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Determines whether the specified System.Object is equal to the current System.Object.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return obj is PKCS12PBEAlgorithmName name && Equals(name);
-        }
-
-        /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <param name="other"></param>
@@ -98,15 +66,6 @@ namespace Honoo.BouncyCastle.Helpers
         public bool Equals(PKCS12PBEAlgorithmName other)
         {
             return _name == other._name;
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
         }
 
         /// <summary>

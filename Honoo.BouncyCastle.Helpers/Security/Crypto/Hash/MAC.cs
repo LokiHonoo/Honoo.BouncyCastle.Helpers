@@ -15,7 +15,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     /// <para/>Legal mac size must be at least 24 bits (FIPS Publication 81) or 16 bits if being used as a data authenticator (FIPS Publication 113).
     /// <para/>Used (block size / 2) as mac size by default.
     /// </summary>
-    public sealed class MAC : IEquatable<MAC>, IMAC
+    public sealed class MAC : IMAC
     {
         #region Properties
 
@@ -129,26 +129,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(MAC other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((MAC)obj);
-        }
-
-        /// <summary>
         /// Generate digest. The digest can be reused.
         /// </summary>
         /// <param name="mode">MAC cipher mode.</param>
@@ -215,24 +195,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public ICipherParameters GenerateParameters(byte[] keyBuffer, int keyOffset, int keyLength, byte[] ivBuffer, int ivOffset, int ivLength)
         {
             return _blockAlgorithm.GenerateParameters(keyBuffer, keyOffset, keyLength, ivBuffer, ivOffset, ivLength);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     /// <summary>
     /// HMAC.
     /// </summary>
-    public sealed class HMAC : IEquatable<HMAC>, IHMAC
+    public sealed class HMAC : IHMAC
     {
         #region Properties
 
@@ -79,26 +79,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(HMAC other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((HMAC)obj);
-        }
-
-        /// <summary>
         /// Generate digest. The digest can be reused.
         /// </summary>
         /// <param name="parameters">Parameters.</param>
@@ -133,24 +113,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         public ICipherParameters GenerateParameters(byte[] keyBuffer, int offset, int length)
         {
             return new KeyParameter(keyBuffer, offset, length);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
         }
 
         /// <summary>

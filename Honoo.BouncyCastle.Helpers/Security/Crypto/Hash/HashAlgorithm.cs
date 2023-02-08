@@ -8,7 +8,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
     /// <summary>
     /// Hash algorithm.
     /// </summary>
-    public abstract class HashAlgorithm : IEquatable<HashAlgorithm>, IHashAlgorithm
+    public abstract class HashAlgorithm : IHashAlgorithm
     {
         #region Properties
 
@@ -81,47 +81,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         }
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(HashAlgorithm other)
-        {
-            return _name.Equals(other._name);
-        }
-
-        /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
-        {
-            return Equals((HashAlgorithm)obj);
-        }
-
-        /// <summary>
         /// Generate digest. The digest can be reused.
         /// </summary>
         /// <returns></returns>
         public abstract IDigest GenerateDigest();
-
-        /// <summary>
-        /// Returns the hash code for this object.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return _name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Return algorithm name.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return _name;
-        }
     }
 }
