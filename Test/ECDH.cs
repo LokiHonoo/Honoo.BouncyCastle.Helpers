@@ -29,7 +29,7 @@ namespace Test
             //
             // Bob work.
             //
-            IECDHTerminalB terminalB = AsymmetricAlgorithms.ECDH.GenerateTerminalB(publicKeyA, pA, gA);
+            IECDHTerminalB terminalB = AsymmetricAlgorithms.ECDH.GenerateTerminalB(pA, gA, publicKeyA);
             byte[] pmsB = terminalB.DeriveKeyMaterial(true);
             // Send to Alice.
             byte[] publicKeyB = terminalB.PublicKey;

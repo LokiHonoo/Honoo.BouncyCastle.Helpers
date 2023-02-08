@@ -78,10 +78,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             ECDHBasicAgreement agreement = new ECDHBasicAgreement();
             agreement.Init(keyPair.Private);
             //
-            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            _publicKey = publicKeyInfo.GetEncoded();
             _p = parameters.P.ToByteArray();
             _g = parameters.G.ToByteArray();
+            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
+            _publicKey = publicKeyInfo.GetEncoded();
             //
             _agreement = agreement;
         }
@@ -115,9 +115,9 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         {
             return _agreement.Equals(
                 other._agreement)
-                & _publicKey.Equals(other._publicKey)
                 & _p.Equals(other._p)
-                & _g.Equals(other._g);
+                & _g.Equals(other._g)
+                & _publicKey.Equals(other._publicKey);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return _agreement.GetHashCode() ^ _publicKey.GetHashCode() ^ _p.GetHashCode() ^ _g.GetHashCode();
+            return _agreement.GetHashCode() ^ _p.GetHashCode() ^ _g.GetHashCode() ^ _publicKey.GetHashCode();
         }
     }
 }

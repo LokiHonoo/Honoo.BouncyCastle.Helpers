@@ -33,16 +33,12 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// ECDiffieHellman terminal Bob.
         /// </summary>
-        /// <param name="publicKeyA">Terminal Alice's public key.</param>
         /// <param name="pA">Terminal Alice's P value.</param>
         /// <param name="gA">Terminal Alice's G value.</param>
+        /// <param name="publicKeyA">Terminal Alice's public key.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ECDHTerminalB(byte[] publicKeyA, byte[] pA, byte[] gA)
+        public ECDHTerminalB(byte[] pA, byte[] gA, byte[] publicKeyA)
         {
-            if (publicKeyA == null)
-            {
-                throw new ArgumentNullException(nameof(publicKeyA));
-            }
             if (pA == null)
             {
                 throw new ArgumentNullException(nameof(pA));
@@ -50,6 +46,10 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
             if (gA == null)
             {
                 throw new ArgumentNullException(nameof(gA));
+            }
+            if (publicKeyA == null)
+            {
+                throw new ArgumentNullException(nameof(publicKeyA));
             }
             //
             AsymmetricKeyParameter publicKeyAlice = PublicKeyFactory.CreateKey(publicKeyA);

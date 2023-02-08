@@ -60,14 +60,14 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
         /// <summary>
         /// Generate ECDH terminal Bob.
         /// </summary>
-        /// <param name="publicKeyA">Terminal Alice's public key.</param>
         /// <param name="pA">Terminal Alice's P value.</param>
         /// <param name="gA">Terminal Alice's G value.</param>
+        /// <param name="publicKeyA">Terminal Alice's public key.</param>
         /// <returns></returns>
         /// <exception cref="Exception"/>
-        public IECDHTerminalB GenerateTerminalB(byte[] publicKeyA, byte[] pA, byte[] gA)
+        public IECDHTerminalB GenerateTerminalB(byte[] pA, byte[] gA, byte[] publicKeyA)
         {
-            return new ECDHTerminalB(publicKeyA, pA, gA);
+            return new ECDHTerminalB(pA, gA, publicKeyA);
         }
     }
 }
