@@ -71,11 +71,11 @@ namespace Test
             // example 2
             IAsymmetricBlockCipher encryptor = AsymmetricAlgorithms.RSA.GenerateEncryptor(AsymmetricPaddingMode.OAEP,
                                                                                           HashAlgorithms.RIPEMD160,
-                                                                                          HashAlgorithms.SHAKE_256,
+                                                                                          HashAlgorithms.SHAKE256_512,
                                                                                           keyPair.Public);
             IAsymmetricBlockCipher decryptor = AsymmetricAlgorithms.RSA.GenerateDecryptor(AsymmetricPaddingMode.OAEP,
                                                                                           HashAlgorithms.RIPEMD160,
-                                                                                          HashAlgorithms.SHAKE_256,
+                                                                                          HashAlgorithms.SHAKE256_512,
                                                                                           keyPair.Private);
             enc = encryptor.ProcessBlock(_input, 0, _input.Length);
             _ = decryptor.ProcessBlock(enc, 0, enc.Length);

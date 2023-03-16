@@ -34,7 +34,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// </summary>
         /// <param name="hashSize">Hash size bits.</param>
         /// <exception cref="Exception"/>
-        public Keccak(int hashSize) : base(string.Format(CultureInfo.InvariantCulture, "Keccak-{0}", hashSize), _hashSizes, hashSize)
+        public Keccak(int hashSize) : base(string.Format(CultureInfo.InvariantCulture, "Keccak{0}", hashSize), _hashSizes, hashSize)
         {
         }
 

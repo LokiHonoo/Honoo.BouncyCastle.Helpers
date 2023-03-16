@@ -45,24 +45,24 @@ namespace Honoo.BouncyCastle.Helpers
             }
             switch (mechanism)
             {
-                case "BLAKE2B-256": algorithm = HMACAlgorithms.BLAKE2b_256_HMAC; return true;
-                case "BLAKE2B-384": algorithm = HMACAlgorithms.BLAKE2b_384_HMAC; return true;
-                case "BLAKE2B-512": algorithm = HMACAlgorithms.BLAKE2b_512_HMAC; return true;
-                case "BLAKE2S-256": algorithm = HMACAlgorithms.BLAKE2s_256_HMAC; return true;
-                case "CSHAKE128": case "CSHAKE-128": algorithm = HMACAlgorithms.CSHAKE_128_HMAC; return true;
-                case "CSHAKE256": case "CSHAKE-256": algorithm = HMACAlgorithms.CSHAKE_256_HMAC; return true;
+                case "BLAKE2B-256": algorithm = HMACAlgorithms.BLAKE2b256_HMAC; return true;
+                case "BLAKE2B-384": algorithm = HMACAlgorithms.BLAKE2b384_HMAC; return true;
+                case "BLAKE2B-512": algorithm = HMACAlgorithms.BLAKE2b512_HMAC; return true;
+                case "BLAKE2S-256": algorithm = HMACAlgorithms.BLAKE2s256_HMAC; return true;
+                case "CSHAKE128": case "CSHAKE-128": algorithm = HMACAlgorithms.CSHAKE128_256_HMAC; return true;
+                case "CSHAKE256": case "CSHAKE-256": algorithm = HMACAlgorithms.CSHAKE256_512_HMAC; return true;
                 case "DSTU7564-256": algorithm = HMACAlgorithms.DSTU7564_256_HMAC; return true;
                 case "DSTU7564-384": algorithm = HMACAlgorithms.DSTU7564_384_HMAC; return true;
                 case "DSTU7564-512": algorithm = HMACAlgorithms.DSTU7564_512_HMAC; return true;
                 case "GOST3411": algorithm = HMACAlgorithms.GOST3411_HMAC; return true;
                 case "GOST3411-2012-256": algorithm = HMACAlgorithms.GOST3411_2012_256_HMAC; return true;
                 case "GOST3411-2012-512": algorithm = HMACAlgorithms.GOST3411_2012_512_HMAC; return true;
-                case "KECCAK-128": case "KECCAK128": algorithm = HMACAlgorithms.Keccak_128_HMAC; return true;
-                case "KECCAK-224": case "KECCAK224": algorithm = HMACAlgorithms.Keccak_224_HMAC; return true;
-                case "KECCAK-256": case "KECCAK256": algorithm = HMACAlgorithms.Keccak_256_HMAC; return true;
-                case "KECCAK-288": case "KECCAK288": algorithm = HMACAlgorithms.Keccak_288_HMAC; return true;
-                case "KECCAK-384": case "KECCAK384": algorithm = HMACAlgorithms.Keccak_384_HMAC; return true;
-                case "KECCAK-512": case "KECCAK512": algorithm = HMACAlgorithms.Keccak_512_HMAC; return true;
+                case "KECCAK-128": case "KECCAK128": algorithm = HMACAlgorithms.Keccak128_HMAC; return true;
+                case "KECCAK-224": case "KECCAK224": algorithm = HMACAlgorithms.Keccak224_HMAC; return true;
+                case "KECCAK-256": case "KECCAK256": algorithm = HMACAlgorithms.Keccak256_HMAC; return true;
+                case "KECCAK-288": case "KECCAK288": algorithm = HMACAlgorithms.Keccak288_HMAC; return true;
+                case "KECCAK-384": case "KECCAK384": algorithm = HMACAlgorithms.Keccak384_HMAC; return true;
+                case "KECCAK-512": case "KECCAK512": algorithm = HMACAlgorithms.Keccak512_HMAC; return true;
                 case "MD2": algorithm = HMACAlgorithms.MD2_HMAC; return true;
                 case "MD4": algorithm = HMACAlgorithms.MD4_HMAC; return true;
                 case "MD5": algorithm = HMACAlgorithms.MD5_HMAC; return true;
@@ -81,11 +81,11 @@ namespace Honoo.BouncyCastle.Helpers
                 case "SHA3-256": case "SHA-3-256": algorithm = HMACAlgorithms.SHA3_256_HMAC; return true;
                 case "SHA3-384": case "SHA-3-384": algorithm = HMACAlgorithms.SHA3_384_HMAC; return true;
                 case "SHA3-512": case "SHA-3-512": algorithm = HMACAlgorithms.SHA3_512_HMAC; return true;
-                case "SHAKE128": case "SHAKE-128": algorithm = HMACAlgorithms.SHAKE_128_HMAC; return true;
-                case "SHAKE256": case "SHAKE-256": algorithm = HMACAlgorithms.SHAKE_256_HMAC; return true;
-                case "SKEIN-256-256": algorithm = HMACAlgorithms.Skein_256_256_HMAC; return true;
-                case "SKEIN-512-512": algorithm = HMACAlgorithms.Skein_512_512_HMAC; return true;
-                case "SKEIN-1024-1024": algorithm = HMACAlgorithms.Skein_1024_1024_HMAC; return true;
+                case "SHAKE128": case "SHAKE-128": algorithm = HMACAlgorithms.SHAKE128_256_HMAC; return true;
+                case "SHAKE256": case "SHAKE-256": algorithm = HMACAlgorithms.SHAKE256_512_HMAC; return true;
+                case "SKEIN-256-256": algorithm = HMACAlgorithms.Skein256_256_HMAC; return true;
+                case "SKEIN-512-512": algorithm = HMACAlgorithms.Skein512_512_HMAC; return true;
+                case "SKEIN-1024-1024": algorithm = HMACAlgorithms.Skein1024_1024_HMAC; return true;
                 case "SM3": algorithm = HMACAlgorithms.SM3_HMAC; return true;
                 case "TIGER": algorithm = HMACAlgorithms.Tiger_HMAC; return true;
                 case "WHIRLPOOL": algorithm = HMACAlgorithms.Whirlpool_HMAC; return true;

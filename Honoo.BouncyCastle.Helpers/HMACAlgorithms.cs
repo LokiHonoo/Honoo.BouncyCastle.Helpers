@@ -10,32 +10,32 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC BLAKE2b_256_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b_256);
+        public static IHMAC BLAKE2b256_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b256);
 
         /// <summary>
         /// Hash size 384 bits.
         /// </summary>
-        public static IHMAC BLAKE2b_384_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b_384);
+        public static IHMAC BLAKE2b384_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b384);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHMAC BLAKE2b_512_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b_512);
+        public static IHMAC BLAKE2b512_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2b512);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC BLAKE2s_256_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2s_256);
-
-        /// <summary>
-        /// Hash size 128 bits.
-        /// </summary>
-        public static IHMAC CSHAKE_128_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE_128);
+        public static IHMAC BLAKE2s256_HMAC { get; } = new HMAC(HashAlgorithms.BLAKE2s256);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC CSHAKE_256_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE_256);
+        public static IHMAC CSHAKE128_256_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE128_256);
+
+        /// <summary>
+        /// Hash size 512 bits.
+        /// </summary>
+        public static IHMAC CSHAKE256_512_HMAC { get; } = new HMAC(HashAlgorithms.CSHAKE256_512);
 
         /// <summary>
         /// Hash size 256 bits.
@@ -71,32 +71,32 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 128 bits.
         /// </summary>
-        public static IHMAC Keccak_128_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_128);
+        public static IHMAC Keccak128_HMAC { get; } = new HMAC(HashAlgorithms.Keccak128);
 
         /// <summary>
         /// Hash size 224 bits.
         /// </summary>
-        public static IHMAC Keccak_224_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_224);
+        public static IHMAC Keccak224_HMAC { get; } = new HMAC(HashAlgorithms.Keccak224);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC Keccak_256_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_256);
+        public static IHMAC Keccak256_HMAC { get; } = new HMAC(HashAlgorithms.Keccak256);
 
         /// <summary>
         /// Hash size 288 bits.
         /// </summary>
-        public static IHMAC Keccak_288_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_288);
+        public static IHMAC Keccak288_HMAC { get; } = new HMAC(HashAlgorithms.Keccak288);
 
         /// <summary>
         /// Hash size 384 bits.
         /// </summary>
-        public static IHMAC Keccak_384_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_384);
+        public static IHMAC Keccak384_HMAC { get; } = new HMAC(HashAlgorithms.Keccak384);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHMAC Keccak_512_HMAC { get; } = new HMAC(HashAlgorithms.Keccak_512);
+        public static IHMAC Keccak512_HMAC { get; } = new HMAC(HashAlgorithms.Keccak512);
 
         /// <summary>
         /// Hash size 128 bits.
@@ -189,29 +189,29 @@ namespace Honoo.BouncyCastle.Helpers
         public static IHMAC SHA512_HMAC { get; } = new HMAC(HashAlgorithms.SHA512);
 
         /// <summary>
-        /// Hash size 128 bits.
-        /// </summary>
-        public static IHMAC SHAKE_128_HMAC { get; } = new HMAC(HashAlgorithms.SHAKE_128);
-
-        /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC SHAKE_256_HMAC { get; } = new HMAC(HashAlgorithms.SHAKE_256);
+        public static IHMAC SHAKE128_256_HMAC { get; } = new HMAC(HashAlgorithms.SHAKE128_256);
+
+        /// <summary>
+        /// Hash size 512 bits.
+        /// </summary> 
+        public static IHMAC SHAKE256_512_HMAC { get; } = new HMAC(HashAlgorithms.SHAKE256_512);
 
         /// <summary>
         /// Hash size 1024 bits.
         /// </summary>
-        public static IHMAC Skein_1024_1024_HMAC { get; } = new HMAC(HashAlgorithms.Skein_1024_1024);
+        public static IHMAC Skein1024_1024_HMAC { get; } = new HMAC(HashAlgorithms.Skein1024_1024);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHMAC Skein_256_256_HMAC { get; } = new HMAC(HashAlgorithms.Skein_256_256);
+        public static IHMAC Skein256_256_HMAC { get; } = new HMAC(HashAlgorithms.Skein256_256);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHMAC Skein_512_512_HMAC { get; } = new HMAC(HashAlgorithms.Skein_512_512);
+        public static IHMAC Skein512_512_HMAC { get; } = new HMAC(HashAlgorithms.Skein512_512);
 
         /// <summary>
         /// Hash size 256 bits.

@@ -11,9 +11,9 @@ namespace Test
 {
     internal static class Hash
     {
+        private static readonly byte[] _input = new byte[123];
         private static int _diff = 0;
         private static int _execute = 0;
-        private static readonly byte[] _input = new byte[123];
         private static int _total = 0;
 
         internal static void Test()
@@ -114,7 +114,7 @@ namespace Test
             }
             //
             List<string> names = new List<string>();
-            names.AddRange(new string[] { "BLAKE2b-88", "SHA-512/368", "SHA512/368", "Skein-256-48" });
+            names.AddRange(new string[] { "BLAKE2b-88", "SHA-512/368", "SHA512/368", "Skein-256-512" });
             foreach (string name in names)
             {
                 _total++;

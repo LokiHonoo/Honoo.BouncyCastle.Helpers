@@ -67,7 +67,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         {
             switch (sBox)
             {
-                case Gost28147SBox.Default: return null;
+                case Gost28147SBox.Default: return Gost28147Engine.GetSBox("Default");
                 case Gost28147SBox.D_Test: return Gost28147Engine.GetSBox("D-Test");
                 case Gost28147SBox.D_A: return Gost28147Engine.GetSBox("D-A");
                 case Gost28147SBox.E_Test: return Gost28147Engine.GetSBox("E-Test");

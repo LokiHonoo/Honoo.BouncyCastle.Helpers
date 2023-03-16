@@ -48,7 +48,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="personalization">Personalization bytes.</param>
         /// <exception cref="Exception"/>
         public BLAKE2s(int hashSize, byte[] key, byte[] salt, byte[] personalization)
-            : base(string.Format(CultureInfo.InvariantCulture, "BLAKE2s-{0}", hashSize), _hashSizes, hashSize)
+            : base(string.Format(CultureInfo.InvariantCulture, "BLAKE2s{0}", hashSize), _hashSizes, hashSize)
         {
             if (key != null && key.Length != 32)
             {

@@ -10,34 +10,32 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHashAlgorithm BLAKE2b_256 { get; } = new BLAKE2b(256);
+        public static IHashAlgorithm BLAKE2b256 { get; } = new BLAKE2b(256);
 
         /// <summary>
         /// Hash size 384 bits.
         /// </summary>
-        public static IHashAlgorithm BLAKE2b_384 { get; } = new BLAKE2b(384);
+        public static IHashAlgorithm BLAKE2b384 { get; } = new BLAKE2b(384);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHashAlgorithm BLAKE2b_512 { get; } = new BLAKE2b(512);
+        public static IHashAlgorithm BLAKE2b512 { get; } = new BLAKE2b(512);
+
+        /// <summary>
+        /// Hash size 256 bits. 
+        /// </summary>
+        public static IHashAlgorithm BLAKE2s256 { get; } = new BLAKE2s(256);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHashAlgorithm BLAKE2s_256 { get; } = new BLAKE2s(256);
+        public static IHashAlgorithm CSHAKE128_256 { get; } = new CSHAKE(256, null, null);
 
         /// <summary>
-        /// Hash size 128 bits.
-        /// <para/>Uses null nist and null customization.
+        /// Hash size 512 bits.
         /// </summary>
-        public static IHashAlgorithm CSHAKE_128 { get; } = new CSHAKE(128, null, null);
-
-        /// <summary>
-        /// Hash size 256 bits.
-        /// <para/>Uses null nist and null customization.
-        /// </summary>
-        public static IHashAlgorithm CSHAKE_256 { get; } = new CSHAKE(256, null, null);
+        public static IHashAlgorithm CSHAKE256_512 { get; } = new CSHAKE(512, null, null);
 
         /// <summary>
         /// Hash size 256 bits.
@@ -73,32 +71,32 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 128 bits.
         /// </summary>
-        public static IHashAlgorithm Keccak_128 { get; } = new Keccak(128);
+        public static IHashAlgorithm Keccak128 { get; } = new Keccak(128);
 
         /// <summary>
         /// Hash size 224 bits.
         /// </summary>
-        public static IHashAlgorithm Keccak_224 { get; } = new Keccak(224);
+        public static IHashAlgorithm Keccak224 { get; } = new Keccak(224);
 
         /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHashAlgorithm Keccak_256 { get; } = new Keccak(256);
+        public static IHashAlgorithm Keccak256 { get; } = new Keccak(256);
 
         /// <summary>
         /// Hash size 288 bits.
         /// </summary>
-        public static IHashAlgorithm Keccak_288 { get; } = new Keccak(288);
+        public static IHashAlgorithm Keccak288 { get; } = new Keccak(288);
 
         /// <summary>
         /// Hash size 384 bits.
-        /// </summary>
-        public static IHashAlgorithm Keccak_384 { get; } = new Keccak(384);
+        /// </summary> 
+        public static IHashAlgorithm Keccak384 { get; } = new Keccak(384);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHashAlgorithm Keccak_512 { get; } = new Keccak(512);
+        public static IHashAlgorithm Keccak512 { get; } = new Keccak(512);
 
         /// <summary>
         /// Hash size 128 bits.
@@ -191,29 +189,29 @@ namespace Honoo.BouncyCastle.Helpers
         public static IHashAlgorithm SHA512_256 { get; } = new SHA512T(256);
 
         /// <summary>
-        /// Hash size 128 bits.
-        /// </summary>
-        public static IHashAlgorithm SHAKE_128 { get; } = new SHAKE(128);
-
-        /// <summary>
         /// Hash size 256 bits.
         /// </summary>
-        public static IHashAlgorithm SHAKE_256 { get; } = new SHAKE(256);
-
-        /// <summary>
-        /// Hash size 1024 bits.
-        /// </summary>
-        public static IHashAlgorithm Skein_1024_1024 { get; } = new Skein(1024, 1024);
-
-        /// <summary>
-        /// Hash size 256 bits.
-        /// </summary>
-        public static IHashAlgorithm Skein_256_256 { get; } = new Skein(256, 256);
+        public static IHashAlgorithm SHAKE128_256 { get; } = new SHAKE(256);
 
         /// <summary>
         /// Hash size 512 bits.
         /// </summary>
-        public static IHashAlgorithm Skein_512_512 { get; } = new Skein(512, 512);
+        public static IHashAlgorithm SHAKE256_512 { get; } = new SHAKE(512);
+
+        /// <summary>
+        /// Hash size 1024 bits.
+        /// </summary>
+        public static IHashAlgorithm Skein1024_1024 { get; } = new Skein(1024, 1024);
+
+        /// <summary>
+        /// Hash size 256 bits.
+        /// </summary>
+        public static IHashAlgorithm Skein256_256 { get; } = new Skein(256, 256);
+
+        /// <summary>
+        /// Hash size 512 bits.
+        /// </summary>
+        public static IHashAlgorithm Skein512_512 { get; } = new Skein(512, 512);
 
         /// <summary>
         /// Hash size 256 bits.

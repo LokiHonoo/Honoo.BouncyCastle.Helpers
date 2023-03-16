@@ -42,7 +42,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <param name="hashSize">Hash size bits.</param>
         /// <param name="stateSize">State size bits.</param>
         /// <exception cref="Exception"/>
-        public Skein(int hashSize, int stateSize) : base(string.Format(CultureInfo.InvariantCulture, "Skein-{0}-{1}", stateSize, hashSize), _hashSizes, hashSize)
+        public Skein(int hashSize, int stateSize) : base(string.Format(CultureInfo.InvariantCulture, "Skein{0}-{1}", stateSize, hashSize), _hashSizes, hashSize)
         {
             if (stateSize != 256 && stateSize != 512 && stateSize != 1024)
             {
