@@ -40,7 +40,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="blockSize">Block size bits.</param>
         /// <exception cref="Exception"/>
         public Threefish(int blockSize)
-            : base(string.Format(CultureInfo.InvariantCulture, "Threefish-{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, GetBlockSizes(blockSize))
+            : base(string.Format(CultureInfo.InvariantCulture, "Threefish{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, GetBlockSizes(blockSize))
         {
         }
 

@@ -28,7 +28,7 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         /// <param name="blockSize">Block size bits.</param>
         /// <exception cref="Exception"/>
         public Rijndael(int blockSize)
-            : base(string.Format(CultureInfo.InvariantCulture, "Rijndael-{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, _keySizes)
+            : base(string.Format(CultureInfo.InvariantCulture, "Rijndael{0}", blockSize), SymmetricAlgorithmKind.Block, _blockSizes, blockSize, _keySizes)
         {
         }
 

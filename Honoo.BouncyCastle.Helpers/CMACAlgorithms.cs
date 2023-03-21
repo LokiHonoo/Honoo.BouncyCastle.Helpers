@@ -86,7 +86,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 128 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size.
         /// </summary>
-        public static ICMAC Rijndael_128_CMAC { get; } = new CMAC(SymmetricAlgorithms.Rijndael_128);
+        public static ICMAC Rijndael_128_CMAC { get; } = new CMAC(SymmetricAlgorithms.Rijndael128);
 
         /// <summary>
         /// Hash size 128 bits. Legal key size 128 bits. Default mac size used as block size.

@@ -95,27 +95,27 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 64 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Rijndael_128_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael_128);
+        public static IMAC Rijndael128_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael128);
 
         /// <summary>
         /// Hash size 80 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Rijndael_160_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael_160);
+        public static IMAC Rijndael160_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael160);
 
         /// <summary>
         /// Hash size 96 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Rijndael_192_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael_192);
+        public static IMAC Rijndael192_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael192);
 
         /// <summary>
         /// Hash size 112 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Rijndael_224_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael_224);
+        public static IMAC Rijndael224_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael224);
 
         /// <summary>
         /// Hash size 128 bits. Legal key size 128, 160, 192, 224, 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Rijndael_256_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael_256);
+        public static IMAC Rijndael256_MAC { get; } = new MAC(SymmetricAlgorithms.Rijndael256);
 
         /// <summary>
         /// Hash size 64 bits. Legal key size 128 bits. Default mac size used as block size / 2.
@@ -145,17 +145,17 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Hash size 512 bits. Legal key size 1024 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Threefish_1024_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish_1024);
+        public static IMAC Threefish1024_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish1024);
 
         /// <summary>
         /// Hash size 128 bits. Legal key size 256 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Threefish_256_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish_256);
+        public static IMAC Threefish256_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish256);
 
         /// <summary>
         /// Hash size 256 bits. Legal key size 512 bits. Default mac size used as block size / 2.
         /// </summary>
-        public static IMAC Threefish_512_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish_512);
+        public static IMAC Threefish512_MAC { get; } = new MAC(SymmetricAlgorithms.Threefish512);
 
         /// <summary>
         /// Hash size 64 bits. Legal key size 32-512 bits (32 bits increments). Default mac size used as block size / 2.

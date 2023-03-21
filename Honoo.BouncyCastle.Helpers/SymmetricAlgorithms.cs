@@ -98,27 +98,27 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Block size 128 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Rijndael_128 { get; } = new Rijndael(128);
+        public static ISymmetricBlockAlgorithm Rijndael128 { get; } = new Rijndael(128);
 
         /// <summary>
         /// Block size 160 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Rijndael_160 { get; } = new Rijndael(160);
+        public static ISymmetricBlockAlgorithm Rijndael160 { get; } = new Rijndael(160);
 
         /// <summary>
         /// Block size 192 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Rijndael_192 { get; } = new Rijndael(192);
+        public static ISymmetricBlockAlgorithm Rijndael192 { get; } = new Rijndael(192);
 
         /// <summary>
         /// Block size 224 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Rijndael_224 { get; } = new Rijndael(224);
+        public static ISymmetricBlockAlgorithm Rijndael224 { get; } = new Rijndael(224);
 
         /// <summary>
         /// Block size 256 bits. Legal key size 128, 160, 192, 224, 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Rijndael_256 { get; } = new Rijndael(256);
+        public static ISymmetricBlockAlgorithm Rijndael256 { get; } = new Rijndael(256);
 
         /// <summary>
         /// Block size 128 bits. Legal key size 128 bits.
@@ -148,17 +148,17 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Block size 1024 bits. Legal key size 1024 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Threefish_1024 { get; } = new Threefish(1024);
+        public static ISymmetricBlockAlgorithm Threefish1024 { get; } = new Threefish(1024);
 
         /// <summary>
         /// Block size 256 bits. Legal key size 256 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Threefish_256 { get; } = new Threefish(256);
+        public static ISymmetricBlockAlgorithm Threefish256 { get; } = new Threefish(256);
 
         /// <summary>
         /// Block size 512 bits. Legal key size 512 bits.
         /// </summary>
-        public static ISymmetricBlockAlgorithm Threefish_512 { get; } = new Threefish(512);
+        public static ISymmetricBlockAlgorithm Threefish512 { get; } = new Threefish(512);
 
         /// <summary>
         /// Block size 128 bits. Legal key size 32-512 bits (32 bits increments).
