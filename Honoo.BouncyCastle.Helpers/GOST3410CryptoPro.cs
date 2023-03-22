@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Asymmetric
+namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
     /// GOST3410 crypto pro.

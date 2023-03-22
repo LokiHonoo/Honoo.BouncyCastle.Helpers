@@ -27,8 +27,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Hash
         /// <para/>NIST name. Avoid using it if not required.
         /// </summary>
         /// <param name="hashSize">Hash size bits.</param>
-        /// <param name="nist">Nist bytes.</param>
-        /// <param name="customization">Customization bytes.</param>
         /// <exception cref="Exception"/>
         public SHAKE(int hashSize) : base(string.Format(CultureInfo.InvariantCulture, "SHAKE{0}-{1}", hashSize / 2, hashSize), _hashSizes, hashSize)
         {

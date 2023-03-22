@@ -5,29 +5,29 @@ using System;
 namespace Honoo.BouncyCastle.Helpers
 {
     /// <summary>
-    /// PKCS12PBE algorithm name.
+    /// PBE algorithm name.
     /// </summary>
-    public sealed class PKCS12PBEAlgorithmName : IEquatable<PKCS12PBEAlgorithmName>
+    public sealed class PBEAlgorithmName : IEquatable<PBEAlgorithmName>
     {
         #region Static properties
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand128BitRC2CBC { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand128BitRC2CBC", PkcsObjectIdentifiers.PbeWithShaAnd128BitRC2Cbc);
+        public static PBEAlgorithmName PBEwithSHAand128BitRC2CBC { get; } = new PBEAlgorithmName("PBEwithSHAand128BitRC2CBC", PkcsObjectIdentifiers.PbeWithShaAnd128BitRC2Cbc);
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand128BitRC4 { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand128BitRC4", PkcsObjectIdentifiers.PbeWithShaAnd128BitRC4);
+        public static PBEAlgorithmName PBEwithSHAand128BitRC4 { get; } = new PBEAlgorithmName("PBEwithSHAand128BitRC4", PkcsObjectIdentifiers.PbeWithShaAnd128BitRC4);
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand2KeyDESedeCBC { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand2KeyDESedeCBC", PkcsObjectIdentifiers.PbeWithShaAnd2KeyTripleDesCbc);
+        public static PBEAlgorithmName PBEwithSHAand2KeyDESedeCBC { get; } = new PBEAlgorithmName("PBEwithSHAand2KeyDESedeCBC", PkcsObjectIdentifiers.PbeWithShaAnd2KeyTripleDesCbc);
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand3KeyDESedeCBC { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand3KeyDESedeCBC", PkcsObjectIdentifiers.PbeWithShaAnd3KeyTripleDesCbc);
+        public static PBEAlgorithmName PBEwithSHAand3KeyDESedeCBC { get; } = new PBEAlgorithmName("PBEwithSHAand3KeyDESedeCBC", PkcsObjectIdentifiers.PbeWithShaAnd3KeyTripleDesCbc);
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand40BitRC2CBC { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand40BitRC2CBC", PkcsObjectIdentifiers.PbewithShaAnd40BitRC2Cbc);
+        public static PBEAlgorithmName PBEwithSHAand40BitRC2CBC { get; } = new PBEAlgorithmName("PBEwithSHAand40BitRC2CBC", PkcsObjectIdentifiers.PbewithShaAnd40BitRC2Cbc);
 
         /// <summary></summary>
-        public static PKCS12PBEAlgorithmName PBEwithSHAand40BitRC4 { get; } = new PKCS12PBEAlgorithmName("PBEwithSHAand40BitRC4", PkcsObjectIdentifiers.PbeWithShaAnd40BitRC4);
+        public static PBEAlgorithmName PBEwithSHAand40BitRC4 { get; } = new PBEAlgorithmName("PBEwithSHAand40BitRC4", PkcsObjectIdentifiers.PbeWithShaAnd40BitRC4);
 
         #endregion Static properties
 
@@ -50,7 +50,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region Construction
 
-        internal PKCS12PBEAlgorithmName(string name, DerObjectIdentifier oid)
+        internal PBEAlgorithmName(string name, DerObjectIdentifier oid)
         {
             _name = name;
             _oid = oid;
@@ -63,7 +63,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(PKCS12PBEAlgorithmName other)
+        public bool Equals(PBEAlgorithmName other)
         {
             return _name == other._name;
         }

@@ -57,7 +57,11 @@ namespace Test
                 new X509NameEntity(X509NameLabel.C,"CN"),
                 new X509NameEntity(X509NameLabel.CN,"TEST User")
             };
-            X509ExtensionEntity[] userExtensions = null;
+            X509ExtensionEntity[] userExtensions = new X509ExtensionEntity[]
+            {
+                new X509ExtensionEntity(X509ExtensionLabel.BasicConstraints, true, new BasicConstraints(false)),
+                new X509ExtensionEntity(X509ExtensionLabel.KeyUsage, true, new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.CrlSign))
+            };
             Pkcs10CertificationRequest userCsr = X509Helper.GenerateCsr(SignatureAlgorithms.GOST3411withECGOST3410, userKeyPair, userDN, userExtensions);
             //
             // CA extract csr and create user cert.

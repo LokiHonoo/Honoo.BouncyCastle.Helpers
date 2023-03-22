@@ -16,7 +16,7 @@
     <PackageTags>Honoo BouncyCastle</PackageTags>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
-    <Version>1.1.15</Version>
+    <Version>1.1.16</Version>
     <AssemblyVersion></AssemblyVersion>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -51,7 +51,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="[1.9.0]" />
   </ItemGroup>
 
 </Project>

@@ -95,7 +95,7 @@ namespace Honoo.BouncyCastle.Helpers
             switch (mechanism)
             {
                 case "1.2.840.10040.4.1": case "DSA": algorithm = AsymmetricAlgorithms.DSA; return true;
-                case "0.4.0.127.0.7.2.2.3.2": case "ECDH": algorithm = AsymmetricAlgorithms.ECDH; return true;
+                case "0.4.0.127.0.7.2.2.1.2": case "ECDH": algorithm = AsymmetricAlgorithms.ECDH; return true;
                 case "0.4.0.127.0.7.2.2.2.2": case "ECDSA": algorithm = AsymmetricAlgorithms.ECDSA; return true;
                 case "1.2.643.2.2.19": case "ECGOST3410": case "ECGOST3410-2001": algorithm = AsymmetricAlgorithms.ECGOST3410; return true;
                 case "1.3.101.112": case "ED25519": algorithm = AsymmetricAlgorithms.Ed25519; return true;

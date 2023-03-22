@@ -48,12 +48,6 @@ namespace Honoo.BouncyCastle.Helpers.Security.Crypto.Symmetric
         #endregion Construction
 
         /// <summary>
-        /// Determines whether the specified object is equal to the current.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-
-        /// <summary>
         /// Generate parameters.
         /// </summary>
         /// <param name="key">Key bytes.</param>
