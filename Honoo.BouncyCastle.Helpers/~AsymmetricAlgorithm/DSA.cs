@@ -218,6 +218,19 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        {
+            DsaPrivateKeyParameters privateKey = (DsaPrivateKeyParameters)keyPair.Private;
+            DsaPublicKeyParameters publicKey = (DsaPublicKeyParameters)keyPair.Public;
+            _privateKey = privateKey;
+            _publicKey = publicKey;
+            _keySize = publicKey.Parameters.P.BitLength;
+            _signer = null;
+            _verifier = null;
+            _initialized = true;
+        }
+
+        /// <inheritdoc/>
         public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             DsaPrivateKeyParameters privateKey = null;
@@ -232,19 +245,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (DsaPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
-            _keySize = publicKey.Parameters.P.BitLength;
-            _signer = null;
-            _verifier = null;
-            _initialized = true;
-        }
-
-        /// <inheritdoc/>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
-        {
-            DsaPrivateKeyParameters privateKey = (DsaPrivateKeyParameters)keyPair.Private;
-            DsaPublicKeyParameters publicKey = (DsaPublicKeyParameters)keyPair.Public;
             _privateKey = privateKey;
             _publicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;

@@ -100,7 +100,7 @@ namespace Honoo.BouncyCastle.Helpers
         void ImportPem(string keyPem);
 
         /// <summary>
-        /// Imports a pem string that represents encrypted asymmetric algorithm private key information, The public key is created automatically.
+        /// Imports a pem string that represents encrypted asymmetric algorithm private key information. The public key is created automatically.
         /// </summary>
         /// <param name="privateKeyPem">A pem string that represents an encrypted asymmetric algorithm private key.</param>
         /// <param name="password">Using decrypt private key.</param>

@@ -141,6 +141,16 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        {
+            _privateKey = (Ed25519PrivateKeyParameters)keyPair.Private;
+            _publicKey = (Ed25519PublicKeyParameters)keyPair.Public;
+            _signer = null;
+            _verifier = null;
+            _initialized = true;
+        }
+
+        /// <inheritdoc/>
         public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             Ed25519PrivateKeyParameters privateKey = null;
@@ -156,16 +166,6 @@ namespace Honoo.BouncyCastle.Helpers
             }
             _privateKey = privateKey;
             _publicKey = publicKey;
-            _signer = null;
-            _verifier = null;
-            _initialized = true;
-        }
-
-        /// <inheritdoc/>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
-        {
-            _privateKey = (Ed25519PrivateKeyParameters)keyPair.Private;
-            _publicKey = (Ed25519PublicKeyParameters)keyPair.Public;
             _signer = null;
             _verifier = null;
             _initialized = true;

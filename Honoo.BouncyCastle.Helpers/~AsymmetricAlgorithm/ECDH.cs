@@ -221,19 +221,19 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Imports a <see cref="AsymmetricKeyParameter"/> that represents asymmetric algorithm key information. Always throw <see cref="NotImplementedException"/>.
+        /// Imports a <see cref="AsymmetricCipherKeyPair"/> that represents asymmetric algorithm key pair information. Always throw <see cref="NotImplementedException"/>.
         /// </summary>
-        /// <param name="asymmetricKey">A <see cref="AsymmetricKeyParameter"/> that represents an asymmetric algorithm key.</param>
-        public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
+        /// <param name="keyPair">A <see cref="AsymmetricCipherKeyPair"/> that represents an asymmetric algorithm key pair.</param>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Imports a <see cref="AsymmetricCipherKeyPair"/> that represents asymmetric algorithm key pair information. Always throw <see cref="NotImplementedException"/>.
+        /// Imports a <see cref="AsymmetricKeyParameter"/> that represents asymmetric algorithm key information. Always throw <see cref="NotImplementedException"/>.
         /// </summary>
-        /// <param name="keyPair">A <see cref="AsymmetricCipherKeyPair"/> that represents an asymmetric algorithm key pair.</param>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        /// <param name="asymmetricKey">A <see cref="AsymmetricKeyParameter"/> that represents an asymmetric algorithm key.</param>
+        public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             throw new NotImplementedException();
         }

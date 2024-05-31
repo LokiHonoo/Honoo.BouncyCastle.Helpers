@@ -24,6 +24,7 @@ namespace Test
             _ignore = 0;
             Demo1();
             Demo2();
+            Demo3();
             DoSM2();
             DoECDSA();
             DoDSA();
@@ -43,6 +44,19 @@ namespace Test
 
             RSA rsa2 = (RSA)AsymmetricAlgorithm.Create(AsymmetricAlgorithmName.RSA);
             rsa2.ImportPem(pem);
+
+            byte[] enc = rsa2.Encrypt(_input);
+            byte[] dec = rsa1.Decrypt(enc);
+            WriteResult("RSA DEMO", _input, enc, dec);
+        }
+
+        private static void Demo3()
+        {
+            RSA rsa1 = new RSA();
+            rsa1.GenerateParameters(2048);
+            string pem = rsa1.ExportPem(false);
+
+            RSA rsa2 = (RSA)AsymmetricAlgorithm.Create(pem);
 
             byte[] enc = rsa2.Encrypt(_input);
             byte[] dec = rsa1.Decrypt(enc);

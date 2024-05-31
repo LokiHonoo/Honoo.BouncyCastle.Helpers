@@ -164,6 +164,19 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        {
+            ElGamalPrivateKeyParameters privateKey = (ElGamalPrivateKeyParameters)keyPair.Private;
+            ElGamalPublicKeyParameters publicKey = (ElGamalPublicKeyParameters)keyPair.Public;
+            _privateKey = privateKey;
+            _publicKey = publicKey;
+            _keySize = publicKey.Parameters.P.BitLength;
+            _encryptor = null;
+            _decryptor = null;
+            _initialized = true;
+        }
+
+        /// <inheritdoc/>
         public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             ElGamalPrivateKeyParameters privateKey = null;
@@ -178,19 +191,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (ElGamalPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
-            _keySize = publicKey.Parameters.P.BitLength;
-            _encryptor = null;
-            _decryptor = null;
-            _initialized = true;
-        }
-
-        /// <inheritdoc/>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
-        {
-            ElGamalPrivateKeyParameters privateKey = (ElGamalPrivateKeyParameters)keyPair.Private;
-            ElGamalPublicKeyParameters publicKey = (ElGamalPublicKeyParameters)keyPair.Public;
             _privateKey = privateKey;
             _publicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;

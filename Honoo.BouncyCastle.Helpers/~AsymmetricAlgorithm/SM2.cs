@@ -169,6 +169,23 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        {
+            ECPrivateKeyParameters privateKey = (ECPrivateKeyParameters)keyPair.Private;
+            ECPublicKeyParameters publicKey = (ECPublicKeyParameters)keyPair.Public;
+            _privateKey = privateKey;
+            _publicKey = publicKey;
+            _keySize = publicKey.Parameters.Curve.FieldSize;
+            _signer = null;
+            _verifier = null;
+            _initialized = true;
+            _publicEncryptionKey = null;
+            _encryptor = null;
+            _decryptor = null;
+            _encryptionInitialized = false;
+        }
+
+        /// <inheritdoc/>
         public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             ECPrivateKeyParameters privateKey = null;
@@ -183,23 +200,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (ECPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
-            _keySize = publicKey.Parameters.Curve.FieldSize;
-            _signer = null;
-            _verifier = null;
-            _initialized = true;
-            _publicEncryptionKey = null;
-            _encryptor = null;
-            _decryptor = null;
-            _encryptionInitialized = false;
-        }
-
-        /// <inheritdoc/>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
-        {
-            ECPrivateKeyParameters privateKey = (ECPrivateKeyParameters)keyPair.Private;
-            ECPublicKeyParameters publicKey = (ECPublicKeyParameters)keyPair.Public;
             _privateKey = privateKey;
             _publicKey = publicKey;
             _keySize = publicKey.Parameters.Curve.FieldSize;

@@ -309,6 +309,21 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
+        {
+            RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)keyPair.Private;
+            RsaKeyParameters publicKey = (RsaKeyParameters)keyPair.Public;
+            _privateKey = privateKey;
+            _publicKey = publicKey;
+            _keySize = publicKey.Modulus.BitLength;
+            _encryptor = null;
+            _decryptor = null;
+            _signer = null;
+            _verifier = null;
+            _initialized = true;
+        }
+
+        /// <inheritdoc/>
         public override void ImportParameters(AsymmetricKeyParameter asymmetricKey)
         {
             RsaPrivateCrtKeyParameters privateKey = null;
@@ -322,21 +337,6 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (RsaKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
-            _keySize = publicKey.Modulus.BitLength;
-            _encryptor = null;
-            _decryptor = null;
-            _signer = null;
-            _verifier = null;
-            _initialized = true;
-        }
-
-        /// <inheritdoc/>
-        public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
-        {
-            RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)keyPair.Private;
-            RsaKeyParameters publicKey = (RsaKeyParameters)keyPair.Public;
             _privateKey = privateKey;
             _publicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
