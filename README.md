@@ -4,9 +4,10 @@
 
 <!-- code_chunk_output -->
 
-- [Honoo.BouncyCastle.Helpers](#honoobouncycastleHelpers)
+- [Honoo.BouncyCastle.Helpers](#honoobouncycastlehelpers)
   - [INTRODUCTION](#introduction)
   - [USAGE](#usage)
+    - [Github](#github)
     - [NuGet](#nuget)
     - [Namespace](#namespace)
     - [Hash](#hash)
@@ -27,6 +28,10 @@
 BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.
 
 ## USAGE
+
+### Github
+
+<https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers/>
 
 ### NuGet
 
@@ -305,4 +310,5 @@ private static void Demo()
 
 ## LICENSE
 
-This project based on MIT license.
+This project based on [MIT](LICENSE) license.
+

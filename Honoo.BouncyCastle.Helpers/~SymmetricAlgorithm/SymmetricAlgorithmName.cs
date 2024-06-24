@@ -19,10 +19,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// Symmetric block algorithm. Block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
         public static SymmetricAlgorithmName AES { get; } = Honoo.BouncyCastle.Helpers.AES.GetAlgorithmName();
+
         /// <summary>
         /// Symmetric block algorithm. Block size 128 bits. Legal key size 128, 192, 256 bits.
         /// </summary>
         public static SymmetricAlgorithmName ARIA { get; } = Honoo.BouncyCastle.Helpers.ARIA.GetAlgorithmName();
+
         /// <summary>
         /// Symmetric block algorithm. Block size 64 bits. Legal key size 128 bits.
         /// </summary>
@@ -416,7 +418,7 @@ namespace Honoo.BouncyCastle.Helpers
             mechanism = mechanism.Trim().Replace('_', '-').Replace('/', '-').ToUpperInvariant();
             switch (mechanism)
             {
-                case "AES": algorithmName = AES; return true; 
+                case "AES": algorithmName = AES; return true;
                 case "ARIA": algorithmName = ARIA; return true;
                 case "BLOWFISH": algorithmName = Blowfish; return true;
                 case "CAMELLIA": algorithmName = Camellia; return true;

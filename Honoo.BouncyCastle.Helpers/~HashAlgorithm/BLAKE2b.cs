@@ -69,7 +69,7 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override int ComputeFinal( byte[] outputBuffer, int offset)
+        public override int ComputeFinal(byte[] outputBuffer, int offset)
         {
             if (_digest == null)
             {
