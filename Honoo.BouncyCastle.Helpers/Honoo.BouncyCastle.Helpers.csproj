@@ -16,10 +16,12 @@
 		<PackageTags>Honoo BouncyCastle</PackageTags>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
-		<Version>2.1.1</Version>
+		<Version>2.1.2</Version>
 		<AssemblyVersion></AssemblyVersion>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>README-NuGet.md</PackageReadmeFile>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,17 +42,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\README.md">
+	  <None Include="..\README-NuGet.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	</ItemGroup>
 

@@ -135,7 +135,7 @@ private static void Demo3()
     SymmetricAlgorithm alg1 = SymmetricAlgorithm.Create(SymmetricAlgorithmName.HC128);
     HC128 alg2 = new HC128();
     byte[] key = new byte[128 / 8];  // 128 = HC128 legal key size bits.
-    byte[] iv = new byte[128 / 8];   // 256 = HC128 legal iv size bits.
+    byte[] iv = new byte[128 / 8];   // 128 = HC128 legal iv size bits.
     Buffer.BlockCopy(_keyExchangePms, 0, key, 0, key.Length);
     Buffer.BlockCopy(_keyExchangePms, 0, iv, 0, iv.Length);
     alg1.ImportParameters(key, iv);
@@ -294,16 +294,18 @@ private static void Demo()
     IKeyExchangeTerminalB keC = new ECDH().GetTerminalB();
     keC.GenerateParameters(p, g, publicKeyA);
     byte[] pmsC = keC.DeriveKeyMaterial(true);
+    byte[] publicKeyC = keC.PublicKeyB;
 
     // Alice work
-    byte[] pmsA = keA.DeriveKeyMaterial(publicKeyB, true);
+    byte[] pmsAB = keA.DeriveKeyMaterial(publicKeyB, true);
+    byte[] pmsAC = keA.DeriveKeyMaterial(publicKeyC, true);
 
     //
-    bool same = pmsA.SequenceEqual(pmsB);
-    Console.WriteLine($"ECDH Same={same}");
-    Console.WriteLine("Alice   pms:" + BitConverter.ToString(pmsA).Replace("-", ""));
-    Console.WriteLine("Bob     pms:" + BitConverter.ToString(pmsB).Replace("-", ""));
-    Console.WriteLine("Cracker pms:" + BitConverter.ToString(pmsC).Replace("-", ""));
+    Console.WriteLine("    Alice-Bob pms:" + BitConverter.ToString(pmsAB).Replace("-", ""));
+    Console.WriteLine("          Bob pms:" + BitConverter.ToString(pmsB).Replace("-", ""));
+    Console.WriteLine();
+    Console.WriteLine("Alice-Cracker pms:" + BitConverter.ToString(pmsAC).Replace("-", ""));
+    Console.WriteLine("      Cracker pms:" + BitConverter.ToString(pmsC).Replace("-", ""));
 }
 
 ```

@@ -32,16 +32,18 @@ namespace Test
             IKeyExchangeTerminalB keC = new ECDH().GetTerminalB();
             keC.GenerateParameters(p, g, publicKeyA);
             byte[] pmsC = keC.DeriveKeyMaterial(true);
+            byte[] publicKeyC = keC.PublicKeyB;
 
             // Alice work
-            byte[] pmsA = keA.DeriveKeyMaterial(publicKeyB, true);
+            byte[] pmsAB = keA.DeriveKeyMaterial(publicKeyB, true);
+            byte[] pmsAC = keA.DeriveKeyMaterial(publicKeyC, true);
 
             //
-            bool same = pmsA.SequenceEqual(pmsB);
-            Console.WriteLine($"ECDH Alice pms same as Bob pms: {same}");
-            Console.WriteLine("Alice   pms:" + BitConverter.ToString(pmsA).Replace("-", ""));
-            Console.WriteLine("Bob     pms:" + BitConverter.ToString(pmsB).Replace("-", ""));
-            Console.WriteLine("Cracker pms:" + BitConverter.ToString(pmsC).Replace("-", ""));
+            Console.WriteLine("    Alice-Bob pms:" + BitConverter.ToString(pmsAB).Replace("-", ""));
+            Console.WriteLine("          Bob pms:" + BitConverter.ToString(pmsB).Replace("-", ""));
+            Console.WriteLine();
+            Console.WriteLine("Alice-Cracker pms:" + BitConverter.ToString(pmsAC).Replace("-", ""));
+            Console.WriteLine("      Cracker pms:" + BitConverter.ToString(pmsC).Replace("-", ""));
         }
     }
 }

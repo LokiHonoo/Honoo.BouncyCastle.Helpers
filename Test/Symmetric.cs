@@ -73,7 +73,7 @@ namespace Test
             SymmetricAlgorithm alg1 = SymmetricAlgorithm.Create(SymmetricAlgorithmName.HC128);
             HC128 alg2 = new HC128();
             byte[] key = new byte[128 / 8];  // 128 = HC128 legal key size bits.
-            byte[] iv = new byte[128 / 8];   // 256 = HC128 legal iv size bits.
+            byte[] iv = new byte[128 / 8];   // 128 = HC128 legal iv size bits.
             Buffer.BlockCopy(_keyExchangePms, 0, key, 0, key.Length);
             Buffer.BlockCopy(_keyExchangePms, 0, iv, 0, iv.Length);
             alg1.ImportParameters(key, iv);
