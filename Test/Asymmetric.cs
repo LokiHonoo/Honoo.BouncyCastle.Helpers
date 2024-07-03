@@ -56,7 +56,7 @@ namespace Test
             rsa1.GenerateParameters(2048);
             string pem = rsa1.ExportPem(false);
 
-            RSA rsa2 = (RSA)AsymmetricAlgorithm.Create(pem);
+            RSA rsa2 = (RSA)AsymmetricAlgorithm.CreateBy(pem);
 
             byte[] enc = rsa2.Encrypt(_input);
             byte[] dec = rsa1.Decrypt(enc);

@@ -165,7 +165,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="keyPair">A <see cref="AsymmetricCipherKeyPair"/> that represents an asymmetric algorithm key pair.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(AsymmetricCipherKeyPair keyPair)
+        public static AsymmetricAlgorithm CreateBy(AsymmetricCipherKeyPair keyPair)
         {
             AsymmetricAlgorithm algorithm;
             switch (keyPair.Private)
@@ -189,7 +189,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="asymmetricKey">A <see cref="AsymmetricKeyParameter"/> that represents an asymmetric algorithm key.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(AsymmetricKeyParameter asymmetricKey)
+        public static AsymmetricAlgorithm CreateBy(AsymmetricKeyParameter asymmetricKey)
         {
             AsymmetricAlgorithm algorithm;
             if (asymmetricKey.IsPrivate)
@@ -230,18 +230,18 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="keyPem">A pem string that represents an asymmetric algorithm key.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(string keyPem)
+        public static AsymmetricAlgorithm CreateBy(string keyPem)
         {
             using (StringReader reader = new StringReader(keyPem))
             {
                 object obj = new PemReader(reader).ReadObject();
                 if (obj.GetType() == typeof(AsymmetricCipherKeyPair))
                 {
-                    return Create((AsymmetricCipherKeyPair)obj);
+                    return CreateBy((AsymmetricCipherKeyPair)obj);
                 }
                 else
                 {
-                    return Create((AsymmetricKeyParameter)obj);
+                    return CreateBy((AsymmetricKeyParameter)obj);
                 }
             }
         }
@@ -252,12 +252,12 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="privateKeyPem">A pem string that represents an encrypted asymmetric algorithm private key.</param>
         /// <param name="password">Using decrypt private key.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(string privateKeyPem, string password)
+        public static AsymmetricAlgorithm CreateBy(string privateKeyPem, string password)
         {
             using (StringReader reader = new StringReader(privateKeyPem))
             {
                 object obj = new PemReader(reader, new Password(password)).ReadObject();
-                return Create((AsymmetricCipherKeyPair)obj);
+                return CreateBy((AsymmetricCipherKeyPair)obj);
             }
         }
 
@@ -267,14 +267,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="keyInfo">A byte buffer that represents an asymmetric algorithm key.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(byte[] keyInfo)
+        public static AsymmetricAlgorithm CreateBy(byte[] keyInfo)
         {
             Asn1Object asn1 = Asn1Object.FromByteArray(keyInfo);
             try
             {
                 PrivateKeyInfo priInfo = PrivateKeyInfo.GetInstance(asn1);
                 AsymmetricKeyParameter privateKey = PrivateKeyFactory.CreateKey(priInfo);
-                return Create(privateKey);
+                return CreateBy(privateKey);
             }
             catch
             {
@@ -282,7 +282,7 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     SubjectPublicKeyInfo pubInfo = SubjectPublicKeyInfo.GetInstance(asn1);
                     AsymmetricKeyParameter publicKey = PublicKeyFactory.CreateKey(pubInfo);
-                    return Create(publicKey);
+                    return CreateBy(publicKey);
                 }
                 catch
                 {
@@ -297,13 +297,13 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="privateKeyInfo">A byte buffer that represents an encrypted asymmetric algorithm private key.</param>
         /// <param name="password">Using decrypt private key.</param>
         /// <returns></returns>
-        public static AsymmetricAlgorithm Create(byte[] privateKeyInfo, string password)
+        public static AsymmetricAlgorithm CreateBy(byte[] privateKeyInfo, string password)
         {
             Asn1Object asn1 = Asn1Object.FromByteArray(privateKeyInfo);
             EncryptedPrivateKeyInfo enc = EncryptedPrivateKeyInfo.GetInstance(asn1);
             PrivateKeyInfo priInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(password.ToCharArray(), enc);
             AsymmetricKeyParameter privateKey = PrivateKeyFactory.CreateKey(priInfo);
-            return Create(privateKey);
+            return CreateBy(privateKey);
         }
 
         /// <inheritdoc/>
