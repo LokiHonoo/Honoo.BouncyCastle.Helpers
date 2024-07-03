@@ -36,7 +36,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <br/>Legal key size 256, 512 bits when block size is 256 bits.
         /// <br/>Legal key size 512 bits when block size is 512 bits.
         /// </summary>
-        public override KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES[_blockSize].Clone();
+        public override KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES[base.BlockSize].Clone();
 
         #endregion Properties
 
@@ -69,14 +69,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public override bool ValidKeySize(int keySize, out string exception)
         {
-            if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES[_blockSize], keySize))
+            if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES[base.BlockSize], keySize))
             {
                 exception = string.Empty;
                 return true;
             }
             else
             {
-                switch (_blockSize)
+                switch (base.BlockSize)
                 {
                     case 128: exception = "Legal key size 128, 256 bits when block size is 128 bits."; break;
                     case 256: exception = "Legal key size 256, 512 bits when block size is 256 bits."; break;
@@ -95,7 +95,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         internal override IBlockCipher GetEngine()
         {
-            return new Dstu7624Engine(_blockSize);
+            return new Dstu7624Engine(base.BlockSize);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers.X509
         #region Properties
 
         private readonly IList<X509ExtensionEntity> _elements = new List<X509ExtensionEntity>();
-        private readonly ISet<X509ExtensionLabel> _orders = new HashSet<X509ExtensionLabel>();
+        private readonly HashSet<X509ExtensionLabel> _orders = new HashSet<X509ExtensionLabel>();
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="X509ExtensionCollection"/>.
@@ -46,6 +47,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="item">The <see cref="X509ExtensionEntity"/> to add to the <see cref="X509ExtensionCollection"/>.</param>
         public void Add(X509ExtensionEntity item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
             _orders.Add(item.Label);
             _elements.Add(item);
         }
@@ -87,6 +92,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="certificate">Other certificate.</param>
         public void CopyFrom(X509Certificate certificate)
         {
+            if (certificate == null)
+            {
+                throw new ArgumentNullException(nameof(certificate));
+            }
             ISet oids = certificate.GetCriticalExtensionOids();
             if (oids != null)
             {
@@ -158,9 +167,8 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <returns>Return true if item was successfully removed, otherwise, false. This method also returns false if item is not found.</returns>
         public bool Remove(X509ExtensionLabel label)
         {
-            if (_orders.Contains(label))
+            if (_orders.Remove(label))
             {
-                _orders.Remove(label);
                 for (int i = _elements.Count - 1; i >= 0; i--)
                 {
                     if (_elements[i].Label == label)

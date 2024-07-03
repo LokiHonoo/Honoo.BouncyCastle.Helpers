@@ -9,6 +9,7 @@ using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -24,8 +25,8 @@ namespace Honoo.BouncyCastle.Helpers
         private const string NAME = "Ed448";
         private readonly byte[] _context;
         private Ed448SignatureInstance _signatureInstance = Ed448SignatureInstance.Ed448;
-        private ISigner _signer = null;
-        private ISigner _verifier = null;
+        private ISigner _signer;
+        private ISigner _verifier;
 
         /// <summary>
         /// Ed448 not need hash algorithm. It's null always.
@@ -84,11 +85,11 @@ namespace Honoo.BouncyCastle.Helpers
             Ed448KeyPairGenerator generator = new Ed448KeyPairGenerator();
             generator.Init(parameters);
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -118,11 +119,11 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -133,21 +134,21 @@ namespace Honoo.BouncyCastle.Helpers
             PrivateKeyInfo priInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(password.ToCharArray(), enc);
             Ed448PrivateKeyParameters privateKey = (Ed448PrivateKeyParameters)PrivateKeyFactory.CreateKey(priInfo);
             Ed448PublicKeyParameters publicKey = privateKey.GeneratePublicKey();
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
         public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
         {
-            _privateKey = (Ed448PrivateKeyParameters)keyPair.Private;
-            _publicKey = (Ed448PublicKeyParameters)keyPair.Public;
+            base.PrivateKey = (Ed448PrivateKeyParameters)keyPair.Private;
+            base.PublicKey = (Ed448PublicKeyParameters)keyPair.Public;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -164,11 +165,11 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (Ed448PublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -188,11 +189,11 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (Ed448PublicKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -204,11 +205,11 @@ namespace Honoo.BouncyCastle.Helpers
                 object obj = new PemReader(reader, new Password(password)).ReadObject();
                 Ed448PrivateKeyParameters privateKey = (Ed448PrivateKeyParameters)obj;
                 Ed448PublicKeyParameters publicKey = privateKey.GeneratePublicKey();
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -234,6 +235,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] SignFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
             return SignFinal();
         }
@@ -248,6 +253,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void SignUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
         }
 
@@ -270,6 +279,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public bool VerifyFinal(byte[] rgb, byte[] signature)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
             return VerifyFinal(signature);
         }
@@ -284,6 +297,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void VerifyUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
         }
 
@@ -339,7 +356,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case Ed448SignatureInstance.Ed448ph: _signer = new Ed448phSigner(_context); break;
                         default: throw new CryptographicException("Unsupported signature EdDSA instance (RFC-8032).");
                     }
-                    _signer.Init(true, _privateKey);
+                    _signer.Init(true, base.PrivateKey);
                 }
             }
             else
@@ -352,7 +369,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case Ed448SignatureInstance.Ed448ph: _verifier = new Ed448phSigner(_context); break;
                         default: throw new CryptographicException("Unsupported signature EdDSA instance (RFC-8032).");
                     }
-                    _verifier.Init(false, _publicKey);
+                    _verifier.Init(false, base.PublicKey);
                 }
             }
         }

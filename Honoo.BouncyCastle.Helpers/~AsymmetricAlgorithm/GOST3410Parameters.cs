@@ -3,7 +3,7 @@
     /// <summary>
     /// GOST3410 parameters.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:请删除不必要的忽略", Justification = "<挂起>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1008:枚举应具有零值", Justification = "<挂起>")]
     public enum GOST3410Parameters
     {
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释

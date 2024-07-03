@@ -1,6 +1,7 @@
 ﻿using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.X509;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -14,8 +15,8 @@ namespace Honoo.BouncyCastle.Helpers.X509
     {
         #region Properties
 
-        private readonly IList<X509NameEntity> _elements = new List<X509NameEntity>();
-        private readonly ISet<X509NameLabel> _orders = new HashSet<X509NameLabel>();
+        private readonly List<X509NameEntity> _elements = new List<X509NameEntity>();
+        private readonly HashSet<X509NameLabel> _orders = new HashSet<X509NameLabel>();
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="X509NameCollection"/>.
@@ -45,6 +46,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="item">The <see cref="X509NameEntity"/> to add to the <see cref="X509NameCollection"/>.</param>
         public void Add(X509NameEntity item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
             _orders.Add(item.Label);
             _elements.Add(item);
         }
@@ -85,6 +90,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="certificate">Other certificate.</param>
         public void CopyFromSubjectDN(X509Certificate certificate)
         {
+            if (certificate == null)
+            {
+                throw new ArgumentNullException(nameof(certificate));
+            }
             IList oids = certificate.SubjectDN.GetOidList();
             if (oids != null)
             {
@@ -149,9 +158,8 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <returns>Return true if item was successfully removed, otherwise, false. This method also returns false if item is not found.</returns>
         public bool Remove(X509NameLabel label)
         {
-            if (_orders.Contains(label))
+            if (_orders.Remove(label))
             {
-                _orders.Remove(label);
                 for (int i = _elements.Count - 1; i >= 0; i--)
                 {
                     if (_elements[i].Label == label)

@@ -3,6 +3,7 @@
     /// <summary>
     /// Symmetric algorithm kind.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1008:枚举应具有零值", Justification = "<挂起>")]
     public enum SymmetricAlgorithmKind
     {
         /// <summary>

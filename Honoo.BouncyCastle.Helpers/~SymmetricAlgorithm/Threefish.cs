@@ -33,7 +33,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits. Legal key size same as block size.
         /// </summary>
-        public override KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES[_blockSize].Clone();
+        public override KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES[base.BlockSize].Clone();
 
         #endregion Properties
 
@@ -66,7 +66,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public override bool ValidKeySize(int keySize, out string exception)
         {
-            if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES[_blockSize], keySize))
+            if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES[base.BlockSize], keySize))
             {
                 exception = string.Empty;
                 return true;
@@ -86,7 +86,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         internal override IBlockCipher GetEngine()
         {
-            return new ThreefishEngine(_blockSize);
+            return new ThreefishEngine(base.BlockSize);
         }
     }
 }

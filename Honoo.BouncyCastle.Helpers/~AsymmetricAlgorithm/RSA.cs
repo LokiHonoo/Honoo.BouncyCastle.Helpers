@@ -32,14 +32,14 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_KEY_SIZE = 2048;
         private const string NAME = "RSA";
         private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(24, Common.SizeMax, 8) };
-        private IAsymmetricBlockCipher _decryptor = null;
-        private IAsymmetricBlockCipher _encryptor = null;
+        private IAsymmetricBlockCipher _decryptor;
+        private IAsymmetricBlockCipher _encryptor;
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;
         private int _keySize = DEFAULT_KEY_SIZE;
         private AsymmetricEncryptionPaddingMode _padding = AsymmetricEncryptionPaddingMode.PKCS1;
         private RSASignaturePaddingMode _signaturePadding = RSASignaturePaddingMode.PKCS1;
-        private ISigner _signer = null;
-        private ISigner _verifier = null;
+        private ISigner _signer;
+        private ISigner _verifier;
 
         /// <inheritdoc/>
         public HashAlgorithmName HashAlgorithmName
@@ -64,6 +64,8 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits. Legal key size is more than or equal to 24 bits (8 bits increments).
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES.Clone();
 
         /// <summary>
@@ -151,14 +153,14 @@ namespace Honoo.BouncyCastle.Helpers
             RsaKeyPairGenerator generator = new RsaKeyPairGenerator();
             generator.Init(parameters);
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _keySize = keySize;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -175,11 +177,11 @@ namespace Honoo.BouncyCastle.Helpers
             InspectParameters();
             if (includePrivate)
             {
-                return DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)_privateKey);
+                return DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)base.PrivateKey);
             }
             else
             {
-                return DotNetUtilities.ToRSAParameters((RsaKeyParameters)_publicKey);
+                return DotNetUtilities.ToRSAParameters((RsaKeyParameters)base.PublicKey);
             }
         }
 
@@ -193,7 +195,7 @@ namespace Honoo.BouncyCastle.Helpers
             InspectParameters();
             if (includePrivate)
             {
-                RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)_privateKey);
+                RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)base.PrivateKey);
                 XElement root = new XElement("RSAKeyValue");
                 root.Add(new XElement("Modulus", Convert.ToBase64String(parameters.Modulus)));
                 root.Add(new XElement("Exponent", Convert.ToBase64String(parameters.Exponent)));
@@ -214,7 +216,7 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaKeyParameters)_publicKey);
+                RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaKeyParameters)base.PublicKey);
                 XElement root = new XElement("RSAKeyValue");
                 root.Add(new XElement("Modulus", Convert.ToBase64String(parameters.Modulus)));
                 root.Add(new XElement("Exponent", Convert.ToBase64String(parameters.Exponent)));
@@ -252,14 +254,14 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -270,14 +272,14 @@ namespace Honoo.BouncyCastle.Helpers
             PrivateKeyInfo priInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(password.ToCharArray(), enc);
             RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(priInfo);
             RsaKeyParameters publicKey = new RsaKeyParameters(false, privateKey.Modulus, privateKey.PublicExponent);
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <summary>
@@ -298,14 +300,14 @@ namespace Honoo.BouncyCastle.Helpers
                 privateKey = (RsaPrivateCrtKeyParameters)keyPair.Private;
                 publicKey = (RsaKeyParameters)keyPair.Public;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -313,14 +315,14 @@ namespace Honoo.BouncyCastle.Helpers
         {
             RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)keyPair.Private;
             RsaKeyParameters publicKey = (RsaKeyParameters)keyPair.Public;
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -337,14 +339,14 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (RsaKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -365,14 +367,14 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (RsaKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Modulus.BitLength;
                 _encryptor = null;
                 _decryptor = null;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -385,14 +387,14 @@ namespace Honoo.BouncyCastle.Helpers
                 AsymmetricCipherKeyPair keyPair = (AsymmetricCipherKeyPair)obj;
                 RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)keyPair.Private;
                 RsaKeyParameters publicKey = (RsaKeyParameters)keyPair.Public;
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Modulus.BitLength;
                 _encryptor = null;
                 _decryptor = null;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -441,14 +443,14 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = new RsaKeyParameters(false, modulus, exponent); ;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Modulus.BitLength;
             _encryptor = null;
             _decryptor = null;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion Export/Import Parameters
@@ -458,6 +460,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] Decrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Decrypt(rgb, 0, rgb.Length);
         }
 
@@ -488,13 +494,19 @@ namespace Honoo.BouncyCastle.Helpers
                 throw new CryptographicException("Need OAEP padding mode.");
             }
             InspectParameters();
+#pragma warning disable CA1062 // 验证公共方法的参数
             _decryptor = GetCipher(false, hashForOAEP, mgf1ForOAEP);
+#pragma warning restore CA1062 // 验证公共方法的参数
             return _decryptor.ProcessBlock(inputBuffer, offset, length);
         }
 
         /// <inheritdoc/>
         public byte[] Encrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Encrypt(rgb, 0, rgb.Length);
         }
 
@@ -525,7 +537,9 @@ namespace Honoo.BouncyCastle.Helpers
                 throw new CryptographicException("Need OAEP padding mode.");
             }
             InspectParameters();
+#pragma warning disable CA1062 // 验证公共方法的参数
             _encryptor = GetCipher(true, hashForOAEP, mgf1ForOAEP);
+#pragma warning restore CA1062 // 验证公共方法的参数
             return _encryptor.ProcessBlock(inputBuffer, offset, length);
         }
 
@@ -546,9 +560,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                if (_initialized)
+                if (base.Initialized)
                 {
-                    if (_privateKey == null)
+                    if (base.PrivateKey == null)
                     {
                         return 0;
                     }
@@ -579,6 +593,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] SignFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
             return SignFinal();
         }
@@ -593,6 +611,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void SignUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
         }
 
@@ -615,6 +637,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public bool VerifyFinal(byte[] rgb, byte[] signature)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
             return VerifyFinal(signature);
         }
@@ -629,6 +655,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void VerifyUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
         }
 
@@ -657,6 +687,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="keySize">Legal key size is more than or equal to 24 bits (8 bits increments).</param>
         /// <param name="exception">Exception message.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public bool ValidKeySize(int keySize, out string exception)
         {
             if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES, keySize))
@@ -732,7 +763,7 @@ namespace Honoo.BouncyCastle.Helpers
                 case AsymmetricEncryptionPaddingMode.ISO9796_1: cipher = new ISO9796d1Encoding(cipher); break;
                 default: throw new CryptographicException("Unsupported padding mode.");
             }
-            cipher.Init(forEncryption, forEncryption ? _publicKey : _privateKey);
+            cipher.Init(forEncryption, forEncryption ? base.PublicKey : base.PrivateKey);
             return cipher;
         }
 
@@ -751,7 +782,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case RSASignaturePaddingMode.ISO9796_2: _signer = new Iso9796d2Signer(new RsaBlindedEngine(), digest); break;
                         default: throw new CryptographicException("Unsupported signature padding mode.");
                     }
-                    _signer.Init(forSigning, _privateKey);
+                    _signer.Init(forSigning, base.PrivateKey);
                 }
             }
             else
@@ -767,7 +798,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case RSASignaturePaddingMode.ISO9796_2: _verifier = new Iso9796d2Signer(new RsaBlindedEngine(), digest); break;
                         default: throw new CryptographicException("Unsupported signature padding mode.");
                     }
-                    _verifier.Init(false, _publicKey);
+                    _verifier.Init(false, base.PublicKey);
                 }
             }
         }

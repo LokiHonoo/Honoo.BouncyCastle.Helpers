@@ -233,20 +233,20 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region Properties
 
-        private readonly HashAlgorithmName _hashAlgorithm;
+        private readonly HashAlgorithmName _hashAlgorithmName;
         private readonly string _name;
 
         /// <summary>
         /// Gets hash size bits of the algorithm.
         /// </summary>
-        public int HashSize => _hashAlgorithm.HashSize;
+        public int HashSize => _hashAlgorithmName.HashSize;
 
         /// <summary>
         /// Gets this algorithm's name.
         /// </summary>
         public string Name => _name;
 
-        internal HashAlgorithmName HashAlgorithm => _hashAlgorithm;
+        internal HashAlgorithmName HashAlgorithmName => _hashAlgorithmName;
 
         #endregion Properties
 
@@ -255,7 +255,7 @@ namespace Honoo.BouncyCastle.Helpers
         internal HMACName(HashAlgorithmName hashAlgorithm)
         {
             _name = $"HMAC-{hashAlgorithm.Name}";
-            _hashAlgorithm = hashAlgorithm;
+            _hashAlgorithmName = hashAlgorithm;
         }
 
         #endregion Construction
@@ -329,15 +329,15 @@ namespace Honoo.BouncyCastle.Helpers
                 return false;
             }
             mechanism = mechanism.Trim().Replace('_', '-').Replace('/', '-').ToUpperInvariant();
-            if (mechanism.EndsWith("-HMAC"))
+            if (mechanism.EndsWith("-HMAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(0, mechanism.Length - 5);
             }
-            else if (mechanism.StartsWith("HMAC-"))
+            else if (mechanism.StartsWith("HMAC-", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(5, mechanism.Length - 5);
             }
-            else if (mechanism.StartsWith("HMAC"))
+            else if (mechanism.StartsWith("HMAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(4, mechanism.Length - 4);
             }
@@ -410,7 +410,26 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(HMACName other)
         {
-            return other._name.Equals(_name);
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is HMACName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>

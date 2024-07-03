@@ -24,7 +24,7 @@ namespace Honoo.BouncyCastle.Helpers
         };
 
         private readonly int _stateSize;
-        private IDigest _digest;
+        private SkeinDigest _digest;
 
         #endregion Properties
 
@@ -70,7 +70,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -80,13 +80,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize, int stateSize)
@@ -125,9 +125,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
+        private SkeinDigest GetDigest()
         {
-            return new SkeinDigest(_stateSize, _hashSize);
+            return new SkeinDigest(_stateSize, base.HashSize);
         }
     }
 }

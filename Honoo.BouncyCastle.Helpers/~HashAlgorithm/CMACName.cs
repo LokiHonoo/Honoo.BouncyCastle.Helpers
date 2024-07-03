@@ -209,15 +209,15 @@ namespace Honoo.BouncyCastle.Helpers
                 return false;
             }
             mechanism = mechanism.Trim().Replace('_', '-').Replace('/', '-').ToUpperInvariant();
-            if (mechanism.EndsWith("-CMAC"))
+            if (mechanism.EndsWith("-CMAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(0, mechanism.Length - 5);
             }
-            else if (mechanism.StartsWith("CMAC-"))
+            else if (mechanism.StartsWith("CMAC-", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(5, mechanism.Length - 5);
             }
-            else if (mechanism.StartsWith("CMAC"))
+            else if (mechanism.StartsWith("CMAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(4, mechanism.Length - 4);
             }
@@ -263,7 +263,26 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(CMACName other)
         {
-            return other._name.Equals(_name);
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is CMACName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>

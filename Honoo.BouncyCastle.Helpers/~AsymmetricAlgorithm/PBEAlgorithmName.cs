@@ -71,7 +71,6 @@ namespace Honoo.BouncyCastle.Helpers
                 PBEwithSHAand40BitRC4,
             };
         }
-
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
@@ -79,8 +78,28 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(PBEAlgorithmName other)
         {
-            return _name == other._name;
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
         }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is PBEAlgorithmName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
 
         /// <summary>
         /// Return algorithm name.

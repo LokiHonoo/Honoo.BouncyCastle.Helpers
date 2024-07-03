@@ -74,7 +74,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         internal override IBlockCipher GetEngine()
         {
-            return new RijndaelEngine(_blockSize);
+            return new RijndaelEngine(base.BlockSize);
         }
     }
 }

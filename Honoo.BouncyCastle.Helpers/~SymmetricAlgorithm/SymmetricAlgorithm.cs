@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
@@ -12,19 +13,17 @@ namespace Honoo.BouncyCastle.Helpers
     {
         #region Properties
 
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-        protected int _blockSize;
-        protected IBufferedCipher _decryptor = null;
-        protected IBufferedCipher _encryptor = null;
-        protected bool _initialized = false;
-        protected int _ivSize;
-        protected int _keySize;
-        protected SymmetricCipherMode _mode = SymmetricCipherMode.CBC;
-        protected SymmetricPaddingMode _padding = SymmetricPaddingMode.PKCS7;
-        protected ICipherParameters _parameters = null;
+        private readonly int _blockSize;
         private readonly SymmetricAlgorithmKind _kind;
         private readonly string _name;
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
+        private IBufferedCipher _decryptor;
+        private IBufferedCipher _encryptor;
+        private bool _initialized;
+        private int _ivSize;
+        private int _keySize;
+        private SymmetricCipherMode _mode = SymmetricCipherMode.CBC;
+        private SymmetricPaddingMode _padding = SymmetricPaddingMode.PKCS7;
+        private ICipherParameters _parameters;
 
         /// <summary>
         /// Gets block size bits. The value will be 0 if the algorithm is a stream algorithm.
@@ -49,17 +48,33 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal iv size bits.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public abstract KeySizes[] LegalIVSizes { get; }
 
         /// <summary>
         /// Gets legal key size bits.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public abstract KeySizes[] LegalKeySizes { get; }
 
         /// <summary>
         /// Gets or sets the mode for operation of the symmetric algorithm. The parameters recreated if change this operation. Valid for block algorithm only.
         /// </summary>
-        public abstract SymmetricCipherMode Mode { get; set; }
+        public SymmetricCipherMode Mode
+        {
+            get => _mode;
+            set
+            {
+                if (value != _mode)
+                {
+                    _parameters = null;
+                    _encryptor = null;
+                    _decryptor = null;
+                    _initialized = false;
+                }
+                _mode = value;
+            }
+        }
 
         /// <summary>
         /// Gets symmetric algorithm name of the algorithm.
@@ -69,7 +84,51 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets or sets the padding mode used in the symmetric algorithm. The parameters recreated if change this operation. Valid for block algorithm only.
         /// </summary>
-        public abstract SymmetricPaddingMode Padding { get; set; }
+        public SymmetricPaddingMode Padding
+        {
+            get => _padding;
+            set
+            {
+                if (value != _padding)
+                {
+                    _parameters = null;
+                    _encryptor = null;
+                    _decryptor = null;
+                    _initialized = false;
+                }
+                _padding = value;
+            }
+        }
+
+        /// <summary>
+        /// Decryptor.
+        /// </summary>
+        protected IBufferedCipher Decryptor { get => _decryptor; set => _decryptor = value; }
+
+        /// <summary>
+        /// Encryptor.
+        /// </summary>
+        protected IBufferedCipher Encryptor { get => _encryptor; set => _encryptor = value; }
+
+        /// <summary>
+        /// Initialized.
+        /// </summary>
+        protected bool Initialized { get => _initialized; set => _initialized = value; }
+
+        /// <summary>
+        /// IVSize.
+        /// </summary>
+        protected int IVSizeProtected { get => _ivSize; set => _ivSize = value; }
+
+        /// <summary>
+        /// KeySize.
+        /// </summary>
+        protected int KeySizeProtected { get => _keySize; set => _keySize = value; }
+
+        /// <summary>
+        /// Decryptor.
+        /// </summary>
+        protected ICipherParameters Parameters { get => _parameters; set => _parameters = value; }
 
         #endregion Properties
 
@@ -189,6 +248,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="iv">Import iv bytes.</param>
         public void ImportParameters(byte[] key, byte[] iv)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
             int keySize = key.Length * 8;
             int ivSize = iv == null ? 0 : iv.Length * 8;
             if (!ValidKeySize(keySize, out string exception))
@@ -238,6 +301,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public byte[] DecryptFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return DecryptFinal(rgb, 0, rgb.Length);
         }
 
@@ -302,6 +369,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public byte[] EncryptFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return EncryptFinal(rgb, 0, rgb.Length);
         }
 
@@ -352,6 +423,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static SymmetricAlgorithm Create(SymmetricAlgorithmName algorithmName)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             return algorithmName.GetAlgorithm();
         }
 
@@ -388,14 +463,10 @@ namespace Honoo.BouncyCastle.Helpers
                 default: return null;
             }
             var net = System.Security.Cryptography.SymmetricAlgorithm.Create(name);
-            if (net != null)
-            {
-                net.Mode = mode;
-                net.Padding = padding;
-                net.FeedbackSize = _blockSize;
-                return net;
-            }
-            return null;
+            net.Mode = mode;
+            net.Padding = padding;
+            net.FeedbackSize = _blockSize;
+            return net;
         }
 
         /// <summary>

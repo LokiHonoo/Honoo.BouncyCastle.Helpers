@@ -2,7 +2,9 @@
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Security.Cryptography;
+using static Org.BouncyCastle.Crypto.Digests.SkeinEngine;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -16,10 +18,10 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_KEY_SIZE = 128;
         private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
         private readonly IDigest _core;
-        private IMac _digest;
-        private bool _initialized = false;
+        private HMac _digest;
+        private bool _initialized;
         private int _keySize = DEFAULT_KEY_SIZE;
-        private KeyParameter _parameters = null;
+        private KeyParameter _parameters;
 
         /// <summary>
         /// Gets key size bits.
@@ -34,9 +36,9 @@ namespace Honoo.BouncyCastle.Helpers
         /// Initializes a new instance of the HMAC class.
         /// </summary>
         /// <param name="algorithmName">HMAC name.</param>
-        public HMAC(HMACName algorithmName) : base(algorithmName.Name, algorithmName.HashSize)
+        public HMAC(HMACName algorithmName) : base(algorithmName == null ? throw new ArgumentNullException(nameof(algorithmName)) : algorithmName.Name, algorithmName.HashSize)
         {
-            _core = algorithmName.HashAlgorithm.GetEngine();
+            _core = algorithmName.HashAlgorithmName.GetEngine();
         }
 
         #endregion Construction
@@ -60,7 +62,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <summary>
@@ -121,6 +123,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="parameters">A BouncyCastle <see cref="ICipherParameters"/> that represents an HMAC parameters.</param>
         public void ImportParameters(ICipherParameters parameters)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
             byte[] key = ((KeyParameter)parameters).GetKey();
             int keySize = key.Length * 8;
             if (!ValidKeySize(keySize, out string exception))
@@ -139,6 +145,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="key">Legal key size is more than or equal to 8 bits (8 bits increments).</param>
         public void ImportParameters(byte[] key)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
             int keySize = key.Length * 8;
             if (!ValidKeySize(keySize, out string exception))
             {
@@ -159,17 +169,17 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Compute data hash.
         /// </summary>
-        /// <param name="buffer">The data buffer to be hash.</param>
+        /// <param name="inputBuffer">The data buffer to be hash.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             InspectParameters();
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         /// <summary>
@@ -178,6 +188,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="keySize">Legal key size is more than or equal to 8 bits (8 bits increments).</param>
         /// <param name="exception">Exception message.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public bool ValidKeySize(int keySize, out string exception)
         {
             if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES, keySize))
@@ -192,9 +203,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IMac GetDigest()
+        private HMac GetDigest()
         {
-            IMac digest = new HMac(_core);
+            HMac digest = new HMac(_core);
             digest.Init(_parameters);
             return digest;
         }

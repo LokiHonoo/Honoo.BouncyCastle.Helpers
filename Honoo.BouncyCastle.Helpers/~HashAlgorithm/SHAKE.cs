@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         private const string NAME = "SHAKE";
         private static readonly KeySizes[] LEGAL_HASH_SIZES = new KeySizes[] { new KeySizes(256, 512, 256) };
-        private IDigest _digest;
+        private ShakeDigest _digest;
 
         #endregion Properties
 
@@ -52,7 +52,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -62,13 +62,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
@@ -93,9 +93,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
+        private ShakeDigest GetDigest()
         {
-            return new ShakeDigest(_hashSize / 2);
+            return new ShakeDigest(base.HashSize / 2);
         }
     }
 }

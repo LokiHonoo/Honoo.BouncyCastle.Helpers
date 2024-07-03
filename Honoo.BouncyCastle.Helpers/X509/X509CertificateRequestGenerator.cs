@@ -6,6 +6,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
+using System;
 using System.IO;
 
 namespace Honoo.BouncyCastle.Helpers.X509
@@ -46,6 +47,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="subjectKeyPair">Subject asymmetric key pair.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, AsymmetricCipherKeyPair subjectKeyPair)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportParameters(subjectKeyPair);
@@ -60,6 +65,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="subjectPrivateKey">Subject asymmetric private key. Create public key automatically.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, AsymmetricKeyParameter subjectPrivateKey)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportParameters(subjectPrivateKey);
@@ -74,6 +83,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="subjectPrivateKeyPem">Subject asymmetric private key pem string. Create public key automatically.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, string subjectPrivateKeyPem)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportPem(subjectPrivateKeyPem);
@@ -89,6 +102,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="password">Using decrypt private key.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, string subjectPrivateKeyPem, string password)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportPem(subjectPrivateKeyPem, password);
@@ -103,6 +120,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="subjectPrivateKeyInfo">Subject asymmetric private key PKCS#8 info. Create public key automatically.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, byte[] subjectPrivateKeyInfo)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportKeyInfo(subjectPrivateKeyInfo);
@@ -118,6 +139,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="password">Using decrypt private key.</param>
         public X509CertificateRequestGenerator(SignatureAlgorithmName algorithmName, byte[] subjectPrivateKeyInfo, string password)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportKeyInfo(subjectPrivateKeyInfo, password);

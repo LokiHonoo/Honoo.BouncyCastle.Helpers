@@ -7,7 +7,7 @@
 - [Honoo.BouncyCastle.Helpers](#honoobouncycastlehelpers)
   - [INTRODUCTION](#introduction)
   - [USAGE](#usage)
-    - [Github](#github)
+    - [GitHub](#github)
   - [LICENSE](#license)
 
 <!-- /code_chunk_output -->
@@ -18,7 +18,7 @@ BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.
 
 ## USAGE
 
-### Github
+### GitHub
 
 <https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers/>
 

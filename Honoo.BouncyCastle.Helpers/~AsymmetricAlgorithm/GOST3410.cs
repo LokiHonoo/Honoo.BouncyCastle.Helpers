@@ -10,6 +10,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -25,8 +26,8 @@ namespace Honoo.BouncyCastle.Helpers
         private const GOST3410Parameters DEFAULT_PARAMETERS = GOST3410Parameters.GostR3410x94CryptoProA;
         private const string NAME = "GOST3410";
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.GOST3411;
-        private ISigner _signer = null;
-        private ISigner _verifier = null;
+        private Gost3410DigestSigner _signer ;
+        private Gost3410DigestSigner _verifier ;
 
         /// <summary>
         /// Get or set hash algorithm for signature. Legal hash algorithm is hash size more than or equal to 256 bits.
@@ -100,11 +101,11 @@ namespace Honoo.BouncyCastle.Helpers
             Gost3410KeyPairGenerator keyPairGenerator = new Gost3410KeyPairGenerator();
             keyPairGenerator.Init(generationParameters);
             AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -135,11 +136,11 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -151,21 +152,21 @@ namespace Honoo.BouncyCastle.Helpers
             Gost3410PrivateKeyParameters privateKey = (Gost3410PrivateKeyParameters)PrivateKeyFactory.CreateKey(priInfo);
             BigInteger y = privateKey.Parameters.A.ModPow(privateKey.X, privateKey.Parameters.P);
             Gost3410PublicKeyParameters publicKey = new Gost3410PublicKeyParameters(y, privateKey.Parameters);
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
         public override void ImportParameters(AsymmetricCipherKeyPair keyPair)
         {
-            _privateKey = (Gost3410PrivateKeyParameters)keyPair.Private;
-            _publicKey = (Gost3410PublicKeyParameters)keyPair.Public;
+            base.PrivateKey = (Gost3410PrivateKeyParameters)keyPair.Private;
+            base.PublicKey = (Gost3410PublicKeyParameters)keyPair.Public;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -183,11 +184,11 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (Gost3410PublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -208,11 +209,11 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (Gost3410PublicKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -225,11 +226,11 @@ namespace Honoo.BouncyCastle.Helpers
                 Gost3410PrivateKeyParameters privateKey = (Gost3410PrivateKeyParameters)obj;
                 BigInteger y = privateKey.Parameters.A.ModPow(privateKey.X, privateKey.Parameters.P);
                 Gost3410PublicKeyParameters publicKey = new Gost3410PublicKeyParameters(y, privateKey.Parameters);
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -255,6 +256,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] SignFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
             return SignFinal();
         }
@@ -269,6 +274,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void SignUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
         }
 
@@ -291,6 +300,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public bool VerifyFinal(byte[] rgb, byte[] signature)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
             return VerifyFinal(signature);
         }
@@ -305,6 +318,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void VerifyUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
         }
 
@@ -366,7 +383,7 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     IDigest digest = _hashAlgorithmName.GetEngine();
                     _signer = new Gost3410DigestSigner(new Gost3410Signer(), digest);
-                    _signer.Init(true, _privateKey);
+                    _signer.Init(true, base.PrivateKey);
                 }
             }
             else
@@ -375,7 +392,7 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     IDigest digest = _hashAlgorithmName.GetEngine();
                     _verifier = new Gost3410DigestSigner(new Gost3410Signer(), digest);
-                    _verifier.Init(false, _publicKey);
+                    _verifier.Init(false, base.PublicKey);
                 }
             }
         }

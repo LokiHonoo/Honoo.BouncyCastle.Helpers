@@ -1,5 +1,6 @@
 ﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
@@ -13,16 +14,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         private readonly int _defaultIVSize;
         private readonly int _defaultKeySize;
-
-        /// <summary>
-        /// Gets or sets the mode for operation of the symmetric algorithm. Valid for block algorithm only.
-        /// </summary>
-        public override SymmetricCipherMode Mode { get => _mode; set => _mode = value; }
-
-        /// <summary>
-        /// Gets or sets the padding mode used in the symmetric algorithm. Valid for block algorithm only.
-        /// </summary>
-        public override SymmetricPaddingMode Padding { get => _padding; set => _padding = value; }
 
         #endregion Properties
 
@@ -54,6 +45,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public override void ImportParameters(ICipherParameters parameters)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
             int keySize;
             int ivSize;
             ICipherParameters parameters1;
@@ -98,12 +93,12 @@ namespace Honoo.BouncyCastle.Helpers
                 }
                 parameters1 = GetKeyParameter(key);
             }
-            _parameters = parameters1;
-            _keySize = keySize;
-            _ivSize = ivSize;
-            _encryptor = null;
-            _decryptor = null;
-            _initialized = true;
+            base.Parameters = parameters1;
+            base.KeySizeProtected = keySize;
+            base.IVSizeProtected = ivSize;
+            base.Encryptor = null;
+            base.Decryptor = null;
+            base.Initialized = true;
         }
 
         /// <summary>
@@ -120,8 +115,8 @@ namespace Honoo.BouncyCastle.Helpers
         protected override IBufferedCipher GetCipher(bool forEncryption)
         {
             IStreamCipher engine = GetEngine();
-            IBufferedCipher cipher = new BufferedStreamCipher(engine);
-            cipher.Init(forEncryption, _parameters);
+            BufferedStreamCipher cipher = new BufferedStreamCipher(engine);
+            cipher.Init(forEncryption, base.Parameters);
             return cipher;
         }
     }

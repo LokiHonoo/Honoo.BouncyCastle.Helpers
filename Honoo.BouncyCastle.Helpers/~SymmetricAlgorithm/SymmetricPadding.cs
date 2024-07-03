@@ -11,9 +11,9 @@ namespace Honoo.BouncyCastle.Helpers
         internal static IBlockCipherPadding X923_PADDING { get; } = new X923Padding();
         internal static IBlockCipherPadding ZEROBYTE_PADDING { get; } = new ZeroBytePadding();
 
-        private static IBlockCipherPadding GetISO10126d2Padding()
+        private static ISO10126d2Padding GetISO10126d2Padding()
         {
-            IBlockCipherPadding padding = new ISO10126d2Padding();
+            ISO10126d2Padding padding = new ISO10126d2Padding();
             padding.Init(Common.SecureRandom.Value);
             return padding;
         }

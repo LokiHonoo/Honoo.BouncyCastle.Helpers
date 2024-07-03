@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers
         private static readonly KeySizes[] LEGAL_HASH_SIZES = new KeySizes[] { new KeySizes(256, 512, 256) };
         private readonly byte[] _customization;
         private readonly byte[] _nist;
-        private IDigest _digest;
+        private CShakeDigest _digest;
 
         #endregion Properties
 
@@ -60,7 +60,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -70,13 +70,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
@@ -101,9 +101,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
+        private CShakeDigest GetDigest()
         {
-            return new CShakeDigest(_hashSize / 2, _nist, _customization);
+            return new CShakeDigest(base.HashSize / 2, _nist, _customization);
         }
     }
 }

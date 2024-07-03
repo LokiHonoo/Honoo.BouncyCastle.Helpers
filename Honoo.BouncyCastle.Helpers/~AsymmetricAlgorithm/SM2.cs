@@ -11,6 +11,7 @@ using Org.BouncyCastle.Math.EC.Multiplier;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -26,14 +27,14 @@ namespace Honoo.BouncyCastle.Helpers
         private const SM2EllipticCurve DEFAULT_CURVE = SM2EllipticCurve.Sm2P256v1;
         private const int DEFAULT_KEY_SIZE = 256;
         private const string NAME = "SM2";
-        private SM2Engine _decryptor = null;
-        private bool _encryptionInitialized = false;
-        private SM2Engine _encryptor = null;
+        private SM2Engine _decryptor;
+        private bool _encryptionInitialized;
+        private SM2Engine _encryptor;
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SM3;
         private int _keySize = DEFAULT_KEY_SIZE;
-        private ICipherParameters _publicEncryptionKey = null;
-        private ISigner _signer = null;
-        private ISigner _verifier = null;
+        private ICipherParameters _publicEncryptionKey;
+        private SM2Signer _signer;
+        private SM2Signer _verifier;
 
         /// <inheritdoc/>
         public HashAlgorithmName HashAlgorithmName
@@ -94,12 +95,12 @@ namespace Honoo.BouncyCastle.Helpers
             ECKeyPairGenerator generator = new ECKeyPairGenerator();
             generator.Init(generationParameters);
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _keySize = ellipticCurve == SM2EllipticCurve.WapiP192v1 ? 192 : 256;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
             _publicEncryptionKey = null;
             _encryptor = null;
             _decryptor = null;
@@ -134,12 +135,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.Curve.FieldSize;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
             _publicEncryptionKey = null;
             _encryptor = null;
             _decryptor = null;
@@ -156,12 +157,12 @@ namespace Honoo.BouncyCastle.Helpers
             var q = new FixedPointCombMultiplier().Multiply(privateKey.Parameters.G, privateKey.D);
             ECPublicKeyParameters publicKey = new ECPublicKeyParameters(privateKey.AlgorithmName, q, privateKey.Parameters);
 
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.Curve.FieldSize;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
             _publicEncryptionKey = null;
             _encryptor = null;
             _decryptor = null;
@@ -173,12 +174,12 @@ namespace Honoo.BouncyCastle.Helpers
         {
             ECPrivateKeyParameters privateKey = (ECPrivateKeyParameters)keyPair.Private;
             ECPublicKeyParameters publicKey = (ECPublicKeyParameters)keyPair.Public;
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.Curve.FieldSize;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
             _publicEncryptionKey = null;
             _encryptor = null;
             _decryptor = null;
@@ -200,12 +201,12 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (ECPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.Curve.FieldSize;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
             _publicEncryptionKey = null;
             _encryptor = null;
             _decryptor = null;
@@ -230,12 +231,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (ECPublicKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.Curve.FieldSize;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
                 _publicEncryptionKey = null;
                 _encryptor = null;
                 _decryptor = null;
@@ -252,12 +253,12 @@ namespace Honoo.BouncyCastle.Helpers
                 AsymmetricCipherKeyPair keyPair = (AsymmetricCipherKeyPair)obj;
                 ECPrivateKeyParameters privateKey = (ECPrivateKeyParameters)keyPair.Private;
                 ECPublicKeyParameters publicKey = (ECPublicKeyParameters)keyPair.Public;
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.Curve.FieldSize;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
                 _publicEncryptionKey = null;
                 _encryptor = null;
                 _decryptor = null;
@@ -272,6 +273,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] Decrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Decrypt(rgb, 0, rgb.Length);
         }
 
@@ -290,6 +295,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] Encrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Encrypt(rgb, 0, rgb.Length);
         }
 
@@ -319,9 +328,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                if (_initialized)
+                if (base.Initialized)
                 {
-                    if (_privateKey == null)
+                    if (base.PrivateKey == null)
                     {
                         return 0;
                     }
@@ -352,6 +361,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] SignFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
             return SignFinal();
         }
@@ -366,6 +379,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void SignUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
         }
 
@@ -388,6 +405,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public bool VerifyFinal(byte[] rgb, byte[] signature)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
             return VerifyFinal(signature);
         }
@@ -402,6 +423,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void VerifyUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
         }
 
@@ -453,7 +478,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         private void GenerateEncryptionParameters()
         {
-            _publicEncryptionKey = new ParametersWithRandom(_publicKey, Common.SecureRandom.Value);
+            _publicEncryptionKey = new ParametersWithRandom(base.PublicKey, Common.SecureRandom.Value);
             _decryptor = null;
             _encryptor = null;
             _encryptionInitialized = true;
@@ -462,7 +487,7 @@ namespace Honoo.BouncyCastle.Helpers
         private SM2Engine GetCipher(bool forEncryption)
         {
             SM2Engine cipher = new SM2Engine();
-            cipher.Init(forEncryption, forEncryption ? _publicEncryptionKey : _privateKey);
+            cipher.Init(forEncryption, forEncryption ? _publicEncryptionKey : base.PrivateKey);
             return cipher;
         }
 
@@ -482,7 +507,7 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     IDigest digest = _hashAlgorithmName.GetEngine();
                     _signer = new SM2Signer(digest);
-                    _signer.Init(true, _privateKey);
+                    _signer.Init(true, base.PrivateKey);
                 }
             }
             else
@@ -491,7 +516,7 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     IDigest digest = _hashAlgorithmName.GetEngine();
                     _verifier = new SM2Signer(digest);
-                    _verifier.Init(false, _publicKey);
+                    _verifier.Init(false, base.PublicKey);
                 }
             }
         }

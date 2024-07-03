@@ -10,6 +10,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Sand this value to terminal B.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         byte[] G { get; }
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits. Legal key size 192, 224, 239, 256, 384, 521..
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         KeySizes[] LegalKeySizes { get; }
 
         /// <summary>
@@ -35,20 +37,22 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Sand this value to terminal B.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         byte[] P { get; }
 
         /// <summary>
         /// Sand this value to terminal B.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         byte[] PublicKeyA { get; }
 
         /// <summary>
         /// Derive key material from the terminal B's exchange.
         /// </summary>
         /// <param name="publicKeyB">The terminal B's public key blob.</param>
-        /// <param name="unsigned">Output unsigned bytes.</param>
+        /// <param name="unsignedMaterial">Output unsigned bytes.</param>
         /// <returns></returns>
-        byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsigned);
+        byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsignedMaterial);
 
         /// <summary>
         /// Generate new parameters of algorithm terminal A.

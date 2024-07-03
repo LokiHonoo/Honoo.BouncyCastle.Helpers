@@ -48,6 +48,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="issuerPrivateKey">Issuer(CA) private key.</param>
         public X509CertificateRevocationListGenerator(SignatureAlgorithmName algorithmName, AsymmetricKeyParameter issuerPrivateKey)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportParameters(issuerPrivateKey);
@@ -61,6 +65,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="issuerPrivateKeyPem">Issuer(CA) private key pem string.</param>
         public X509CertificateRevocationListGenerator(SignatureAlgorithmName algorithmName, string issuerPrivateKeyPem)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportPem(issuerPrivateKeyPem);
@@ -75,6 +83,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="password">Using decrypt private key.</param>
         public X509CertificateRevocationListGenerator(SignatureAlgorithmName algorithmName, string issuerPrivateKeyPem, string password)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportPem(issuerPrivateKeyPem, password);
@@ -88,6 +100,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="issuerPrivateKeyInfo">Issuer(CA) private key info.</param>
         public X509CertificateRevocationListGenerator(SignatureAlgorithmName algorithmName, byte[] issuerPrivateKeyInfo)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportKeyInfo(issuerPrivateKeyInfo);
@@ -102,6 +118,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="password">Using decrypt private key.</param>
         public X509CertificateRevocationListGenerator(SignatureAlgorithmName algorithmName, byte[] issuerPrivateKeyInfo, string password)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             _asn1Algorithm = algorithmName.Asn1Identifier;
             AsymmetricAlgorithm algorithm = algorithmName.GetAlgorithm();
             algorithm.ImportKeyInfo(issuerPrivateKeyInfo, password);

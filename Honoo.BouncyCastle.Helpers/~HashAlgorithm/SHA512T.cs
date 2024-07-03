@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         private const string NAME = "SHA512/";
         private static readonly KeySizes[] LEGAL_HASH_SIZES = new KeySizes[] { new KeySizes(224, 376, 8), new KeySizes(392, 504, 8) };
-        private IDigest _digest;
+        private Sha512tDigest _digest;
 
         #endregion Properties
 
@@ -52,7 +52,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -62,13 +62,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
@@ -93,9 +93,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
+        private Sha512tDigest GetDigest()
         {
-            return new Sha512tDigest(_hashSize);
+            return new Sha512tDigest(base.HashSize);
         }
     }
 }

@@ -7,6 +7,7 @@ using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -15,25 +16,36 @@ namespace Honoo.BouncyCastle.Helpers
     /// <summary>
     /// Represents the abstract base class from which all implementations of asymmetric algorithms must inherit.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:请删除不必要的忽略", Justification = "<挂起>")]
     public abstract class AsymmetricAlgorithm : IAsymmetricAlgorithm
     {
         #region Properties
 
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-
-        protected bool _initialized = false;
-        protected AsymmetricKeyParameter _privateKey = null;
-        protected AsymmetricKeyParameter _publicKey = null;
         private readonly AsymmetricAlgorithmKind _kind;
         private readonly string _name;
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
+        private bool _initialized;
+        private AsymmetricKeyParameter _privateKey;
+        private AsymmetricKeyParameter _publicKey;
 
         /// <inheritdoc/>
         public AsymmetricAlgorithmKind Kind => _kind;
 
         /// <inheritdoc/>
         public string Name => _name;
+
+        /// <summary>
+        /// Initialized.
+        /// </summary>
+        protected bool Initialized { get => _initialized; set => _initialized = value; }
+
+        /// <summary>
+        /// PrivateKey.
+        /// </summary>
+        protected AsymmetricKeyParameter PrivateKey { get => _privateKey; set => _privateKey = value; }
+
+        /// <summary>
+        /// PublicKey.
+        /// </summary>
+        protected AsymmetricKeyParameter PublicKey { get => _publicKey; set => _publicKey = value; }
 
         #endregion Properties
 
@@ -73,6 +85,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] ExportKeyInfo(PBEAlgorithmName pbeAlgorithmName, string password)
         {
+            if (pbeAlgorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(pbeAlgorithmName));
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException($"“{nameof(password)}”can't be null or blank.", nameof(password));
+            }
             InspectParameters();
             byte[] salt = new byte[16];
             Common.SecureRandom.Value.NextBytes(salt);
@@ -111,6 +131,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public string ExportPem(DEKAlgorithmName dekAlgorithmName, string password)
         {
+            if (dekAlgorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(dekAlgorithmName));
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException($"“{nameof(password)}”can't be null or blank.", nameof(password));
+            }
             InspectParameters();
             using (StringWriter writer = new StringWriter())
             {
@@ -147,6 +175,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricAlgorithm Create(AsymmetricAlgorithmName algorithmName)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             return algorithmName.GetAlgorithm();
         }
 
@@ -157,6 +189,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static ISignatureAlgorithm Create(SignatureAlgorithmName algorithmName)
         {
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
             return (ISignatureAlgorithm)algorithmName.GetAlgorithm();
         }
 
@@ -167,6 +203,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricAlgorithm CreateBy(AsymmetricCipherKeyPair keyPair)
         {
+            if (keyPair == null)
+            {
+                throw new ArgumentNullException(nameof(keyPair));
+            }
             AsymmetricAlgorithm algorithm;
             switch (keyPair.Private)
             {
@@ -191,6 +231,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricAlgorithm CreateBy(AsymmetricKeyParameter asymmetricKey)
         {
+            if (asymmetricKey == null)
+            {
+                throw new ArgumentNullException(nameof(asymmetricKey));
+            }
             AsymmetricAlgorithm algorithm;
             if (asymmetricKey.IsPrivate)
             {
@@ -254,6 +298,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricAlgorithm CreateBy(string privateKeyPem, string password)
         {
+            if (string.IsNullOrWhiteSpace(privateKeyPem))
+            {
+                throw new ArgumentException($"“{nameof(privateKeyPem)}”can't be null or blank.", nameof(privateKeyPem));
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException($"“{nameof(password)}”can't be null or blank.", nameof(password));
+            }
             using (StringReader reader = new StringReader(privateKeyPem))
             {
                 object obj = new PemReader(reader, new Password(password)).ReadObject();
@@ -299,6 +351,14 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static AsymmetricAlgorithm CreateBy(byte[] privateKeyInfo, string password)
         {
+            if (privateKeyInfo == null)
+            {
+                throw new ArgumentNullException(nameof(privateKeyInfo));
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException($"“{nameof(password)}”can't be null or blank.", nameof(password));
+            }
             Asn1Object asn1 = Asn1Object.FromByteArray(privateKeyInfo);
             EncryptedPrivateKeyInfo enc = EncryptedPrivateKeyInfo.GetInstance(asn1);
             PrivateKeyInfo priInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(password.ToCharArray(), enc);

@@ -31,8 +31,8 @@ namespace Honoo.BouncyCastle.Helpers
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;
         private int _keySize = DEFAULT_KEY_SIZE;
         private DSASignatureEncodingMode _signatureEncoding = DSASignatureEncodingMode.Standard;
-        private ISigner _signer = null;
-        private ISigner _verifier = null;
+        private DsaDigestSigner _signer;
+        private DsaDigestSigner _verifier;
 
         /// <inheritdoc/>
         public HashAlgorithmName HashAlgorithmName
@@ -57,6 +57,8 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits. Legal key size 512-1024 bits (64 bits increments).
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES.Clone();
 
         /// <inheritdoc/>
@@ -130,12 +132,12 @@ namespace Honoo.BouncyCastle.Helpers
             DsaKeyPairGenerator keyPairGenerator = new DsaKeyPairGenerator();
             keyPairGenerator.Init(generationParameters);
             AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _keySize = keySize;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -166,12 +168,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -183,12 +185,12 @@ namespace Honoo.BouncyCastle.Helpers
             DsaPrivateKeyParameters privateKey = (DsaPrivateKeyParameters)PrivateKeyFactory.CreateKey(priInfo);
             BigInteger y = privateKey.Parameters.G.ModPow(privateKey.X, privateKey.Parameters.P);
             DsaPublicKeyParameters publicKey = new DsaPublicKeyParameters(y, privateKey.Parameters);
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <summary>
@@ -209,12 +211,12 @@ namespace Honoo.BouncyCastle.Helpers
                 privateKey = (DsaPrivateKeyParameters)keyPair.Private;
                 publicKey = (DsaPublicKeyParameters)keyPair.Public;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -222,12 +224,12 @@ namespace Honoo.BouncyCastle.Helpers
         {
             DsaPrivateKeyParameters privateKey = (DsaPrivateKeyParameters)keyPair.Private;
             DsaPublicKeyParameters publicKey = (DsaPublicKeyParameters)keyPair.Public;
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -245,12 +247,12 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (DsaPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -271,12 +273,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (DsaPublicKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.P.BitLength;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -289,12 +291,12 @@ namespace Honoo.BouncyCastle.Helpers
                 AsymmetricCipherKeyPair keyPair = (AsymmetricCipherKeyPair)obj;
                 DsaPrivateKeyParameters privateKey = (DsaPrivateKeyParameters)keyPair.Private;
                 DsaPublicKeyParameters publicKey = (DsaPublicKeyParameters)keyPair.Public;
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.P.BitLength;
                 _signer = null;
                 _verifier = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -335,12 +337,12 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = new DsaPublicKeyParameters(y, parameters);
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _signer = null;
             _verifier = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion Export/Import Parameters
@@ -365,6 +367,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] SignFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
             return SignFinal();
         }
@@ -379,6 +385,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void SignUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             SignUpdate(rgb, 0, rgb.Length);
         }
 
@@ -401,6 +411,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public bool VerifyFinal(byte[] rgb, byte[] signature)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
             return VerifyFinal(signature);
         }
@@ -415,6 +429,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public void VerifyUpdate(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             VerifyUpdate(rgb, 0, rgb.Length);
         }
 
@@ -443,6 +461,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="keySize">Legal key size 512-1024 bits (64 bits increments).</param>
         /// <param name="exception">Exception message.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public bool ValidKeySize(int keySize, out string exception)
         {
             if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES, keySize))
@@ -493,7 +512,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case DSASignatureEncodingMode.Plain: _signer = new DsaDigestSigner(new DsaSigner(), digest, PlainDsaEncoding.Instance); break;
                         default: throw new CryptographicException("Unsupported signature encoding mode.");
                     }
-                    _signer.Init(true, _privateKey);
+                    _signer.Init(true, base.PrivateKey);
                 }
             }
             else
@@ -507,7 +526,7 @@ namespace Honoo.BouncyCastle.Helpers
                         case DSASignatureEncodingMode.Plain: _verifier = new DsaDigestSigner(new DsaSigner(), digest, PlainDsaEncoding.Instance); break;
                         default: throw new CryptographicException("Unsupported signature encoding mode.");
                     }
-                    _verifier.Init(false, _publicKey);
+                    _verifier.Init(false, base.PublicKey);
                 }
             }
         }

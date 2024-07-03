@@ -401,7 +401,26 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(HashAlgorithmName other)
         {
-            return other._name.Equals(_name);
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is HashAlgorithmName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -415,7 +434,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static bool TryGetAlgorithmNameNano(string mechanism, out HashAlgorithmName algorithmName)
         {
-            if (mechanism.StartsWith("BLAKE2B"))
+            if (mechanism.StartsWith("BLAKE2B", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(7, mechanism.Length - 7);
                 cut = cut.TrimStart('-');
@@ -428,7 +447,7 @@ namespace Honoo.BouncyCastle.Helpers
                     }
                 }
             }
-            else if (mechanism.StartsWith("BLAKE2S"))
+            else if (mechanism.StartsWith("BLAKE2S", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(7, mechanism.Length - 7);
                 cut = cut.TrimStart('-');
@@ -441,7 +460,7 @@ namespace Honoo.BouncyCastle.Helpers
                     }
                 }
             }
-            else if (mechanism.StartsWith("SHA512T"))
+            else if (mechanism.StartsWith("SHA512T", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(7, mechanism.Length - 7);
                 if (int.TryParse(cut, out int hashSize))
@@ -453,7 +472,7 @@ namespace Honoo.BouncyCastle.Helpers
                     }
                 }
             }
-            else if (mechanism.StartsWith("SHA-512"))
+            else if (mechanism.StartsWith("SHA-512", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(7, mechanism.Length - 7);
                 cut = cut.TrimStart('-');
@@ -466,7 +485,7 @@ namespace Honoo.BouncyCastle.Helpers
                     }
                 }
             }
-            else if (mechanism.StartsWith("SHA512"))
+            else if (mechanism.StartsWith("SHA512", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(6, mechanism.Length - 6);
                 cut = cut.TrimStart('-');
@@ -479,7 +498,7 @@ namespace Honoo.BouncyCastle.Helpers
                     }
                 }
             }
-            else if (mechanism.StartsWith("SKEIN"))
+            else if (mechanism.StartsWith("SKEIN", StringComparison.Ordinal))
             {
                 string cut = mechanism.Substring(5, mechanism.Length - 5);
                 cut = cut.TrimStart('-');

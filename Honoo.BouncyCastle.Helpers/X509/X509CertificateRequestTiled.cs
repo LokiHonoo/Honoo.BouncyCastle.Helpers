@@ -5,6 +5,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using System;
 using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
@@ -69,6 +70,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="publicKey">Public key.</param>
         public bool Verify(AsymmetricKeyParameter publicKey)
         {
+            if (publicKey == null)
+            {
+                throw new ArgumentNullException(nameof(publicKey));
+            }
             if (publicKey.IsPrivate)
             {
                 throw new CryptographicException("Verify need a public key.");

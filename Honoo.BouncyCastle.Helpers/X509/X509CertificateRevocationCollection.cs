@@ -12,7 +12,7 @@ namespace Honoo.BouncyCastle.Helpers.X509
         #region Properties
 
         private readonly IList<X509CertificateRevocationEntity> _elements = new List<X509CertificateRevocationEntity>();
-        private readonly ISet<string> _orders = new HashSet<string>();
+        private readonly HashSet<string> _orders = new HashSet<string>();
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="X509CertificateRevocationCollection"/>.
@@ -42,6 +42,10 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <param name="item">The <see cref="X509CertificateRevocationEntity"/> to add to the <see cref="X509CertificateRevocationCollection"/>.</param>
         public void Add(X509CertificateRevocationEntity item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
             _orders.Add(item.SerialNumber);
             _elements.Add(item);
         }
@@ -109,9 +113,8 @@ namespace Honoo.BouncyCastle.Helpers.X509
         /// <returns>Return true if item was successfully removed, otherwise, false. This method also returns false if item is not found.</returns>
         public bool Remove(string serialNumber)
         {
-            if (_orders.Contains(serialNumber))
+            if (_orders.Remove(serialNumber))
             {
-                _orders.Remove(serialNumber);
                 for (int i = _elements.Count - 1; i >= 0; i--)
                 {
                     if (_elements[i].SerialNumber == serialNumber)

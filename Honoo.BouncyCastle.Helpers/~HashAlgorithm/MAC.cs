@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
+using System;
 using System.Security.Cryptography;
 
 namespace Honoo.BouncyCastle.Helpers
@@ -74,7 +75,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Initializes a new instance of the MAC class.
         /// </summary>
         /// <param name="algorithmName">MAC name.</param>
-        public MAC(MACName algorithmName) : this(algorithmName, algorithmName.BlockSize)
+        public MAC(MACName algorithmName) : this(algorithmName, algorithmName == null ? throw new ArgumentNullException(nameof(algorithmName)) : algorithmName.BlockSize)
         {
         }
 
@@ -83,7 +84,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// </summary>
         /// <param name="algorithmName">MAC name.</param>
         /// <param name="macSize">Legal mac size is between 8 and symmetric algorithm block size bits (8 bits increments).</param>
-        public MAC(MACName algorithmName, int macSize) : base(algorithmName.Name, macSize)
+        public MAC(MACName algorithmName, int macSize) : base(algorithmName == null ? throw new ArgumentNullException(nameof(algorithmName)) : algorithmName.Name, macSize)
         {
             if (macSize < 8 || macSize > algorithmName.BlockSize || macSize % 8 != 0)
             {
@@ -124,7 +125,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <summary>
@@ -199,16 +200,16 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Compute data hash.
         /// </summary>
-        /// <param name="buffer">The data buffer to be hash.</param>
+        /// <param name="inputBuffer">The data buffer to be hash.</param>
         /// <param name="offset">The starting offset to read.</param>
         /// <param name="length">The length to read.</param>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         /// <summary>

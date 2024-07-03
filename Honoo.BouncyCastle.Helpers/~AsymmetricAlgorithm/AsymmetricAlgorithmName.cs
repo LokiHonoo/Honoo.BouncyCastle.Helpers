@@ -175,7 +175,26 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(AsymmetricAlgorithmName other)
         {
-            return other._name.Equals(_name);
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is AsymmetricAlgorithmName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>

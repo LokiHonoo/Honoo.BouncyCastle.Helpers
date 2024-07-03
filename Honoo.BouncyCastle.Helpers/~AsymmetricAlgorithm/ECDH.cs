@@ -31,16 +31,17 @@ namespace Honoo.BouncyCastle.Helpers
             new KeySizes(521, 521, 0)
         };
 
-        private ECDHBasicAgreement _agreementA = null;
-        private ECDHBasicAgreement _agreementB = null;
-        private byte[] _g = null;
+        private ECDHBasicAgreement _agreementA;
+        private ECDHBasicAgreement _agreementB;
+        private byte[] _g;
         private int _keySize = DEFAULT_KEY_SIZE;
-        private byte[] _p = null;
-        private BigInteger _pmsB = null;
-        private byte[] _publicKeyA = null;
-        private byte[] _publicKeyB = null;
+        private byte[] _p;
+        private BigInteger _pmsB;
+        private byte[] _publicKeyA;
+        private byte[] _publicKeyB;
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public byte[] G
         {
             get
@@ -54,9 +55,11 @@ namespace Honoo.BouncyCastle.Helpers
         public int KeySize => _keySize;
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES.Clone();
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public byte[] P
         {
             get
@@ -67,6 +70,7 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public byte[] PublicKeyA
         {
             get
@@ -77,6 +81,7 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         public byte[] PublicKeyB => _publicKeyB;
 
         #endregion Properties
@@ -98,6 +103,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets key exchange algorithm terminal A's interface.
         /// </summary>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1024:在适用处使用属性", Justification = "<挂起>")]
         public IKeyExchangeTerminalA GetTerminalA()
         {
             return this;
@@ -107,6 +113,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets key exchange algorithm terminal B's interface.
         /// </summary>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1024:在适用处使用属性", Justification = "<挂起>")]
         public IKeyExchangeTerminalB GetTerminalB()
         {
             return this;
@@ -152,7 +159,7 @@ namespace Honoo.BouncyCastle.Helpers
             _pmsB = null;
             _publicKeyB = null;
             //
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -176,7 +183,7 @@ namespace Honoo.BouncyCastle.Helpers
             _g = null;
             _publicKeyA = null;
             //
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -184,17 +191,17 @@ namespace Honoo.BouncyCastle.Helpers
         #region Derive
 
         /// <inheritdoc/>
-        public byte[] DeriveKeyMaterial(bool unsigned)
+        public byte[] DeriveKeyMaterial(bool unsignedMaterial)
         {
-            return unsigned ? _pmsB.ToByteArrayUnsigned() : _pmsB.ToByteArray();
+            return unsignedMaterial ? _pmsB.ToByteArrayUnsigned() : _pmsB.ToByteArray();
         }
 
         /// <inheritdoc/>
-        public byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsigned)
+        public byte[] DeriveKeyMaterial(byte[] publicKeyB, bool unsignedMaterial)
         {
             AsymmetricKeyParameter publicKeyBob = PublicKeyFactory.CreateKey(publicKeyB);
             BigInteger pmsA = _agreementA.CalculateAgreement(publicKeyBob);
-            return unsigned ? pmsA.ToByteArrayUnsigned() : pmsA.ToByteArray();
+            return unsignedMaterial ? pmsA.ToByteArrayUnsigned() : pmsA.ToByteArray();
         }
 
         #endregion Derive

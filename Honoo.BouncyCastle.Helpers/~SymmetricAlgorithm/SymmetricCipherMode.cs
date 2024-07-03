@@ -3,6 +3,8 @@
     /// <summary>
     /// Symmetric algorithm cipher mode.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1008:枚举应具有零值", Justification = "<挂起>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:标识符不应包含下划线", Justification = "<挂起>")]
     public enum SymmetricCipherMode
     {
         /// <summary>

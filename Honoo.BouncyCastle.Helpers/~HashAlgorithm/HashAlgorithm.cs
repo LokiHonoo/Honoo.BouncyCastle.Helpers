@@ -9,10 +9,7 @@ namespace Honoo.BouncyCastle.Helpers
     {
         #region Properties
 
-        /// <summary>
-        /// Hash size bits.
-        /// </summary>
-        protected readonly int _hashSize;
+        private readonly int _hashSize;
 
         private readonly string _name;
 
@@ -50,7 +47,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public static HashAlgorithm Create(HashAlgorithmName algorithmName)
         {
-            return algorithmName.GetAlgorithm();
+            if (algorithmName == null)
+            {
+                throw new ArgumentNullException(nameof(algorithmName));
+            }
+            return algorithmName.GetAlgorithm.Invoke();
         }
 
         /// <summary>
@@ -70,6 +71,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="rgb">The data to be hash.</param>
         public byte[] ComputeFinal(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             Update(rgb, 0, rgb.Length);
             return ComputeFinal();
         }
@@ -132,6 +137,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="rgb">The data to be hash.</param>
         public void Update(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             Update(rgb, 0, rgb.Length);
         }
 

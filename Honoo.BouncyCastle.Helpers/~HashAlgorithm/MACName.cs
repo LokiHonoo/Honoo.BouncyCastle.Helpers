@@ -263,15 +263,15 @@ namespace Honoo.BouncyCastle.Helpers
                 return false;
             }
             mechanism = mechanism.Trim().Replace('_', '-').Replace('/', '-').ToUpperInvariant();
-            if (mechanism.EndsWith("-MAC"))
+            if (mechanism.EndsWith("-MAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(0, mechanism.Length - 4);
             }
-            else if (mechanism.StartsWith("MAC-"))
+            else if (mechanism.StartsWith("MAC-", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(4, mechanism.Length - 4);
             }
-            else if (mechanism.StartsWith("MAC"))
+            else if (mechanism.StartsWith("MAC", StringComparison.Ordinal))
             {
                 mechanism = mechanism.Substring(3, mechanism.Length - 3);
             }
@@ -318,7 +318,6 @@ namespace Honoo.BouncyCastle.Helpers
                 default: algorithmName = null; return false;
             }
         }
-
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
@@ -326,8 +325,28 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public bool Equals(MACName other)
         {
-            return other._name.Equals(_name);
+            return other != null && string.Equals(_name, other._name, StringComparison.Ordinal);
         }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return obj is MACName other && Equals(other);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
 
         /// <summary>
         /// Return algorithm name.

@@ -23,14 +23,15 @@
         /// <summary>
         /// Sand this value to terminal A.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
         byte[] PublicKeyB { get; }
 
         /// <summary>
         /// Derive key material.
         /// </summary>
-        /// <param name="unsigned">Output unsigned bytes.</param>
+        /// <param name="unsignedMaterial">Output unsigned bytes.</param>
         /// <returns></returns>
-        byte[] DeriveKeyMaterial(bool unsigned);
+        byte[] DeriveKeyMaterial(bool unsignedMaterial);
 
         /// <summary>
         /// Generate new parameters of algorithm terminal B, Using by terminal A's qualified parameters.

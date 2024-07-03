@@ -17,7 +17,7 @@ namespace Honoo.BouncyCastle.Helpers
         private readonly byte[] _key;
         private readonly byte[] _personalization;
         private readonly byte[] _salt;
-        private IDigest _digest;
+        private Blake2sDigest _digest;
 
         #endregion Properties
 
@@ -40,11 +40,11 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 throw new CryptographicException("Argument key length need null or less than 32 bytes.");
             }
-            if (salt != null && key.Length != 8)
+            if (salt != null && key != null && key.Length != 8)
             {
                 throw new CryptographicException("Argument salt length need null or less than 8 bytes.");
             }
-            if (personalization != null && key.Length != 8)
+            if (personalization != null && key != null && key.Length != 8)
             {
                 throw new CryptographicException("Argument personalization length need null or less than 8 bytes.");
             }
@@ -76,7 +76,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -86,13 +86,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
@@ -117,9 +117,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
+        private Blake2sDigest GetDigest()
         {
-            return new Blake2sDigest(_key, _hashSize / 8, _salt, _personalization);
+            return new Blake2sDigest(_key, base.HashSize / 8, _salt, _personalization);
         }
     }
 }

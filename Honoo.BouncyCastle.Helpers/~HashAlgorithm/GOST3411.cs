@@ -15,7 +15,7 @@ namespace Honoo.BouncyCastle.Helpers
         private const int HASH_SIZE = 256;
         private const string NAME = "GOST3411";
         private readonly byte[] _substitutionBox;
-        private IDigest _digest;
+        private Gost3411Digest _digest;
 
         #endregion Properties
 
@@ -67,7 +67,7 @@ namespace Honoo.BouncyCastle.Helpers
                 _digest = GetDigest();
             }
             _digest.DoFinal(outputBuffer, offset);
-            return _hashSize / 8;
+            return base.HashSize / 8;
         }
 
         /// <inheritdoc/>
@@ -77,13 +77,13 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <inheritdoc/>
-        public override void Update(byte[] buffer, int offset, int length)
+        public override void Update(byte[] inputBuffer, int offset, int length)
         {
             if (_digest == null)
             {
                 _digest = GetDigest();
             }
-            _digest.BlockUpdate(buffer, offset, length);
+            _digest.BlockUpdate(inputBuffer, offset, length);
         }
 
         internal static HashAlgorithmName GetAlgorithmName()
@@ -91,7 +91,7 @@ namespace Honoo.BouncyCastle.Helpers
             return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new Gost3411Digest(); }, () => { return new GOST3411(); });
         }
 
-        private IDigest GetDigest()
+        private Gost3411Digest GetDigest()
         {
             return _substitutionBox == null ? new Gost3411Digest() : new Gost3411Digest(_substitutionBox);
         }

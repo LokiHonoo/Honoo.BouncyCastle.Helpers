@@ -11,6 +11,7 @@ using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -27,8 +28,8 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_KEY_SIZE = 768;
         private const string NAME = "ElGamal";
         private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
-        private IAsymmetricBlockCipher _decryptor = null;
-        private IAsymmetricBlockCipher _encryptor = null;
+        private IAsymmetricBlockCipher _decryptor;
+        private IAsymmetricBlockCipher _encryptor;
         private int _keySize = DEFAULT_KEY_SIZE;
         private AsymmetricEncryptionPaddingMode _padding = AsymmetricEncryptionPaddingMode.PKCS1;
 
@@ -40,6 +41,8 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Gets legal key size bits. Legal key size is more than or equal to 8 bits (8 bits increments).
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public KeySizes[] LegalKeySizes => (KeySizes[])LEGAL_KEY_SIZES.Clone();
 
         /// <summary>
@@ -102,12 +105,12 @@ namespace Honoo.BouncyCastle.Helpers
             ElGamalKeyPairGenerator keyPairGenerator = new ElGamalKeyPairGenerator();
             keyPairGenerator.Init(generationParameters);
             AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
-            _privateKey = keyPair.Private;
-            _publicKey = keyPair.Public;
+            base.PrivateKey = keyPair.Private;
+            base.PublicKey = keyPair.Public;
             _keySize = keySize;
             _encryptor = null;
             _decryptor = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         #endregion GenerateParameters
@@ -138,12 +141,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                 }
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _encryptor = null;
             _decryptor = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -155,12 +158,12 @@ namespace Honoo.BouncyCastle.Helpers
             ElGamalPrivateKeyParameters privateKey = (ElGamalPrivateKeyParameters)PrivateKeyFactory.CreateKey(priInfo);
             BigInteger y = privateKey.Parameters.G.ModPow(privateKey.X, privateKey.Parameters.P);
             ElGamalPublicKeyParameters publicKey = new ElGamalPublicKeyParameters(y, privateKey.Parameters);
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _encryptor = null;
             _decryptor = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -168,12 +171,12 @@ namespace Honoo.BouncyCastle.Helpers
         {
             ElGamalPrivateKeyParameters privateKey = (ElGamalPrivateKeyParameters)keyPair.Private;
             ElGamalPublicKeyParameters publicKey = (ElGamalPublicKeyParameters)keyPair.Public;
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _encryptor = null;
             _decryptor = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -191,12 +194,12 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 publicKey = (ElGamalPublicKeyParameters)asymmetricKey;
             }
-            _privateKey = privateKey;
-            _publicKey = publicKey;
+            base.PrivateKey = privateKey;
+            base.PublicKey = publicKey;
             _keySize = publicKey.Parameters.P.BitLength;
             _encryptor = null;
             _decryptor = null;
-            _initialized = true;
+            base.Initialized = true;
         }
 
         /// <inheritdoc/>
@@ -217,12 +220,12 @@ namespace Honoo.BouncyCastle.Helpers
                 {
                     publicKey = (ElGamalPublicKeyParameters)obj;
                 }
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.P.BitLength;
                 _encryptor = null;
                 _decryptor = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -235,12 +238,12 @@ namespace Honoo.BouncyCastle.Helpers
                 ElGamalPrivateKeyParameters privateKey = (ElGamalPrivateKeyParameters)obj;
                 BigInteger y = privateKey.Parameters.G.ModPow(privateKey.X, privateKey.Parameters.P);
                 ElGamalPublicKeyParameters publicKey = new ElGamalPublicKeyParameters(y, privateKey.Parameters);
-                _privateKey = privateKey;
-                _publicKey = publicKey;
+                base.PrivateKey = privateKey;
+                base.PublicKey = publicKey;
                 _keySize = publicKey.Parameters.P.BitLength;
                 _encryptor = null;
                 _decryptor = null;
-                _initialized = true;
+                base.Initialized = true;
             }
         }
 
@@ -251,6 +254,10 @@ namespace Honoo.BouncyCastle.Helpers
         /// <inheritdoc/>
         public byte[] Decrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Decrypt(rgb, 0, rgb.Length);
         }
 
@@ -281,13 +288,19 @@ namespace Honoo.BouncyCastle.Helpers
                 throw new CryptographicException("Need OAEP padding mode.");
             }
             InspectParameters();
+#pragma warning disable CA1062 // 验证公共方法的参数
             _decryptor = GetCipher(false, hashForOAEP, mgf1ForOAEP);
+#pragma warning restore CA1062 // 验证公共方法的参数
             return _decryptor.ProcessBlock(inputBuffer, offset, length);
         }
 
         /// <inheritdoc/>
         public byte[] Encrypt(byte[] rgb)
         {
+            if (rgb == null)
+            {
+                throw new ArgumentNullException(nameof(rgb));
+            }
             return Encrypt(rgb, 0, rgb.Length);
         }
 
@@ -318,7 +331,9 @@ namespace Honoo.BouncyCastle.Helpers
                 throw new CryptographicException("Need OAEP padding mode.");
             }
             InspectParameters();
+#pragma warning disable CA1062 // 验证公共方法的参数
             _encryptor = GetCipher(true, hashForOAEP, mgf1ForOAEP);
+#pragma warning restore CA1062 // 验证公共方法的参数
             return _encryptor.ProcessBlock(inputBuffer, offset, length);
         }
 
@@ -339,9 +354,9 @@ namespace Honoo.BouncyCastle.Helpers
             }
             else
             {
-                if (_initialized)
+                if (base.Initialized)
                 {
-                    if (_privateKey == null)
+                    if (base.PrivateKey == null)
                     {
                         return 0;
                     }
@@ -367,6 +382,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="keySize">Legal key size is more than or equal to 8 bits (8 bits increments).</param>
         /// <param name="exception">Exception message.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]
         public bool ValidKeySize(int keySize, out string exception)
         {
             if (DetectionUtilities.ValidSize(LEGAL_KEY_SIZES, keySize))
@@ -415,7 +431,7 @@ namespace Honoo.BouncyCastle.Helpers
                 case AsymmetricEncryptionPaddingMode.ISO9796_1: throw new CryptographicException("ElGamal is unsupported ISO9796_1 padding mode.");
                 default: throw new CryptographicException("Unsupported padding mode.");
             }
-            cipher.Init(encryption, encryption ? _publicKey : _privateKey);
+            cipher.Init(encryption, encryption ? base.PublicKey : base.PrivateKey);
             return cipher;
         }
     }
