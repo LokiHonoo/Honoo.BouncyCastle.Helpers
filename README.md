@@ -6,9 +6,9 @@
 
 - [Honoo.BouncyCastle.Helpers](#honoobouncycastlehelpers)
   - [INTRODUCTION](#introduction)
-  - [USAGE](#usage)
+  - [GUIDE](#guide)
     - [NuGet](#nuget)
-  - [DEMO](#demo)
+  - [USAGE](#usage)
     - [Namespace](#namespace)
     - [Hash](#hash)
     - [HMAC](#hmac)
@@ -27,13 +27,13 @@
 
 BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.
 
-## USAGE
+## GUIDE
 
 ### NuGet
 
 <https://www.nuget.org/packages/Honoo.BouncyCastle.Helpers/>
 
-## DEMO
+## USAGE
 
 ### Namespace
 

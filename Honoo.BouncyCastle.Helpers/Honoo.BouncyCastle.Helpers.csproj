@@ -18,19 +18,11 @@
 		<RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
 		<Version>2.1.3</Version>
 		<AssemblyVersion></AssemblyVersion>
-		<PackageReadmeFile>README-NuGet.md</PackageReadmeFile>
+		<PackageReadmeFile>Honoo.BouncyCastle.Helpers.md</PackageReadmeFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest-all</AnalysisLevel>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>..\bin\Debug</OutputPath>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\bin\Release</OutputPath>
-		<DocumentationFile>..\bin\Release\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -42,7 +34,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\README-NuGet.md">
+	  <None Include="Honoo.BouncyCastle.Helpers.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>

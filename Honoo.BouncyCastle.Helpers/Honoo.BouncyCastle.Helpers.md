@@ -6,7 +6,7 @@
 
 - [Honoo.BouncyCastle.Helpers](#honoobouncycastlehelpers)
   - [INTRODUCTION](#introduction)
-  - [USAGE](#usage)
+  - [GUIDE](#guide)
     - [GitHub](#github)
   - [LICENSE](#license)
 
@@ -16,7 +16,7 @@
 
 BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.
 
-## USAGE
+## GUIDE
 
 ### GitHub
 
