@@ -4,16 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net40;net6.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
+	<BaseOutputPath>..\bin\</BaseOutputPath>
   </PropertyGroup>
-	
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>..\bin\Debug</OutputPath>
-	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>..\bin\Release</OutputPath>
-	</PropertyGroup>
-	
   <ItemGroup>
     <ProjectReference Include="..\Honoo.BouncyCastle.Helpers\Honoo.BouncyCastle.Helpers.csproj" />
   </ItemGroup>
