@@ -13,8 +13,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion Delegate
 
-#pragma warning disable CA1707 // 标识符不应包含下划线
-
         #region Block Algorithm Names
 
         /// <summary>
@@ -243,7 +241,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion Stream Algorithm Names
 
-#pragma warning restore CA1707 // 标识符不应包含下划线
 
         #region Properties
 
