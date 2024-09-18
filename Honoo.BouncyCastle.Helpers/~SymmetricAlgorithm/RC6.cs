@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_KEY_SIZE = 256;
         private const SymmetricAlgorithmKind KIND = SymmetricAlgorithmKind.Block;
         private const string NAME = "RC6";
-        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
+        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) };
 
         /// <summary>
         /// Gets legal key size bits. Legal key size is more than or equal to 8 bits (8 bits increments).

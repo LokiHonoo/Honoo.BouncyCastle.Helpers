@@ -31,7 +31,7 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_CERTAINTY = 25;
         private const int DEFAULT_KEY_SIZE = 2048;
         private const string NAME = "RSA";
-        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(24, Common.SizeMax, 8) };
+        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(24, Common.IntgerMulti8Max, 8) };
         private IAsymmetricBlockCipher _decryptor;
         private IAsymmetricBlockCipher _encryptor;
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;

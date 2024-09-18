@@ -510,8 +510,8 @@ namespace Honoo.BouncyCastle.Helpers
                 case SymmetricCipherMode.OpenPGPCFB: return new KeySizes[] { new KeySizes(8, base.BlockSize, 8) };
                 case SymmetricCipherMode.SIC: if (base.BlockSize >= 128) return new KeySizes[] { new KeySizes(Math.Max(base.BlockSize / 2, base.BlockSize - 64), base.BlockSize, 8) }; return null;
                 case SymmetricCipherMode.CCM: if (base.BlockSize == 128) return new KeySizes[] { new KeySizes(56, 104, 8) }; return null;
-                case SymmetricCipherMode.EAX: if (base.BlockSize == 64 || base.BlockSize == 128) return new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) }; return null;
-                case SymmetricCipherMode.GCM: if (base.BlockSize == 128) return new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) }; return null;
+                case SymmetricCipherMode.EAX: if (base.BlockSize == 64 || base.BlockSize == 128) return new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) }; return null;
+                case SymmetricCipherMode.GCM: if (base.BlockSize == 128) return new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) }; return null;
 
                 /*
                 * BUG: OCB cipher mode supported null(0) Nonce/IV size but BouncyCastle cannot set that (BouncyCastle 1.9.0).
@@ -528,7 +528,7 @@ namespace Honoo.BouncyCastle.Helpers
             switch (base.Mode)
             {
                 case SymmetricCipherMode.CCM: return new KeySizes[] { new KeySizes(32, 128, 16) };
-                case SymmetricCipherMode.EAX: return new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
+                case SymmetricCipherMode.EAX: return new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) };
                 case SymmetricCipherMode.GCM: return new KeySizes[] { new KeySizes(32, 128, 8) };
                 case SymmetricCipherMode.OCB: return new KeySizes[] { new KeySizes(64, 128, 8) };
                 default: return null;

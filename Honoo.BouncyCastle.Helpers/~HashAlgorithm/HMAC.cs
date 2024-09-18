@@ -16,7 +16,7 @@ namespace Honoo.BouncyCastle.Helpers
         #region Properties
 
         private const int DEFAULT_KEY_SIZE = 128;
-        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
+        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) };
         private readonly IDigest _core;
         private HMac _digest;
         private bool _initialized;

@@ -27,7 +27,7 @@ namespace Honoo.BouncyCastle.Helpers
         private const int DEFAULT_CERTAINTY = 20;
         private const int DEFAULT_KEY_SIZE = 768;
         private const string NAME = "ElGamal";
-        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
+        private static readonly KeySizes[] LEGAL_KEY_SIZES = new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) };
         private IAsymmetricBlockCipher _decryptor;
         private IAsymmetricBlockCipher _encryptor;
         private int _keySize = DEFAULT_KEY_SIZE;
@@ -281,6 +281,7 @@ namespace Honoo.BouncyCastle.Helpers
         /// <param name="hashForOAEP">The hash algorithm name for OAEP padding.</param>
         /// <param name="mgf1ForOAEP">The mgf1 algorithm name for OAEP padding.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:验证公共方法的参数", Justification = "<挂起>")]
         public byte[] Decrypt(byte[] inputBuffer, int offset, int length, HashAlgorithmName hashForOAEP, HashAlgorithmName mgf1ForOAEP)
         {
             if (_padding != AsymmetricEncryptionPaddingMode.OAEP)
@@ -288,9 +289,7 @@ namespace Honoo.BouncyCastle.Helpers
                 throw new CryptographicException("Need OAEP padding mode.");
             }
             InspectParameters();
-#pragma warning disable CA1062 // 验证公共方法的参数
             _decryptor = GetCipher(false, hashForOAEP, mgf1ForOAEP);
-#pragma warning restore CA1062 // 验证公共方法的参数
             return _decryptor.ProcessBlock(inputBuffer, offset, length);
         }
 

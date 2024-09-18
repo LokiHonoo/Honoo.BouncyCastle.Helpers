@@ -14,7 +14,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         private const int DEFAULT_STATE_SIZE = 512;
         private const string NAME = "Skein";
-        private static readonly KeySizes[] LEGAL_HASH_SIZES = new KeySizes[] { new KeySizes(8, Common.SizeMax, 8) };
+        private static readonly KeySizes[] LEGAL_HASH_SIZES = new KeySizes[] { new KeySizes(8, Common.IntgerMulti8Max, 8) };
 
         private static readonly KeySizes[] LEGAL_STATE_SIZES = new KeySizes[]
         {
