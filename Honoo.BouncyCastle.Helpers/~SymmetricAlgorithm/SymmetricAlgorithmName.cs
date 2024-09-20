@@ -245,6 +245,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         private readonly int _blockSize;
         private readonly GetAlgorithmCallback _getAlgorithm;
+        private readonly bool _hasNetImplementation;
         private readonly SymmetricAlgorithmKind _kind;
         private readonly string _name;
 
@@ -252,6 +253,11 @@ namespace Honoo.BouncyCastle.Helpers
         /// Gets block size bits. The value will be 0 if the algorithm is a stream algorithm.
         /// </summary>
         public int BlockSize => _blockSize;
+
+        /// <summary>
+        /// Gets a value indicate this algorithm has a .NET implementation.
+        /// </summary>
+        public bool HasNetImplementation => _hasNetImplementation;
 
         /// <summary>
         /// Gets algorithm kind of the algorithm.
@@ -269,12 +275,13 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region Construction
 
-        internal SymmetricAlgorithmName(string name, SymmetricAlgorithmKind kind, int blockSize, GetAlgorithmCallback getAlgorithm)
+        internal SymmetricAlgorithmName(string name, SymmetricAlgorithmKind kind, int blockSize, GetAlgorithmCallback getAlgorithm, bool hasNetImplementation)
         {
             _name = name;
             _kind = kind;
             _blockSize = blockSize;
             _getAlgorithm = getAlgorithm;
+            _hasNetImplementation = hasNetImplementation;
         }
 
         #endregion Construction

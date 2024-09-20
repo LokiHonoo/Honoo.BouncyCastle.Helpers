@@ -89,7 +89,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static SymmetricAlgorithmName GetAlgorithmName(int blockSize)
         {
-            return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new DSTU7624(blockSize); });
+            return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new DSTU7624(blockSize); }, false);
         }
 
         /// <inheritdoc/>

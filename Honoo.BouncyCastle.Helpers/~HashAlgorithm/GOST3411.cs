@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
+﻿using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Engines;
 using System.Security.Cryptography;
 
@@ -88,12 +87,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName()
         {
-            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new Gost3411Digest(); }, () => { return new GOST3411(); });
-        }
-
-        private Gost3411Digest GetDigest()
-        {
-            return _substitutionBox == null ? new Gost3411Digest() : new Gost3411Digest(_substitutionBox);
+            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new Gost3411Digest(); }, () => { return new GOST3411(); }, false);
         }
 
         private static byte[] GetSubstitutionBox(Gost28147SubstitutionBox substitutionBox)
@@ -110,6 +104,11 @@ namespace Honoo.BouncyCastle.Helpers
                 case Gost28147SubstitutionBox.E_D: return Gost28147Engine.GetSBox("E-D");
                 default: throw new CryptographicException("Unsupported substitution box.");
             }
+        }
+
+        private Gost3411Digest GetDigest()
+        {
+            return _substitutionBox == null ? new Gost3411Digest() : new Gost3411Digest(_substitutionBox);
         }
     }
 }

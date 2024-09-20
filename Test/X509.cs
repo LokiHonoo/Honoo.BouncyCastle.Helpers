@@ -100,7 +100,7 @@ namespace Test
             //
             File.WriteAllBytes("userCer.cer", userCer);
             var userCerBC = new Org.BouncyCastle.X509.X509Certificate(userCer);
-            var userCerNET = new System.Security.Cryptography.X509Certificates.X509Certificate2(userCer); 
+            var userCerNET = new System.Security.Cryptography.X509Certificates.X509Certificate2(userCer);
             try
             {
                 userCerBC.Verify(_issuerCer.GetPublicKey());

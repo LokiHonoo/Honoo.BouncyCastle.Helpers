@@ -91,7 +91,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static SymmetricAlgorithmName GetAlgorithmName()
         {
-            return new SymmetricAlgorithmName(NAME, KIND, 0, () => { return new ChaCha(); });
+            return new SymmetricAlgorithmName(NAME, KIND, 0, () => { return new ChaCha(); }, false);
         }
 
         /// <inheritdoc/>

@@ -76,7 +76,8 @@ namespace Honoo.BouncyCastle.Helpers
             return new HashAlgorithmName($"{NAME}{hashSize}",
                                          hashSize,
                                          () => { return GetDigest(hashSize); },
-                                         () => { return new GOST3411_2012(hashSize); });
+                                         () => { return new GOST3411_2012(hashSize); },
+                                         false);
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)
@@ -93,11 +94,6 @@ namespace Honoo.BouncyCastle.Helpers
             }
         }
 
-        private IDigest GetDigest()
-        {
-            return GetDigest(base.HashSize);
-        }
-
         private static IDigest GetDigest(int hashSize)
         {
             if (hashSize == 512)
@@ -108,6 +104,11 @@ namespace Honoo.BouncyCastle.Helpers
             {
                 return new Gost3411_2012_256Digest();
             }
+        }
+
+        private IDigest GetDigest()
+        {
+            return GetDigest(base.HashSize);
         }
     }
 }

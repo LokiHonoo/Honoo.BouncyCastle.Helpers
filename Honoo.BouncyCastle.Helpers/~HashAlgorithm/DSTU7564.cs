@@ -75,7 +75,8 @@ namespace Honoo.BouncyCastle.Helpers
             return new HashAlgorithmName($"{NAME}{hashSize}",
                                          hashSize,
                                          () => { return new Dstu7564Digest(hashSize); },
-                                         () => { return new DSTU7564(hashSize); });
+                                         () => { return new DSTU7564(hashSize); },
+                                         false);
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)

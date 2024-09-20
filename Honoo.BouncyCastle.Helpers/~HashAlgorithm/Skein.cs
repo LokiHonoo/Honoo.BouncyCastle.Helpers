@@ -1,5 +1,4 @@
 ﻿using Honoo.BouncyCastle.Helpers.Utilities;
-using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using System.Security.Cryptography;
 
@@ -94,7 +93,8 @@ namespace Honoo.BouncyCastle.Helpers
             return new HashAlgorithmName($"{NAME}{hashSize}-{stateSize}",
                                          hashSize,
                                          () => { return new SkeinDigest(stateSize, hashSize); },
-                                         () => { return new Skein(hashSize, stateSize); });
+                                         () => { return new Skein(hashSize, stateSize); },
+                                         false);
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)

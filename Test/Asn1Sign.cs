@@ -47,7 +47,7 @@ namespace Test
                     generator.Generate(aaa);
                     builder.Append("Name OK     ");
                 }
-                catch 
+                catch
                 {
                     builder.Append("            ");
                 }
@@ -57,7 +57,7 @@ namespace Test
                     generator.Generate(aaa);
                     builder.Append("Oid OK     ");
                 }
-                catch 
+                catch
                 {
                     builder.Append("           ");
                 }

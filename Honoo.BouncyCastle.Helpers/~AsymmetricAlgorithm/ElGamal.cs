@@ -398,7 +398,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Encryption, () => { return new ElGamal(); });
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Encryption, () => { return new ElGamal(); }, false);
         }
 
         private IAsymmetricBlockCipher GetCipher(bool encryption, HashAlgorithmName hash, HashAlgorithmName mgf1)

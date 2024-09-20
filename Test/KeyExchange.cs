@@ -1,7 +1,5 @@
 ﻿using Honoo.BouncyCastle.Helpers;
 using System;
-using System.Linq;
-using System.Security.Cryptography;
 
 namespace Test
 {

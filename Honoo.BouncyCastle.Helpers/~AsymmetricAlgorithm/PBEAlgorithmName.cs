@@ -71,6 +71,7 @@ namespace Honoo.BouncyCastle.Helpers
                 PBEwithSHAand40BitRC4,
             };
         }
+
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
@@ -99,7 +100,6 @@ namespace Honoo.BouncyCastle.Helpers
         {
             return base.GetHashCode();
         }
-
 
         /// <summary>
         /// Return algorithm name.

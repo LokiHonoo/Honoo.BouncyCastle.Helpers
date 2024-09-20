@@ -292,7 +292,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.KeyExchange, () => { return new ECDH(); });
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.KeyExchange, () => { return new ECDH(); }, false);
         }
     }
 }

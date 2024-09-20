@@ -704,7 +704,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.SignatureAndEncryption, () => { return new RSA(); });
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.SignatureAndEncryption, () => { return new RSA(); }, true);
         }
 
         internal static SignatureAlgorithmName GetSignatureAlgorithmName(HashAlgorithmName hashAlgorithm, RSASignaturePaddingMode signaturePadding)

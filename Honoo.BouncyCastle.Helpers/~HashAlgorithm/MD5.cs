@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
+﻿using Org.BouncyCastle.Crypto.Digests;
 
 namespace Honoo.BouncyCastle.Helpers
 {
@@ -65,7 +64,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName()
         {
-            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new MD5Digest(); }, () => { return new MD5(); });
+            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new MD5Digest(); }, () => { return new MD5(); }, true);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]

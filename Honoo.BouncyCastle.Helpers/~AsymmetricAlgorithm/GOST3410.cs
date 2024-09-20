@@ -26,8 +26,8 @@ namespace Honoo.BouncyCastle.Helpers
         private const GOST3410Parameters DEFAULT_PARAMETERS = GOST3410Parameters.GostR3410x94CryptoProA;
         private const string NAME = "GOST3410";
         private HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.GOST3411;
-        private Gost3410DigestSigner _signer ;
-        private Gost3410DigestSigner _verifier ;
+        private Gost3410DigestSigner _signer;
+        private Gost3410DigestSigner _verifier;
 
         /// <summary>
         /// Get or set hash algorithm for signature. Legal hash algorithm is hash size more than or equal to 256 bits.
@@ -346,7 +346,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new GOST3410(); });
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new GOST3410(); }, false);
         }
 
         internal static SignatureAlgorithmName GetSignatureAlgorithmName(HashAlgorithmName hashAlgorithm)

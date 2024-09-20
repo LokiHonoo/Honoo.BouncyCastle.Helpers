@@ -4,7 +4,6 @@ using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
-using Org.BouncyCastle.Security.Certificates;
 using Org.BouncyCastle.X509;
 using System;
 using System.IO;

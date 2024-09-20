@@ -122,7 +122,6 @@ namespace Honoo.BouncyCastle.Helpers
         #region Export/Import Parameters
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:不捕获常规异常类型", Justification = "<挂起>")]
         public override void ImportKeyInfo(byte[] keyInfo)
         {
             ECPrivateKeyParameters privateKey = null;
@@ -354,7 +353,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new ECDSA(); });
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new ECDSA(); }, true);
         }
 
         internal static SignatureAlgorithmName GetSignatureAlgorithmName(HashAlgorithmName hashAlgorithm, ECDSASignatureExtension signatureExtension)

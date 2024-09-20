@@ -318,6 +318,7 @@ namespace Honoo.BouncyCastle.Helpers
                 default: algorithmName = null; return false;
             }
         }
+
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
@@ -346,7 +347,6 @@ namespace Honoo.BouncyCastle.Helpers
         {
             return base.GetHashCode();
         }
-
 
         /// <summary>
         /// Return algorithm name.
