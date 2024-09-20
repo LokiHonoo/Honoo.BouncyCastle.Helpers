@@ -443,17 +443,15 @@ namespace Honoo.BouncyCastle.Helpers
         /// <returns></returns>
         public System.Security.Cryptography.HMAC GetNetAlgorithm()
         {
-            string name;
             switch (_name)
             {
-                case "HMAC-MD5": name = "HMACMD5"; break;
-                case "HMAC-SHA1": name = "HMACSHA1"; break;
-                case "HMAC-SHA256": name = "HMACSHA256"; break;
-                case "HMAC-SHA384": name = "HMACSHA384"; break;
-                case "HMAC-SHA512": name = "HMACSHA512"; break;
-                default: name = _name; break;
+                case "HMAC-MD5": return System.Security.Cryptography.HMAC.Create("HMACMD5");
+                case "HMAC-SHA1": return System.Security.Cryptography.HMAC.Create("HMACSHA1");
+                case "HMAC-SHA256": return System.Security.Cryptography.HMAC.Create("HMACSHA256");
+                case "HMAC-SHA384": return System.Security.Cryptography.HMAC.Create("HMACSHA384");
+                case "HMAC-SHA512": return System.Security.Cryptography.HMAC.Create("HMACSHA512");
+                default: return System.Security.Cryptography.HMAC.Create(_name);
             }
-            return System.Security.Cryptography.HMAC.Create(name);
         }
 
         /// <summary>

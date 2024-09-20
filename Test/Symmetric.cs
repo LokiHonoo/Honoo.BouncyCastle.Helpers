@@ -207,7 +207,7 @@ namespace Test
 
         private static void DoNET()
         {//CBC/ECB/CFB
-            string[] names = new string[] { "AES", "3DES", "DES" };
+            string[] names = new string[] { "AES", "3DES", };
             var modes = new SymmetricCipherMode[] { SymmetricCipherMode.CBC, SymmetricCipherMode.ECB };
             var paddings = new SymmetricPaddingMode[] {
                 SymmetricPaddingMode.NoPadding,
