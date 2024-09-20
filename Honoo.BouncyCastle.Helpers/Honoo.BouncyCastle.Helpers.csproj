@@ -16,7 +16,7 @@
 		<PackageTags>Honoo BouncyCastle</PackageTags>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
-		<Version>2.1.3</Version>
+		<Version>2.1.4</Version>
 		<AssemblyVersion></AssemblyVersion>
 		<PackageReadmeFile>Honoo.BouncyCastle.Helpers.md</PackageReadmeFile>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>

@@ -4,7 +4,6 @@ using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
 using System;
 using System.Security.Cryptography;
-using static Org.BouncyCastle.Crypto.Digests.SkeinEngine;
 
 namespace Honoo.BouncyCastle.Helpers
 {

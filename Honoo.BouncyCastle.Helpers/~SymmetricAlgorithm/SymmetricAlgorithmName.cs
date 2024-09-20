@@ -241,7 +241,6 @@ namespace Honoo.BouncyCastle.Helpers
 
         #endregion Stream Algorithm Names
 
-
         #region Properties
 
         private readonly int _blockSize;
@@ -495,6 +494,16 @@ namespace Honoo.BouncyCastle.Helpers
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Get <see cref="System.Security.Cryptography.SymmetricAlgorithm"/> by default settings if algorithm has .NET implementation.
+        /// </summary>
+        /// <returns></returns>
+        public System.Security.Cryptography.SymmetricAlgorithm GetNetAlgorithm()
+        {
+            string name = _name == "DESede" ? "TripleDES" : _name;
+            return System.Security.Cryptography.SymmetricAlgorithm.Create(name);
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace Test
             Demo1();
             Demo2();
             Demo3();
-            DoNET2();
+            DoNET();
             DoAll();
             Console.WriteLine();
             Console.WriteLine();
@@ -205,11 +205,16 @@ namespace Test
             }
         }
 
-        private static void DoNET2()
-        {
-            string[] names = new string[] { "CAST5", "AES", "3DES", "DES" };
-            var modes = (SymmetricCipherMode[])Enum.GetValues(typeof(SymmetricCipherMode));
-            var paddings = (SymmetricPaddingMode[])Enum.GetValues(typeof(SymmetricPaddingMode));
+        private static void DoNET()
+        {//CBC/ECB/CFB
+            string[] names = new string[] { "AES", "3DES", "DES" };
+            var modes = new SymmetricCipherMode[] { SymmetricCipherMode.CBC, SymmetricCipherMode.ECB };
+            var paddings = new SymmetricPaddingMode[] {
+                SymmetricPaddingMode.NoPadding,
+                SymmetricPaddingMode.PKCS7,
+                SymmetricPaddingMode.X923,
+                SymmetricPaddingMode.ISO10126
+            };
             for (int i = 0; i < names.Length; i++)
             {
                 SymmetricAlgorithmName.TryGetAlgorithmName(names[i], out SymmetricAlgorithmName algorithmName);
@@ -220,29 +225,26 @@ namespace Test
                     {
                         alg.Mode = mode;
                         alg.Padding = padding;
-                        var net = alg.GetNetAlgorithm();
-                        if (net != null)
+                        var net = algorithmName.GetNetAlgorithm();
+                        net.Mode = (System.Security.Cryptography.CipherMode)(int)mode;
+                        net.Padding = (System.Security.Cryptography.PaddingMode)(int)padding;
+                        byte[] input = _input;
+                        if (padding == SymmetricPaddingMode.NoPadding)
                         {
-                            byte[] input = _input;
-                            if (padding == SymmetricPaddingMode.NoPadding)
-                            {
-                                input = new byte[alg.BlockSize * 3];
-                                Common.Random.NextBytes(input);
-                            }
-                            _total++;
-                            string title = $"{alg.Name}/{mode}/{padding}  BC <--> NET";
-                            alg.GenerateParameters();
-                            alg.ExportParameters(out byte[] key, out byte[] iv);
-                            net.Key = key;
-                            net.IV = iv ?? (new byte[net.BlockSize / 8]);
-                            alg.EncryptFinal(input);
-                            byte[] enc = alg.EncryptFinal(input);
-                            using (var decryptor = net.CreateDecryptor())
-                            {
-                                byte[] dec = decryptor.TransformFinalBlock(enc, 0, enc.Length);
-                                WriteResult(title, input, enc, dec);
-                            }
+                            input = new byte[alg.BlockSize * 3];
+                            Common.Random.NextBytes(input);
                         }
+                        _total++;
+                        string title = $"{alg.Name}/{mode}/{padding}  BC <--> NET";
+                        alg.GenerateParameters();
+                        alg.ExportParameters(out byte[] key, out byte[] iv);
+                        net.Key = key;
+                        net.IV = iv ?? (new byte[net.BlockSize / 8]);
+                        alg.EncryptFinal(input);
+                        byte[] enc = alg.EncryptFinal(input);
+                        using var decryptor = net.CreateDecryptor();
+                        byte[] dec = decryptor.TransformFinalBlock(enc, 0, enc.Length);
+                        WriteResult(title, input, enc, dec);
                     }
                 }
             }
