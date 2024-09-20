@@ -5,7 +5,7 @@
 		<PackageId>Honoo.BouncyCastle.Helpers</PackageId>
 		<Authors>LokiHonoo</Authors>
 		<Company>LokiHonoo</Company>
-		<Copyright>Copyright (C) Loki Honoo 2020. All rights reserved.</Copyright>
+		<Copyright>Copyright (C) LokiHonoo 2020. All rights reserved.</Copyright>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>Honoo.BouncyCastle.Helpers.snk</AssemblyOriginatorKeyFile>
