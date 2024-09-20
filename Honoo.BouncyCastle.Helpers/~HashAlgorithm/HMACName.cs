@@ -438,23 +438,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Get <see cref="System.Security.Cryptography.HMAC"/> by default settings if algorithm has .NET implementation.
-        /// </summary>
-        /// <returns></returns>
-        public System.Security.Cryptography.HMAC GetNetAlgorithm()
-        {
-            switch (_name)
-            {
-                case "HMAC-MD5": return System.Security.Cryptography.HMAC.Create("HMACMD5");
-                case "HMAC-SHA1": return System.Security.Cryptography.HMAC.Create("HMACSHA1");
-                case "HMAC-SHA256": return System.Security.Cryptography.HMAC.Create("HMACSHA256");
-                case "HMAC-SHA384": return System.Security.Cryptography.HMAC.Create("HMACSHA384");
-                case "HMAC-SHA512": return System.Security.Cryptography.HMAC.Create("HMACSHA512");
-                default: return System.Security.Cryptography.HMAC.Create(_name);
-            }
-        }
-
-        /// <summary>
         /// Return algorithm name.
         /// </summary>
         /// <returns></returns>

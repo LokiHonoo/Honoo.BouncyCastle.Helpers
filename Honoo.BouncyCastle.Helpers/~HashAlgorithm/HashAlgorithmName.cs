@@ -431,16 +431,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Get <see cref="System.Security.Cryptography.HashAlgorithm"/> by default settings if algorithm has .NET implementation.
-        /// <br/>If algorithm is MD5/SHA1/SHA256/SHA384/SHA512.
-        /// </summary>
-        /// <returns></returns>
-        public System.Security.Cryptography.HashAlgorithm GetNetAlgorithm()
-        {
-            return System.Security.Cryptography.HashAlgorithm.Create(_name);
-        }
-
-        /// <summary>
         /// Return algorithm name.
         /// </summary>
         /// <returns></returns>

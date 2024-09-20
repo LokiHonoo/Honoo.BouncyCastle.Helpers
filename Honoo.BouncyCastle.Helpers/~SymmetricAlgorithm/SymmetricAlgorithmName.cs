@@ -504,23 +504,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Get <see cref="System.Security.Cryptography.SymmetricAlgorithm"/> by default settings if algorithm has .NET implementation.
-        /// <br/>If algorithm is AES/DES/TripleDES/RC2.
-        /// </summary>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1508:避免死条件代码", Justification = "<挂起>")]
-        public System.Security.Cryptography.SymmetricAlgorithm GetNetAlgorithm()
-        {
-            string name = _name == "DESede" ? "TripleDES" : _name;
-            var net = System.Security.Cryptography.SymmetricAlgorithm.Create(name);
-            if (net != null)
-            {
-                net.FeedbackSize = _blockSize;
-            }
-            return net;
-        }
-
-        /// <summary>
         /// Return algorithm name.
         /// </summary>
         /// <returns></returns>

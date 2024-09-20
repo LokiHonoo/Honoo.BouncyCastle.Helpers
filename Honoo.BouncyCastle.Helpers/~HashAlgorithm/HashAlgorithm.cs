@@ -55,6 +55,24 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Creates an instance of the algorithm by algorithm name.
+        /// </summary>
+        /// <param name="mechanism">Asymmetric algorithm name.</param>
+        /// <returns></returns>
+        public static HashAlgorithm Create(string mechanism)
+        {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            if (HashAlgorithmName.TryGetAlgorithmName(mechanism, out HashAlgorithmName algorithmName))
+            {
+                return algorithmName.GetAlgorithm();
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Compute data hash.
         /// </summary>
         /// <returns></returns>

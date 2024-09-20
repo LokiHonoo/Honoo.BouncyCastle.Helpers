@@ -431,6 +431,24 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
+        /// Creates an instance of the algorithm by algorithm name.
+        /// </summary>
+        /// <param name="mechanism">Asymmetric algorithm name.</param>
+        /// <returns></returns>
+        public static SymmetricAlgorithm Create(string mechanism)
+        {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            if (SymmetricAlgorithmName.TryGetAlgorithmName(mechanism, out SymmetricAlgorithmName algorithmName))
+            {
+                return algorithmName.GetAlgorithm();
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Reset encryptor/decryptor of the algorithm.
         /// </summary>
         public void Reset()

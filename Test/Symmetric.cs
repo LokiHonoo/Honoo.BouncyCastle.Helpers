@@ -206,8 +206,8 @@ namespace Test
         }
 
         private static void DoNET()
-        {//CBC/ECB/CFB
-            string[] names = new string[] { "AES", "3DES", };
+        {
+            string[] names = new string[] { "AES", "TripleDES", };
             var modes = new SymmetricCipherMode[] { SymmetricCipherMode.CBC, SymmetricCipherMode.ECB };
             var paddings = new SymmetricPaddingMode[] {
                 SymmetricPaddingMode.NoPadding,
@@ -218,31 +218,33 @@ namespace Test
             for (int i = 0; i < names.Length; i++)
             {
                 SymmetricAlgorithmName.TryGetAlgorithmName(names[i], out SymmetricAlgorithmName algorithmName);
-                SymmetricAlgorithm alg = SymmetricAlgorithm.Create(algorithmName);
+                SymmetricAlgorithm alg1 = SymmetricAlgorithm.Create(names[i]);
+                System.Security.Cryptography.SymmetricAlgorithm alg2 = System.Security.Cryptography.SymmetricAlgorithm.Create(names[i]);
                 foreach (SymmetricCipherMode mode in modes)
                 {
                     foreach (SymmetricPaddingMode padding in paddings)
                     {
-                        alg.Mode = mode;
-                        alg.Padding = padding;
-                        var net = algorithmName.GetNetAlgorithm();
-                        net.Mode = (System.Security.Cryptography.CipherMode)(int)mode;
-                        net.Padding = (System.Security.Cryptography.PaddingMode)(int)padding;
+                        alg1.Mode = mode;
+                        alg1.Padding = padding;
+                        alg2.Mode = (System.Security.Cryptography.CipherMode)(int)mode;
+                        alg2.Padding = (System.Security.Cryptography.PaddingMode)(int)padding;
                         byte[] input = _input;
                         if (padding == SymmetricPaddingMode.NoPadding)
                         {
-                            input = new byte[alg.BlockSize * 3];
+                            input = new byte[alg1.BlockSize * 3];
                             Common.Random.NextBytes(input);
                         }
                         _total++;
-                        string title = $"{alg.Name}/{mode}/{padding}  BC <--> NET";
-                        alg.GenerateParameters();
-                        alg.ExportParameters(out byte[] key, out byte[] iv);
-                        net.Key = key;
-                        net.IV = iv ?? (new byte[net.BlockSize / 8]);
-                        alg.EncryptFinal(input);
-                        byte[] enc = alg.EncryptFinal(input);
-                        using var decryptor = net.CreateDecryptor();
+                        string title = $"{alg1.Name}/{mode}/{padding}  BC <--> NET";
+                        alg1.GenerateParameters();
+                        alg1.ExportParameters(out byte[] key, out byte[] iv);
+                        alg2.Key = key;
+                        if (iv != null)
+                        {
+                            alg2.IV = iv;
+                        }
+                        byte[] enc = alg1.EncryptFinal(input);
+                        using var decryptor = alg2.CreateDecryptor();
                         byte[] dec = decryptor.TransformFinalBlock(enc, 0, enc.Length);
                         WriteResult(title, input, enc, dec);
                     }

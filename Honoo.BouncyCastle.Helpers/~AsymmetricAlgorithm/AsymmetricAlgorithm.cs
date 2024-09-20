@@ -185,6 +185,24 @@ namespace Honoo.BouncyCastle.Helpers
         /// <summary>
         /// Creates an instance of the algorithm by algorithm name.
         /// </summary>
+        /// <param name="mechanism">Asymmetric algorithm name.</param>
+        /// <returns></returns>
+        public static AsymmetricAlgorithm Create(string mechanism)
+        {
+            if (string.IsNullOrWhiteSpace(mechanism))
+            {
+                throw new ArgumentNullException(nameof(mechanism));
+            }
+            if (AsymmetricAlgorithmName.TryGetAlgorithmName(mechanism, out AsymmetricAlgorithmName algorithmName))
+            {
+                return algorithmName.GetAlgorithm();
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Creates an instance of the algorithm by algorithm name.
+        /// </summary>
         /// <param name="algorithmName">Signature algorithm name.</param>
         /// <returns></returns>
         public static ISignatureAlgorithm Create(SignatureAlgorithmName algorithmName)

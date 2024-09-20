@@ -205,15 +205,6 @@ namespace Honoo.BouncyCastle.Helpers
         }
 
         /// <summary>
-        /// Get <see cref="System.Security.Cryptography.AsymmetricAlgorithm"/> by default settings if algorithm has .NET implementation.
-        /// </summary>
-        /// <returns></returns>
-        public System.Security.Cryptography.AsymmetricAlgorithm GetNetAlgorithm()
-        {
-            return System.Security.Cryptography.AsymmetricAlgorithm.Create(_name);
-        }
-
-        /// <summary>
         /// Return algorithm name.
         /// </summary>
         /// <returns></returns>
