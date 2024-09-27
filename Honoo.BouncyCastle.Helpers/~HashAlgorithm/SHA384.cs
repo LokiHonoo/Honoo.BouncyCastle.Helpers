@@ -64,7 +64,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName()
         {
-            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new Sha384Digest(); }, () => { return new SHA384(); }, true);
+            return new HashAlgorithmName(NAME, HASH_SIZE, () => { return new Sha384Digest(); }, () => { return new SHA384(); });
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:将成员标记为 static", Justification = "<挂起>")]

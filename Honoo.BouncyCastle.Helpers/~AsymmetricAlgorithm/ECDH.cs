@@ -33,12 +33,11 @@ namespace Honoo.BouncyCastle.Helpers
 
         private ECDHBasicAgreement _agreementA;
         private ECDHBasicAgreement _agreementB;
-        private byte[] _g;
+        private DHParameters _dhParameterA;
         private int _keySize = DEFAULT_KEY_SIZE;
-        private byte[] _p;
         private BigInteger _pmsB;
-        private byte[] _publicKeyA;
-        private byte[] _publicKeyB;
+        private AsymmetricKeyParameter _publicKeyA;
+        private AsymmetricKeyParameter _publicKeyB;
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
@@ -47,7 +46,7 @@ namespace Honoo.BouncyCastle.Helpers
             get
             {
                 InspectParameters();
-                return (byte[])_g.Clone();
+                return _dhParameterA.G.ToByteArray();
             }
         }
 
@@ -65,7 +64,7 @@ namespace Honoo.BouncyCastle.Helpers
             get
             {
                 InspectParameters();
-                return (byte[])_p.Clone();
+                return _dhParameterA.P.ToByteArray();
             }
         }
 
@@ -76,13 +75,22 @@ namespace Honoo.BouncyCastle.Helpers
             get
             {
                 InspectParameters();
-                return (byte[])_publicKeyA.Clone();
+                SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(_publicKeyA);
+                return publicKeyInfo.GetEncoded();
             }
         }
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:属性不应返回数组", Justification = "<挂起>")]
-        public byte[] PublicKeyB => _publicKeyB;
+        public byte[] PublicKeyB
+        {
+            get
+            {
+                InspectParameters();
+                SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(_publicKeyB);
+                return publicKeyInfo.GetEncoded();
+            }
+        }
 
         #endregion Properties
 
@@ -123,7 +131,9 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region GenerateParameters
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Generate new parameters of algorithm terminal A.
+        /// </summary>
         public override void GenerateParameters()
         {
             GenerateParameters(DEFAULT_KEY_SIZE, DEFAULT_CERTAINTY);
@@ -149,15 +159,13 @@ namespace Honoo.BouncyCastle.Helpers
             AsymmetricCipherKeyPair keyPair = keyPairGenerator.GenerateKeyPair();
             _agreementA = new ECDHBasicAgreement();
             _agreementA.Init(keyPair.Private);
-            _p = parameters.P.ToByteArray();
-            _g = parameters.G.ToByteArray();
-            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            _publicKeyA = publicKeyInfo.GetEncoded();
+            _dhParameterA = parameters;
+            _publicKeyA = keyPair.Public;
             _keySize = keySize;
             //
             _agreementB = null;
-            _pmsB = null;
             _publicKeyB = null;
+            _pmsB = null;
             //
             base.Initialized = true;
         }
@@ -173,14 +181,12 @@ namespace Honoo.BouncyCastle.Helpers
             AsymmetricCipherKeyPair keyPair = generator.GenerateKeyPair();
             _agreementB = new ECDHBasicAgreement();
             _agreementB.Init(keyPair.Private);
-            SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(keyPair.Public);
-            _publicKeyB = publicKeyInfo.GetEncoded();
+            _publicKeyB = keyPair.Public;
             _pmsB = _agreementB.CalculateAgreement(publicKeyAlice);
             _keySize = ((ECPublicKeyParameters)keyPair.Public).Parameters.Curve.FieldSize;
             //
             _agreementA = null;
-            _p = null;
-            _g = null;
+            _dhParameterA = null;
             _publicKeyA = null;
             //
             base.Initialized = true;
@@ -292,7 +298,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.KeyExchange, () => { return new ECDH(); }, false);
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.KeyExchange, () => { return new ECDH(); });
         }
     }
 }

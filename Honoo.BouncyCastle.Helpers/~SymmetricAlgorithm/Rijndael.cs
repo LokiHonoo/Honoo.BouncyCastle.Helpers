@@ -73,9 +73,9 @@ namespace Honoo.BouncyCastle.Helpers
                 case 128:
                 case 192:
                 case 256:
-                    return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new Rijndael(blockSize); }, true);
+                    return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new Rijndael(blockSize); });
                 default:
-                    return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new Rijndael(blockSize); }, false);
+                    return new SymmetricAlgorithmName($"{NAME}{blockSize}", KIND, blockSize, () => { return new Rijndael(blockSize); });
             }
         }
 

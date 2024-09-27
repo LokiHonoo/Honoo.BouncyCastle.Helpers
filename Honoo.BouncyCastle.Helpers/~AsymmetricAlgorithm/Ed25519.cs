@@ -326,7 +326,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static AsymmetricAlgorithmName GetAlgorithmName()
         {
-            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new Ed25519(); }, false);
+            return new AsymmetricAlgorithmName(NAME, AsymmetricAlgorithmKind.Signature, () => { return new Ed25519(); });
         }
 
         internal static SignatureAlgorithmName GetSignatureAlgorithmName(Ed25519SignatureInstance instance)

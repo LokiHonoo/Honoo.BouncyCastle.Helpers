@@ -72,11 +72,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
         {
-            return new HashAlgorithmName($"{NAME}{hashSize / 2}-{hashSize}",
-                                         hashSize,
-                                         () => { return new ShakeDigest(hashSize / 2); },
-                                         () => { return new SHAKE(hashSize); },
-                                         false);
+            return new HashAlgorithmName($"{NAME}{hashSize / 2}-{hashSize}", hashSize, () => { return new ShakeDigest(hashSize / 2); }, () => { return new SHAKE(hashSize); });
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)

@@ -242,11 +242,6 @@ namespace Honoo.BouncyCastle.Helpers
         public int HashSize => _hashAlgorithmName.HashSize;
 
         /// <summary>
-        /// Gets a value indicate this algorithm has a .NET implementation.
-        /// </summary>
-        public bool HasNetImplementation => _hashAlgorithmName.HasNetImplementation;
-
-        /// <summary>
         /// Gets this algorithm's name.
         /// </summary>
         public string Name => _name;

@@ -70,14 +70,8 @@ namespace Honoo.BouncyCastle.Helpers
         #region Properties
 
         private readonly GetAlgorithmCallback _getAlgorithm;
-        private readonly bool _hasNetImplementation;
         private readonly AsymmetricAlgorithmKind _kind;
         private readonly string _name;
-
-        /// <summary>
-        /// Gets a value indicate this algorithm has a .NET implementation.
-        /// </summary>
-        public bool HasNetImplementation => _hasNetImplementation;
 
         /// <summary>
         /// Gets algorithm kind of the algorithm.
@@ -95,12 +89,11 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region Construction
 
-        internal AsymmetricAlgorithmName(string name, AsymmetricAlgorithmKind kind, GetAlgorithmCallback getAlgorithm, bool hasNetImplementation)
+        internal AsymmetricAlgorithmName(string name, AsymmetricAlgorithmKind kind, GetAlgorithmCallback getAlgorithm)
         {
             _name = name;
             _kind = kind;
             _getAlgorithm = getAlgorithm;
-            _hasNetImplementation = hasNetImplementation;
         }
 
         #endregion Construction

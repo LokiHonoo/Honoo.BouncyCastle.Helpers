@@ -90,11 +90,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize, int stateSize)
         {
-            return new HashAlgorithmName($"{NAME}{hashSize}-{stateSize}",
-                                         hashSize,
-                                         () => { return new SkeinDigest(stateSize, hashSize); },
-                                         () => { return new Skein(hashSize, stateSize); },
-                                         false);
+            return new HashAlgorithmName($"{NAME}{hashSize}-{stateSize}", hashSize, () => { return new SkeinDigest(stateSize, hashSize); }, () => { return new Skein(hashSize, stateSize); });
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)

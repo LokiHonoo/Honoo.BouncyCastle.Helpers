@@ -245,18 +245,12 @@ namespace Honoo.BouncyCastle.Helpers
         private readonly GetAlgorithmCallback _getAlgorithm;
         private readonly GetEngineCallback _getEngine;
         private readonly int _hashSize;
-        private readonly bool _hasNetImplementation;
         private readonly string _name;
 
         /// <summary>
         /// Gets hash size bits of the algorithm.
         /// </summary>
         public int HashSize => _hashSize;
-
-        /// <summary>
-        /// Gets a value indicate this algorithm has a .NET implementation.
-        /// </summary>
-        public bool HasNetImplementation => _hasNetImplementation;
 
         /// <summary>
         /// Gets this algorithm's name.
@@ -270,13 +264,12 @@ namespace Honoo.BouncyCastle.Helpers
 
         #region Construction
 
-        internal HashAlgorithmName(string name, int hashSize, GetEngineCallback getEngine, GetAlgorithmCallback getAlgorithm, bool hasNetImplementation)
+        internal HashAlgorithmName(string name, int hashSize, GetEngineCallback getEngine, GetAlgorithmCallback getAlgorithm)
         {
             _name = name;
             _hashSize = hashSize;
             _getEngine = getEngine;
             _getAlgorithm = getAlgorithm;
-            _hasNetImplementation = hasNetImplementation;
         }
 
         #endregion Construction

@@ -82,11 +82,7 @@ namespace Honoo.BouncyCastle.Helpers
 
         internal static HashAlgorithmName GetAlgorithmName(int hashSize)
         {
-            return new HashAlgorithmName($"{NAME}{hashSize}",
-                                         hashSize,
-                                         () => { return new KeccakDigest(hashSize); },
-                                         () => { return new Keccak(hashSize); },
-                                         false);
+            return new HashAlgorithmName($"{NAME}{hashSize}", hashSize, () => { return new KeccakDigest(hashSize); }, () => { return new Keccak(hashSize); });
         }
 
         internal static bool ValidHashSize(int hashSize, out string exception)
