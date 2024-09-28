@@ -9,7 +9,19 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>Honoo.BouncyCastle.Helpers.snk</AssemblyOriginatorKeyFile>
-		<Description>BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.</Description>
+		<Description>BouncyCastle's helpers. Refactoring by System.Security.Cryptography code styles.
+
+Create algorithm as:
+HashAlgorithm.Create(HashAlgorithmName.SHA256);
+HMAC.Create(HMACName.HMAC_SM3);
+SymmetricAlgorithm.Create("Tnepres");
+AsymmetricAlgorithm.CreateBy(rsaPem);
+AsymmetricAlgorithm.Create(SignatureAlgorithmName.SHA256withECDSA)
+new ECDH().GetTerminalA();
+new ECDH().GetTerminalB();
+...
+
+Look over DEMO at guthub.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</RepositoryUrl>
@@ -26,6 +38,10 @@
 		<BaseOutputPath>..\bin\</BaseOutputPath>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<PackageOutputPath>D:\NuGetPackages</PackageOutputPath>
+	</PropertyGroup>
+	
 	<ItemGroup>
 	  <None Include="Honoo.BouncyCastle.Helpers.md">
 	    <Pack>True</Pack>
