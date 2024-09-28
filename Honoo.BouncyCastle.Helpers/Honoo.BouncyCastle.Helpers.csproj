@@ -13,7 +13,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/LokiHonoo/Honoo.BouncyCastle.Helpers</RepositoryUrl>
-		<PackageTags>Honoo BouncyCastle</PackageTags>
+		<PackageTags>Honoo;BouncyCastle</PackageTags>
 		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Honoo.BouncyCastle.Helpers</RootNamespace>
 		<Version>2.1.7</Version>
