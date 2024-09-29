@@ -4,7 +4,6 @@ using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 using System;
-using System.IO;
 
 namespace Test
 {
@@ -12,7 +11,7 @@ namespace Test
     {
         private static X509Certificate _issuerCer;
         private static byte[] _issuerPrivateKeyInfo;
-        private static SignatureAlgorithmName _issuerSignatureAlgorithm;
+        private static SignatureAlgorithmName _issuerSignatureAlgorithmName;
 
         internal static void Test()
         {
@@ -28,19 +27,18 @@ namespace Test
             //
             // Issuer work, Create CA private key and self sign certificate.
             //
-            _issuerSignatureAlgorithm = SignatureAlgorithmName.SHA256withECDSA;
-            ISignatureAlgorithm issuerAlgorithm = AsymmetricAlgorithm.Create(_issuerSignatureAlgorithm);
-            byte[] issuerPrivateKeyInfo = issuerAlgorithm.ExportKeyInfo(true);
-            X509CertificateRequestGenerator issuerCsrGenerator = new X509CertificateRequestGenerator(_issuerSignatureAlgorithm, issuerPrivateKeyInfo);
+            _issuerSignatureAlgorithmName = SignatureAlgorithmName.SHA256withECDSA;
+            ISignatureAlgorithm issuerAlgorithm = AsymmetricAlgorithm.Create(_issuerSignatureAlgorithmName);
+            _issuerPrivateKeyInfo = issuerAlgorithm.ExportKeyInfo(true);
+            X509CertificateRequestGenerator issuerCsrGenerator = new X509CertificateRequestGenerator(_issuerSignatureAlgorithmName, _issuerPrivateKeyInfo);
             issuerCsrGenerator.SubjectDN.Add(X509NameLabel.C, "CN");
             issuerCsrGenerator.SubjectDN.Add(X509NameLabel.CN, "Test CA");
             string issuerCsr = issuerCsrGenerator.GeneratePem();
-            X509CertificateV3Generator v3Generator = new X509CertificateV3Generator(_issuerSignatureAlgorithm, issuerPrivateKeyInfo);
+            X509CertificateV3Generator v3Generator = new X509CertificateV3Generator(_issuerSignatureAlgorithmName, _issuerPrivateKeyInfo);
             v3Generator.IssuerDN.Add(X509NameLabel.C, "CN");
             v3Generator.IssuerDN.Add(X509NameLabel.CN, "Test CA");
             v3Generator.SetCertificateRequest(issuerCsr);
             _issuerCer = v3Generator.Generate(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(365));
-            _issuerPrivateKeyInfo = issuerPrivateKeyInfo;
         }
 
         private static void CreateCrl()
@@ -48,10 +46,7 @@ namespace Test
             //
             // Issuer work, Create CA private key and self sign certificate.
             //
-            _issuerSignatureAlgorithm = SignatureAlgorithmName.SHA256withECDSA;
-            ISignatureAlgorithm issuerAlgorithm = AsymmetricAlgorithm.Create(_issuerSignatureAlgorithm);
-            byte[] issuerPrivateKeyInfo = issuerAlgorithm.ExportKeyInfo(true);
-            X509CertificateRevocationListGenerator generator = new X509CertificateRevocationListGenerator(_issuerSignatureAlgorithm, issuerPrivateKeyInfo);
+            X509CertificateRevocationListGenerator generator = new X509CertificateRevocationListGenerator(_issuerSignatureAlgorithmName, _issuerPrivateKeyInfo);
             generator.IssuerDN.CopyFromSubjectDN(_issuerCer);
             generator.Extensions.CopyFrom(_issuerCer);
             generator.Revocations.Add(new X509CertificateRevocationEntity("F38BC566", 16, DateTime.Now, null));
@@ -73,8 +68,8 @@ namespace Test
             //
             // User work, Create certificate request.
             //
-            SignatureAlgorithmName.TryGetAlgorithmName(algorithmMechanism, out SignatureAlgorithmName userAlgorithmName);
-            X509CertificateRequestGenerator userCreateCsr = new X509CertificateRequestGenerator(userAlgorithmName, userPrivateKeyInfo);
+            SignatureAlgorithmName.TryGetAlgorithmName(algorithmMechanism, out SignatureAlgorithmName userSignatureAlgorithmName);
+            X509CertificateRequestGenerator userCreateCsr = new X509CertificateRequestGenerator(userSignatureAlgorithmName, userPrivateKeyInfo);
             userCreateCsr.SubjectDN.Add(new X509NameEntity(X509NameLabel.C, "CN"));
             userCreateCsr.SubjectDN.Add(new X509NameEntity(X509NameLabel.CN, "Test Subject Porject Name"));
             userCreateCsr.SubjectDN.Add(new X509NameEntity(X509NameLabel.EmailAddress, "abc999@test111222.com"));
@@ -85,7 +80,7 @@ namespace Test
             //
             // Issuer work, Load certificate request and create certificate.
             //
-            X509CertificateV3Generator v3generator = new X509CertificateV3Generator(_issuerSignatureAlgorithm, _issuerPrivateKeyInfo);
+            X509CertificateV3Generator v3generator = new X509CertificateV3Generator(_issuerSignatureAlgorithmName, _issuerPrivateKeyInfo);
             v3generator.IssuerDN.CopyFromSubjectDN(_issuerCer);
             Asn1Encodable asn2 = new KeyUsage(KeyUsage.KeyCertSign | KeyUsage.DataEncipherment);
             v3generator.Extensions.Add(new X509ExtensionEntity(X509ExtensionLabel.KeyUsage, false, asn2));
@@ -98,7 +93,6 @@ namespace Test
             //
             // User work, Verify.
             //
-            File.WriteAllBytes("userCer.cer", userCer);
             var userCerBC = new Org.BouncyCastle.X509.X509Certificate(userCer);
             var userCerNET = new System.Security.Cryptography.X509Certificates.X509Certificate2(userCer);
             try
@@ -110,9 +104,9 @@ namespace Test
             {
                 Console.WriteLine($"Verify user certificate by CA certificate - false");
             }
-            Console.WriteLine();
+            Console.WriteLine("======================================================================================");
             Console.WriteLine(userCerBC);
-            Console.WriteLine();
+            Console.WriteLine("======================================================================================");
             Console.WriteLine(userCerNET);
             Console.ReadKey(true);
         }
